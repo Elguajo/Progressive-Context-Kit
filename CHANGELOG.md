@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.7.0 — 2026-08-17
+
+- Added **Action-First Communication** to both universal adapters (`global/AGENTS.codex.md`, `global/CLAUDE.md`): minimum-sufficient-information principle, explicit output priority (`Correctness > Safety > Task completeness > Actionability > Concision`), bounded numbered steps, tangent suppression, `location -> cause -> fix` error reporting, no speculative time estimates, and no manufactured next action after a complete request.
+- Ported semantically from `Token-Efficient-Spec-Kit@v0.11.0`'s `## Action-first output` section, not copied mechanically: no ADHD framing, no new dependency, no separate always-on Skill — folded into the existing always-loaded universal contract.
+- Standalone inherits the behavior through generated composition (`tools/sync_profiles.py`); the Personal repository router does not duplicate the universal block.
+- Compacted existing wording in both global adapters to stay within the unchanged 5,000-char hard budgets and the 8,500/8,600-char combined Personal budgets, preserving every one of the 147 inherited Behavior Contract anchors and all 37 pre-existing Framework Contract rules.
+- Added Framework Contract rules FW-038…FW-041 and a static `action-first-communication` scenario; recomputed `FRAMEWORK_IDS.sha256`.
+- Extended `tools/tests/test_profiles.py` with Action-First regression coverage on both global adapters and on generated-vs-duplicated placement.
+- Updated `docs/system/LINEAGE.md` and `docs/DESIGN_RATIONALE.md` to record the ported behavior.
+- Confirmed the v1.4 Completion Record / Handoff Protocol and the v1.3 tooling-bootstrap model remain unchanged and were not re-derived from Token v0.10 (already superseded).
+
 ## 1.6.0 — 2026-08-17
 
 - Split delivery into one canonical **Framework Source** repository and one generated **Project Runtime** release surface.

@@ -43,4 +43,23 @@ class ProfileTests(unittest.TestCase):
         self.assertNotIn("The user's global Codex Custom Instructions", text)
         self.assertIn('implementation-execution', text)
 
+    def test_action_first_semantics_exist_in_both_global_adapters(self):
+        required = [
+            'minimum sufficient information',
+            'Correctness > Safety > Task completeness > Actionability > Concision',
+            'location -> cause -> fix',
+        ]
+        for rel in ['global/AGENTS.codex.md', 'global/CLAUDE.md']:
+            text = (ROOT / rel).read_text(encoding='utf-8')
+            for phrase in required:
+                self.assertIn(phrase, text)
+            self.assertIn('time estimates', text)
+            self.assertIn('next action', text)
+
+    def test_action_first_is_generated_not_duplicated_in_personal_router(self):
+        standalone = (ROOT/'profiles/standalone/AGENTS.md').read_text(encoding='utf-8')
+        personal = (ROOT/'profiles/personal/AGENTS.md').read_text(encoding='utf-8')
+        self.assertIn('minimum sufficient information', standalone)
+        self.assertNotIn('minimum sufficient information', personal)
+
 if __name__ == '__main__': unittest.main()

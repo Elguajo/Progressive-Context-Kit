@@ -1,4 +1,4 @@
-# Token / Context Budgets — Quality-First v1.6.0
+# Token / Context Budgets — Quality-First v1.7.0
 
 Budgets prevent accidental bloat. They never authorize deleting behavior or preferred-tool routing needed for a correct, secure, complete engineering decision.
 

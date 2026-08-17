@@ -15,6 +15,8 @@ The same progressive-disclosure principle applies on two axes:
 
 This preserves the useful behavior of a comprehensive Custom Instructions setup without forcing every engineering procedure into every request.
 
+The same progressive-disclosure principle applies to user-facing output: return the minimum sufficient information for the next correct decision/action, while correctness, safety, completeness and necessary explanation outrank concision.
+
 Additional design choices:
 
 - Branded tools are preferred implementations behind stable capability names; fallbacks prevent brittleness.

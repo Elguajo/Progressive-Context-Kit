@@ -1,4 +1,4 @@
-# Progressive Context Spec Kit v1.6.0
+# Progressive Context Spec Kit v1.7.0
 
 > 🇷🇺 Русская версия: [`README_RU.md`](README_RU.md) · подробный гайд: [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md)
 
@@ -14,7 +14,7 @@ This repository is the **Framework Source** used to develop, test, and release P
 
 For a new project, download the latest release asset:
 
-**`Progressive-Context-Project-Runtime-v1.6.0.zip`**
+**`Progressive-Context-Project-Runtime-v1.7.0.zip`**
 
 from **GitHub Releases**: https://github.com/Elguajo/Progressive-Context-Spec-Kit/releases/latest
 
@@ -80,8 +80,8 @@ python3 tools/build_release.py
 Output:
 
 ```text
-dist/Progressive-Context-Project-Runtime-v1.6.0.zip
-dist/Progressive-Context-Project-Runtime-v1.6.0.manifest.json
+dist/Progressive-Context-Project-Runtime-v1.7.0.zip
+dist/Progressive-Context-Project-Runtime-v1.7.0.manifest.json
 dist/SHA256SUMS.txt
 ```
 

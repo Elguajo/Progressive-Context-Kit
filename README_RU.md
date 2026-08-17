@@ -1,4 +1,4 @@
-# Progressive Context Spec Kit v1.6.0
+# Progressive Context Spec Kit v1.7.0
 
 > 🇬🇧 English version: [`README.md`](README.md) · подробный гайд: [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md)
 
@@ -14,7 +14,7 @@
 
 Чтобы начать новый проект, скачай из GitHub Releases файл:
 
-**`Progressive-Context-Project-Runtime-v1.6.0.zip`**
+**`Progressive-Context-Project-Runtime-v1.7.0.zip`**
 
 https://github.com/Elguajo/Progressive-Context-Spec-Kit/releases/latest
 
@@ -81,7 +81,7 @@ python3 tools/build_release.py
 Результат:
 
 ```text
-dist/Progressive-Context-Project-Runtime-v1.6.0.zip
+dist/Progressive-Context-Project-Runtime-v1.7.0.zip
 ```
 
 Старый `tools/build_starter.py` сохранён как compatibility alias, но начиная с v1.6 пользовательский пакет называется **Project Runtime**.

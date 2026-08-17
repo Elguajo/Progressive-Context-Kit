@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-framework",
-  "rule_count": 37,
+  "rule_count": 41,
   "rules": [
     {
       "id": "FW-001",
@@ -224,6 +224,30 @@
       "owner": "docs/DESIGN_RATIONALE.md",
       "anchor": "Project Runtime is generated output, never a second source of truth.",
       "summary": "Project Runtime is derived from canonical Framework Source and is never maintained independently"
+    },
+    {
+      "id": "FW-038",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "minimum sufficient information",
+      "summary": "Codex universal contract uses Action-First minimum-sufficient output"
+    },
+    {
+      "id": "FW-039",
+      "owner": "global/CLAUDE.md",
+      "anchor": "minimum sufficient information",
+      "summary": "Claude universal contract uses Action-First minimum-sufficient output"
+    },
+    {
+      "id": "FW-040",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Correctness > Safety > Task completeness > Actionability > Concision",
+      "summary": "Concision never outranks correctness, safety, completeness or actionability"
+    },
+    {
+      "id": "FW-041",
+      "owner": "docs/system/LINEAGE.md",
+      "anchor": "Action-First Communication",
+      "summary": "Token v0.11 Action-First behavior is tracked in Progressive lineage"
     }
   ]
 }

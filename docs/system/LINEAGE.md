@@ -4,7 +4,7 @@
 
 This file records what was retained, redesigned, improved, or intentionally removed from `Elguajo/Token-Efficient-Spec-Kit` so future optimization does not accidentally erase useful behavior.
 
-| Original mechanism | Progressive v1.5.x owner | Status | Rationale |
+| Original mechanism | Progressive v1.7.x owner | Status | Rationale |
 |---|---|---|---|
 | Project Brief | `docs/project/PROJECT_BRIEF.md` | Retained | Canonical product truth |
 | Architecture | `docs/project/ARCHITECTURE.md` | Retained | Canonical current system shape/boundaries |
@@ -31,6 +31,7 @@ This file records what was retained, redesigned, improved, or intentionally remo
 | `.specify/memory/constitution.md` governance | Global + Skills + protocols/contracts | Redesigned | Avoid duplicate always-loaded governance |
 | Large monolithic operational prompts | Skills/protocols + short entry prompts | Redesigned | Progressive disclosure |
 | Existing-project implicit handling | `ADOPT_EXISTING_PROJECT.md` + Skill | Improved | First-class forensic adoption workflow |
+| Action-First Communication (Token v0.11) | `global/AGENTS.codex.md` + `global/CLAUDE.md` | Retained/Adapted | Minimum-sufficient user-facing output; no ADHD framing or separate always-on Skill |
 
 ## Non-regression rule
 
