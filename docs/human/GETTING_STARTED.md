@@ -1,6 +1,8 @@
 # Progressive Context Spec Kit — Getting Started
 
 > **Human-only onboarding guide.** This file belongs to Framework Source and is deliberately excluded from the Project Runtime release.
+>
+> Russian version: [`GETTING_STARTED.ru.md`](GETTING_STARTED.ru.md)
 
 ## 1. Recommended path: download Project Runtime
 

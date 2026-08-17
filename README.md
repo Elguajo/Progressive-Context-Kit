@@ -1,5 +1,7 @@
 # Progressive Context Spec Kit v1.6.0
 
+> 🇷🇺 Русская версия: [`README_RU.md`](README_RU.md) · подробный гайд: [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md)
+
 A **quality-first, token-efficient Spec-Driven Development workflow** for AI coding agents.
 
 > **Minimize active context, not available knowledge.**
@@ -67,7 +69,7 @@ Use this repository when you want to:
 - run migration and framework regression tests;
 - build the Project Runtime release.
 
-Human onboarding lives at `docs/human/GETTING_STARTED.md` and stays source-only.
+Human onboarding lives at `docs/human/GETTING_STARTED.md` (Russian: `docs/human/GETTING_STARTED.ru.md`) and stays source-only.
 
 ## Build the Project Runtime
 

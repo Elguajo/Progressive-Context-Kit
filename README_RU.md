@@ -1,5 +1,7 @@
 # Progressive Context Spec Kit v1.6.0
 
+> 🇬🇧 English version: [`README.md`](README.md) · подробный гайд: [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md)
+
 **Качественно-ориентированный, token-efficient Spec-Driven Development workflow** для AI coding-агентов.
 
 > **Минимизировать активный контекст, а не доступные знания.**
@@ -68,7 +70,7 @@ Runtime **генерируется автоматически** из Framework S
 - запускаешь framework regression tests;
 - собираешь новый Project Runtime release.
 
-Human-only инструкция находится в `docs/human/GETTING_STARTED.md` и в Runtime не попадает.
+Human-only инструкция находится в `docs/human/GETTING_STARTED.md` (русская версия: `docs/human/GETTING_STARTED.ru.md`) и в Runtime не попадает.
 
 ## Сборка Project Runtime
 
