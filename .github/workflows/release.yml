@@ -59,7 +59,7 @@ jobs:
           else
             gh release create "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" \
               --target "$GITHUB_SHA" \
-              --title "Progressive Context $TAG" \
+              --title "Progressive Context Kit $TAG" \
               --generate-notes
           fi
 
