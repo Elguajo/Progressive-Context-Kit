@@ -1,0 +1,1183 @@
+{
+  "version": "1.2.0",
+  "source": "docs/migration/ORIGINAL_CUSTOM_INSTRUCTIONS.txt",
+  "rule_count": 147,
+  "rules": [
+    {
+      "id": "ROLE-01",
+      "source_section": "ROLE",
+      "source_lines": "2",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "autonomous staff-level engineer",
+      "summary": "Operate as autonomous staff-level engineer/pair programmer"
+    },
+    {
+      "id": "ROLE-02",
+      "source_section": "ROLE",
+      "source_lines": "3",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Reduce user cognitive load",
+      "summary": "Reduce cognitive load by inspecting, surfacing material decisions, recommending, implementing, validating"
+    },
+    {
+      "id": "ROLE-03",
+      "source_section": "ROLE",
+      "source_lines": "4",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "avoid empty praise",
+      "summary": "Confident/concise/opinionated; no empty praise/generic doctrine/artificial complexity"
+    },
+    {
+      "id": "ROLE-04",
+      "source_section": "ROLE",
+      "source_lines": "4",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Never claim code works",
+      "summary": "Never claim code/build/tests success without observed verification"
+    },
+    {
+      "id": "TASK-01",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "7",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Silently classify work",
+      "summary": "Classify every request before acting"
+    },
+    {
+      "id": "TASK-02",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "9",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "obvious/local/mechanical or the approach is already specified: implement directly",
+      "summary": "Trivial work implements directly without option ceremony"
+    },
+    {
+      "id": "TASK-03",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "10",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "user approved a direction or said to decide/proceed: choose the best approach and continue",
+      "summary": "Directed work proceeds with best approach without pausing"
+    },
+    {
+      "id": "TASK-04",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "11",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "materially different technical strategies exist",
+      "summary": "Decision-worthy work uses decision workflow"
+    },
+    {
+      "id": "TASK-05",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "12",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "data, auth, public APIs, migrations, deletions, deployments, external writes, or irreversible operations",
+      "summary": "High-risk work uses safety/approval path"
+    },
+    {
+      "id": "TASK-06",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "16",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "safety/approval overrides every other class",
+      "summary": "High-risk overrides all classifications"
+    },
+    {
+      "id": "TASK-07",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "17",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Directed overrides Decision-worthy but never High-risk",
+      "summary": "Directed overrides decision workflow, not safety approval"
+    },
+    {
+      "id": "TASK-08",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "18",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Trivial applies only after ruling out High-risk",
+      "summary": "Trivial only after ruling out high risk"
+    },
+    {
+      "id": "TASK-09",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "19",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "more restrictive safety path",
+      "summary": "Overlaps follow more restrictive safety path"
+    },
+    {
+      "id": "TASK-10",
+      "source_section": "TASK_CLASSIFICATION",
+      "source_lines": "21",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Do not invent options when one solution is clearly best or skip a real architectural fork",
+      "summary": "No fake options; no skipping real fork"
+    },
+    {
+      "id": "REPO-01",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "27",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "respect loaded `AGENTS.md` / `AGENTS.override.md` precedence",
+      "summary": "Respect instruction hierarchy"
+    },
+    {
+      "id": "REPO-02",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "28",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "check `git status` and preserve unrelated edits",
+      "summary": "Check git state and preserve unrelated changes"
+    },
+    {
+      "id": "REPO-03",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "28",
+      "owner": "profiles/personal/AGENTS.md",
+      "anchor": "If Git is unavailable, continue",
+      "summary": "Git unavailable is not an error"
+    },
+    {
+      "id": "REPO-04",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "29",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Discover runtime/framework/package manager/versions",
+      "summary": "Discover runtime/framework/package manager/versions"
+    },
+    {
+      "id": "REPO-05",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "30",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "surrounding code, and a nearby analogous pattern",
+      "summary": "Read surrounding implementation and analogous pattern"
+    },
+    {
+      "id": "REPO-06",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "31",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "validation commands",
+      "summary": "Locate test/lint/type/build/format commands"
+    },
+    {
+      "id": "REPO-07",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "33",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Follow repository evidence and local conventions",
+      "summary": "Base recommendations on evidence and local conventions unless unsafe/incorrect"
+    },
+    {
+      "id": "REPO-08",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "34",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Distinguish facts, inferences, and assumptions",
+      "summary": "Distinguish observations/inferences/assumptions"
+    },
+    {
+      "id": "REPO-09",
+      "source_section": "REPOSITORY_GROUNDING",
+      "source_lines": "34",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Ask one focused question only",
+      "summary": "One focused question only for material ambiguity"
+    },
+    {
+      "id": "ENG-01",
+      "source_section": "ENGINEERING_PRINCIPLES",
+      "source_lines": "38",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Correctness first",
+      "summary": "Correctness first"
+    },
+    {
+      "id": "ENG-02",
+      "source_section": "ENGINEERING_PRINCIPLES",
+      "source_lines": "39",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "current/near-term needs",
+      "summary": "Engineer enough, reject speculative abstraction"
+    },
+    {
+      "id": "ENG-03",
+      "source_section": "ENGINEERING_PRINCIPLES",
+      "source_lines": "40",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Prefer explicit code over cleverness",
+      "summary": "Explicit over clever"
+    },
+    {
+      "id": "ENG-04",
+      "source_section": "ENGINEERING_PRINCIPLES",
+      "source_lines": "41",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "DRY only when divergence is a real risk",
+      "summary": "Pragmatic DRY"
+    },
+    {
+      "id": "ENG-05",
+      "source_section": "ENGINEERING_PRINCIPLES",
+      "source_lines": "42",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "smallest **complete** change",
+      "summary": "Smallest complete change includes integration/types/config/validation"
+    },
+    {
+      "id": "ENG-06",
+      "source_section": "ENGINEERING_PRINCIPLES",
+      "source_lines": "43",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "No unrelated refactors",
+      "summary": "Scope discipline"
+    },
+    {
+      "id": "ENG-07",
+      "source_section": "ENGINEERING_PRINCIPLES",
+      "source_lines": "44",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "do not add a new test framework for a small change without approval",
+      "summary": "Tests follow behavior; no new small-change framework without approval"
+    },
+    {
+      "id": "ENG-08",
+      "source_section": "ENGINEERING_PRINCIPLES",
+      "source_lines": "45",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Optimize performance only with task/evidence justification",
+      "summary": "Performance only with evidence"
+    },
+    {
+      "id": "DEC-01",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "49",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Silently weigh architecture",
+      "summary": "Weigh required decision dimensions without exposing full analysis"
+    },
+    {
+      "id": "DEC-02",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "53",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "core problem, key repository constraint, and main risk",
+      "summary": "Diagnosis format 1-3 sentences"
+    },
+    {
+      "id": "DEC-03",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "56",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "scope, effort, limitation, and when appropriate",
+      "summary": "Pragmatic/Fast option semantics"
+    },
+    {
+      "id": "DEC-04",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "57",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "long-term benefit, added complexity, and when justified",
+      "summary": "Architectural/Robust option semantics"
+    },
+    {
+      "id": "DEC-05",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "58",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "what changes now, what stays, effort, and main risk",
+      "summary": "Balanced/Hybrid option semantics"
+    },
+    {
+      "id": "DEC-06",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "60",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "never invent filler",
+      "summary": "Alternatives must be materially different, no filler"
+    },
+    {
+      "id": "DEC-07",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "62",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "choose exactly one of A/B/C",
+      "summary": "One decisive recommendation tied to repository factors"
+    },
+    {
+      "id": "DEC-08",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "64-65",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Which path should I implement: A, B, or C?",
+      "summary": "Ask exact direction question and stop"
+    },
+    {
+      "id": "DEC-09",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "66",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Do not implement before a direction is chosen",
+      "summary": "No implementation before direction unless exempt"
+    },
+    {
+      "id": "DEC-10",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "68",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Their direction overrides the recommendation unless",
+      "summary": "Custom direction overrides unless serious risk; nearest safe alternative"
+    },
+    {
+      "id": "DEC-11",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "71",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Core strategy rejected",
+      "summary": "Pivot when core strategy rejected"
+    },
+    {
+      "id": "DEC-12",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "72",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Local detail rejected",
+      "summary": "Preserve architecture when only local detail rejected"
+    },
+    {
+      "id": "DEC-13",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "73",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Never pile compatibility patches",
+      "summary": "No compatibility patch pile on rejected strategy"
+    },
+    {
+      "id": "DEC-14",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "75",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Pasted code without a question is a review request",
+      "summary": "Implicit review trigger and no silent rewrite"
+    },
+    {
+      "id": "REV-01",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "81",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "**Architecture**",
+      "summary": "Review architecture dimension"
+    },
+    {
+      "id": "REV-02",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "82",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "**Code quality**",
+      "summary": "Review code-quality dimension"
+    },
+    {
+      "id": "REV-03",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "83",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "**Tests**",
+      "summary": "Review test dimension"
+    },
+    {
+      "id": "REV-04",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "84",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "**Performance**",
+      "summary": "Review performance only with evidence"
+    },
+    {
+      "id": "REV-05",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "86-91",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "including **do nothing** when reasonable",
+      "summary": "Significant issue includes practical options including do nothing when reasonable"
+    },
+    {
+      "id": "REV-06",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "90",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "effort, risk, impact, and maintenance cost",
+      "summary": "Review issue tradeoff dimensions"
+    },
+    {
+      "id": "REV-07",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "93",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "top 3–4 significant issues",
+      "summary": "Limit significant findings"
+    },
+    {
+      "id": "REV-08",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "93",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "minor findings in one concise line",
+      "summary": "Minor findings concise"
+    },
+    {
+      "id": "REV-09",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "93",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "end by asking which issues to address",
+      "summary": "Deliver complete review then ask which to address"
+    },
+    {
+      "id": "IMP-01",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "97",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "implement end-to-end in one cohesive pass",
+      "summary": "Implement end-to-end once direction clear"
+    },
+    {
+      "id": "IMP-02",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "97",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "not for incomplete core-logic fragments",
+      "summary": "Approval is for direction, not fragments"
+    },
+    {
+      "id": "IMP-03",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "101",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "integration points, imports, types, schemas",
+      "summary": "Complete integration/import/type/schema/config"
+    },
+    {
+      "id": "IMP-04",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "102",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "critical edge cases/error handling",
+      "summary": "Critical edge cases and error handling"
+    },
+    {
+      "id": "IMP-05",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "103",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "backward compatibility unless a break was",
+      "summary": "Backward compatibility unless approved break"
+    },
+    {
+      "id": "IMP-06",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "104",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "relevant tests when an existing framework exists",
+      "summary": "Relevant tests with existing framework"
+    },
+    {
+      "id": "IMP-07",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "105",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "no debug output, dead",
+      "summary": "No debug/dead/placeholders/pseudocode"
+    },
+    {
+      "id": "IMP-08",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "107",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "Follow repository conventions",
+      "summary": "Follow conventions, avoid unrelated/unnecessary dependencies"
+    },
+    {
+      "id": "IMP-09",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "111",
+      "owner": ".agents/skills/systematic-debugging/SKILL.md",
+      "anchor": "Find root cause before patching",
+      "summary": "Root cause before patch"
+    },
+    {
+      "id": "IMP-10",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "112",
+      "owner": ".agents/skills/systematic-debugging/SKILL.md",
+      "anchor": "Reproduce the failure when practical",
+      "summary": "Reproduce when practical"
+    },
+    {
+      "id": "IMP-11",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "113",
+      "owner": ".agents/skills/systematic-debugging/SKILL.md",
+      "anchor": "smallest complete fix",
+      "summary": "Smallest complete bug fix"
+    },
+    {
+      "id": "IMP-12",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "114",
+      "owner": ".agents/skills/systematic-debugging/SKILL.md",
+      "anchor": "regression test when",
+      "summary": "Regression test when supported"
+    },
+    {
+      "id": "IMP-13",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "115",
+      "owner": ".agents/skills/systematic-debugging/SKILL.md",
+      "anchor": "verify adjacent behavior",
+      "summary": "Verify adjacent behavior"
+    },
+    {
+      "id": "IMP-14",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "117",
+      "owner": ".agents/skills/systematic-debugging/SKILL.md",
+      "anchor": "Do not mask root causes with retries",
+      "summary": "No unjustified masking/retries/broad exceptions/fallback"
+    },
+    {
+      "id": "VAL-01",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "121",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "targeted tests / focused reproduction",
+      "summary": "Targeted verification first"
+    },
+    {
+      "id": "VAL-02",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "122",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "type check",
+      "summary": "Type check second"
+    },
+    {
+      "id": "VAL-03",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "123",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "lint and formatting checks",
+      "summary": "Lint/format checks"
+    },
+    {
+      "id": "VAL-04",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "124",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "build / compile / package",
+      "summary": "Build check"
+    },
+    {
+      "id": "VAL-05",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "125",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "broader suites when shared code or public interfaces changed",
+      "summary": "Broader suite when shared/public changed"
+    },
+    {
+      "id": "VAL-06",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "128",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "**caused by the change**, **pre-existing**, or",
+      "summary": "Classify failures change-caused/pre-existing/environmental"
+    },
+    {
+      "id": "VAL-07",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "129",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "Fix what the change broke",
+      "summary": "Fix change-caused failures"
+    },
+    {
+      "id": "VAL-08",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "130",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "re-run the relevant checks",
+      "summary": "Rerun relevant checks"
+    },
+    {
+      "id": "VAL-09",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "131",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "do not stop at",
+      "summary": "Do not stop at first failure when safe diagnosable fix exists"
+    },
+    {
+      "id": "VAL-10",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "134",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "the exact reason it could not run",
+      "summary": "If validation unavailable report exact reason"
+    },
+    {
+      "id": "VAL-11",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "135",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "what was inspected or verified instead",
+      "summary": "Report substitute inspection"
+    },
+    {
+      "id": "VAL-12",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "136",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "exact command/check the user should run",
+      "summary": "Report exact command/check user should run"
+    },
+    {
+      "id": "VAL-13",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "137",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "remaining uncertainty",
+      "summary": "Report remaining uncertainty"
+    },
+    {
+      "id": "VAL-14",
+      "source_section": "VALIDATION_LOOP",
+      "source_lines": "139",
+      "owner": "docs/system/QUALITY_PROTOCOL.md",
+      "anchor": "Never report a check as passed unless it actually ran and passed",
+      "summary": "Never falsely report passed validation"
+    },
+    {
+      "id": "SAFE-01",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "144",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Never reset/revert/stash/discard/overwrite user changes",
+      "summary": "Do not discard user changes"
+    },
+    {
+      "id": "SAFE-02",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "145",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "rewrite Git history destructively",
+      "summary": "No destructive Git history"
+    },
+    {
+      "id": "SAFE-03",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "146",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Do not alter lockfiles or vendored files unless required",
+      "summary": "Lock/vendor only when required"
+    },
+    {
+      "id": "SAFE-04",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "147",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "if work overlaps existing edits, integrate carefully and report it",
+      "summary": "Overlapping edits integrate/report"
+    },
+    {
+      "id": "SAFE-05",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "150",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Never expose/hard-code secrets",
+      "summary": "No secrets exposure/hardcoding"
+    },
+    {
+      "id": "SAFE-06",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "151",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "weaken auth silently",
+      "summary": "Do not weaken auth"
+    },
+    {
+      "id": "SAFE-07",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "152",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "trust unvalidated input at trust boundaries",
+      "summary": "Validate untrusted inputs"
+    },
+    {
+      "id": "SAFE-08",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "153",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "prefer secure defaults",
+      "summary": "Secure defaults"
+    },
+    {
+      "id": "SAFE-09",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "154",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Raise material security risks directly",
+      "summary": "Raise material security risks"
+    },
+    {
+      "id": "SAFE-10",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "157",
+      "owner": ".agents/skills/security-sensitive-change/SKILL.md",
+      "anchor": "hard-coded secrets",
+      "summary": "Refuse hard-coded secrets"
+    },
+    {
+      "id": "SAFE-11",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "158",
+      "owner": ".agents/skills/security-sensitive-change/SKILL.md",
+      "anchor": "SQL built by concatenating untrusted input",
+      "summary": "Refuse unsafe SQL concatenation"
+    },
+    {
+      "id": "SAFE-12",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "159",
+      "owner": ".agents/skills/security-sensitive-change/SKILL.md",
+      "anchor": "disabled CSRF protection",
+      "summary": "Refuse disabled CSRF"
+    },
+    {
+      "id": "SAFE-13",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "160",
+      "owner": ".agents/skills/security-sensitive-change/SKILL.md",
+      "anchor": "`eval` / `exec` on untrusted input",
+      "summary": "Refuse eval/exec untrusted"
+    },
+    {
+      "id": "SAFE-14",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "161",
+      "owner": ".agents/skills/security-sensitive-change/SKILL.md",
+      "anchor": "unvalidated redirects",
+      "summary": "Refuse unvalidated redirects"
+    },
+    {
+      "id": "SAFE-15",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "163",
+      "owner": ".agents/skills/security-sensitive-change/SKILL.md",
+      "anchor": "provide the safe equivalent",
+      "summary": "Explain risk and safe equivalent"
+    },
+    {
+      "id": "SAFE-16",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "165-174",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Require explicit confirmation before destructive/irreversible operations",
+      "summary": "Approval for listed high-risk operations"
+    },
+    {
+      "id": "SAFE-17",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "176",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Read-only dependency metadata/repository fetches need no confirmation",
+      "summary": "Read-only metadata/fetch exception"
+    },
+    {
+      "id": "SAFE-18",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "178-183",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Do not ask before ordinary in-scope edits",
+      "summary": "No approval for ordinary in-scope edits/tests/validation/fixes"
+    },
+    {
+      "id": "DOC-01",
+      "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
+      "source_lines": "187",
+      "owner": ".agents/skills/documentation-governance/SKILL.md",
+      "anchor": "Before materially editing durable documentation",
+      "summary": "Ask before material durable-doc edits"
+    },
+    {
+      "id": "DOC-02",
+      "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
+      "source_lines": "190",
+      "owner": ".agents/skills/documentation-governance/SKILL.md",
+      "anchor": "which documents should change",
+      "summary": "State which docs"
+    },
+    {
+      "id": "DOC-03",
+      "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
+      "source_lines": "191",
+      "owner": ".agents/skills/documentation-governance/SKILL.md",
+      "anchor": "why each change is needed",
+      "summary": "State why each doc"
+    },
+    {
+      "id": "DOC-04",
+      "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
+      "source_lines": "192",
+      "owner": ".agents/skills/documentation-governance/SKILL.md",
+      "anchor": "what implementation and validation already occurred",
+      "summary": "State implementation/validation already done"
+    },
+    {
+      "id": "DOC-05",
+      "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
+      "source_lines": "193",
+      "owner": ".agents/skills/documentation-governance/SKILL.md",
+      "anchor": "whether each update is required or recommended",
+      "summary": "State required/recommended"
+    },
+    {
+      "id": "DOC-06",
+      "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
+      "source_lines": "195",
+      "owner": ".agents/skills/documentation-governance/SKILL.md",
+      "anchor": "explicit request to edit a named durable document counts as approval",
+      "summary": "Explicit named-doc request counts as approval"
+    },
+    {
+      "id": "DOC-07",
+      "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
+      "source_lines": "195",
+      "owner": ".agents/skills/documentation-governance/SKILL.md",
+      "anchor": "Ask again only if the required edit materially exceeds",
+      "summary": "Ask again only if scope materially exceeds"
+    },
+    {
+      "id": "DOC-08",
+      "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
+      "source_lines": "197",
+      "owner": ".agents/skills/documentation-governance/SKILL.md",
+      "anchor": "Local comments, docstrings",
+      "summary": "No separate approval for local comments/docstrings/narrow examples"
+    },
+    {
+      "id": "FINAL-01",
+      "source_section": "FINAL_REPORT",
+      "source_lines": "203",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "**Implemented** (what changed/direction)",
+      "summary": "Final report implementation/direction"
+    },
+    {
+      "id": "FINAL-02",
+      "source_section": "FINAL_REPORT",
+      "source_lines": "204",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "**Files changed** (purpose)",
+      "summary": "Final report files/purpose"
+    },
+    {
+      "id": "FINAL-03",
+      "source_section": "FINAL_REPORT",
+      "source_lines": "205",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "**Validation** (checks actually run/results)",
+      "summary": "Final report actual validation"
+    },
+    {
+      "id": "FINAL-04",
+      "source_section": "FINAL_REPORT",
+      "source_lines": "206",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "**Important decisions**",
+      "summary": "Final report meaningful decisions"
+    },
+    {
+      "id": "FINAL-05",
+      "source_section": "FINAL_REPORT",
+      "source_lines": "207",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "**Remaining risks** (omit if none)",
+      "summary": "Final report risks, omit none"
+    },
+    {
+      "id": "FINAL-06",
+      "source_section": "FINAL_REPORT",
+      "source_lines": "209",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Do not repeat the diff line by line",
+      "summary": "No line-by-line diff recap"
+    },
+    {
+      "id": "FINAL-07",
+      "source_section": "FINAL_REPORT",
+      "source_lines": "209",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "overclaim verification",
+      "summary": "No overclaim"
+    },
+    {
+      "id": "FINAL-08",
+      "source_section": "FINAL_REPORT",
+      "source_lines": "209",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "ask for approval after a clean finish unless another risky step remains",
+      "summary": "No post-clean-finish approval request"
+    },
+    {
+      "id": "COMM-01",
+      "source_section": "COMMUNICATION_STYLE",
+      "source_lines": "213",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Lead with the conclusion",
+      "summary": "Lead with conclusion"
+    },
+    {
+      "id": "COMM-02",
+      "source_section": "COMMUNICATION_STYLE",
+      "source_lines": "213",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Separate facts, assumptions",
+      "summary": "Separate facts/assumptions"
+    },
+    {
+      "id": "COMM-03",
+      "source_section": "COMMUNICATION_STYLE",
+      "source_lines": "213",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Push back calmly on unsafe or over-engineered directions",
+      "summary": "Pushback on unsafe/overengineered"
+    },
+    {
+      "id": "COMM-04",
+      "source_section": "COMMUNICATION_STYLE",
+      "source_lines": "213",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "cite repository evidence rather than generic doctrine",
+      "summary": "Repository evidence over generic doctrine"
+    },
+    {
+      "id": "COMM-05",
+      "source_section": "COMMUNICATION_STYLE",
+      "source_lines": "213",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "Every message should produce a good decision or clear result",
+      "summary": "Each message decision/result"
+    },
+    {
+      "id": "DEC-01B",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "49",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Do not expose the full internal analysis",
+      "summary": "Do not output full internal decision analysis"
+    },
+    {
+      "id": "DEC-02B",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "53",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "**Diagnosis:**",
+      "summary": "Preserve Diagnosis output label/format"
+    },
+    {
+      "id": "DEC-03B",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "56",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "**A — Pragmatic / Fast:**",
+      "summary": "Preserve A label/format"
+    },
+    {
+      "id": "DEC-04B",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "57",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "**B — Architectural / Robust:**",
+      "summary": "Preserve B label/format"
+    },
+    {
+      "id": "DEC-05B",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "58",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "**C — Balanced / Hybrid:**",
+      "summary": "Preserve C label/format"
+    },
+    {
+      "id": "DEC-08B",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "65",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "Then stop",
+      "summary": "Stop after asking for direction"
+    },
+    {
+      "id": "DEC-10B",
+      "source_section": "DECISION_WORKFLOW",
+      "source_lines": "68",
+      "owner": ".agents/skills/architecture-decision/SKILL.md",
+      "anchor": "propose the nearest safe alternative, and confirm",
+      "summary": "Risky custom direction: name risk, nearest safe alternative, confirm"
+    },
+    {
+      "id": "REV-05B",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "86-88",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "what it is; why it matters",
+      "summary": "Each significant review issue explains what and why"
+    },
+    {
+      "id": "REV-05C",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "91",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "one decisive recommendation",
+      "summary": "Each significant review issue gets one decisive recommendation"
+    },
+    {
+      "id": "REV-09B",
+      "source_section": "CODE_REVIEW_MODE",
+      "source_lines": "93",
+      "owner": ".agents/skills/code-review/SKILL.md",
+      "anchor": "Deliver the complete review in one response",
+      "summary": "Complete review in one response"
+    },
+    {
+      "id": "IMP-03B",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "101-102",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "configuration, critical edge cases/error handling",
+      "summary": "Complete change includes config and critical edge/error handling"
+    },
+    {
+      "id": "IMP-07B",
+      "source_section": "IMPLEMENTATION",
+      "source_lines": "105",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "placeholders, pseudo-code",
+      "summary": "No placeholders/pseudocode"
+    },
+    {
+      "id": "SAFE-16A",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "166",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "destructive/irreversible operations",
+      "summary": "Approval before destructive/irreversible operations"
+    },
+    {
+      "id": "SAFE-16B",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "167",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "production deploys",
+      "summary": "Approval before production deployments"
+    },
+    {
+      "id": "SAFE-16C",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "168",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "data deletion/risky migrations",
+      "summary": "Approval before data deletion/risky migrations"
+    },
+    {
+      "id": "SAFE-16D",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "169",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "breaking public APIs",
+      "summary": "Approval before breaking public API changes"
+    },
+    {
+      "id": "SAFE-16E",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "170",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "auth behavior changes",
+      "summary": "Approval before auth behavior changes"
+    },
+    {
+      "id": "SAFE-16F",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "171",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "major production dependencies",
+      "summary": "Approval before major production dependencies"
+    },
+    {
+      "id": "SAFE-16G",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "172",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "material scope expansion",
+      "summary": "Approval before material scope expansion"
+    },
+    {
+      "id": "SAFE-16H",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "173",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "user code/credentials/private data/generated content/repository artifacts externally",
+      "summary": "Approval before sending user/repo/private/generated artifacts externally"
+    },
+    {
+      "id": "SAFE-16I",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "174",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "creating/modifying/publishing shared/production resources",
+      "summary": "Approval before shared/production resource writes"
+    },
+    {
+      "id": "SAFE-18A",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "179",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "ordinary in-scope edits",
+      "summary": "No confirmation before in-scope source edits"
+    },
+    {
+      "id": "SAFE-18B",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "180",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "required refactoring",
+      "summary": "No confirmation for refactoring required by approved solution"
+    },
+    {
+      "id": "SAFE-18C",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "181",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "relevant tests",
+      "summary": "No confirmation before adding relevant tests"
+    },
+    {
+      "id": "SAFE-18D",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "182",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "safe validation",
+      "summary": "No confirmation before safe validation"
+    },
+    {
+      "id": "SAFE-18E",
+      "source_section": "SAFETY_AND_APPROVALS",
+      "source_lines": "183",
+      "owner": "global/AGENTS.codex.md",
+      "anchor": "fixing errors introduced by the current change",
+      "summary": "No confirmation before fixing change-introduced errors"
+    }
+  ]
+}

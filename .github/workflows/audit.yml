@@ -1,0 +1,17 @@
+name: audit
+on: [push, pull_request]
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python3 tools/behavior_contract.py
+      - run: python3 tools/framework_contract.py
+      - run: python3 tools/duplication_audit.py
+      - run: python3 tools/audit.py
+      - run: python3 tools/context_report.py --profile personal --baseline-chars 11540
+      - run: python3 tools/sync_profiles.py
+      - run: python3 tools/sync_skills.py
+      - run: python3 -m unittest discover -s tools/tests -v

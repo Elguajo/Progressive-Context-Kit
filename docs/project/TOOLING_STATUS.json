@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "profile": "not_selected",
+  "last_bootstrap": null,
+  "tools": {
+    "semble": {
+      "status": "not_checked",
+      "checked_at": null,
+      "version": null,
+      "evidence": null,
+      "notes": null
+    },
+    "serena": {
+      "status": "not_checked",
+      "checked_at": null,
+      "version": null,
+      "evidence": null,
+      "notes": null
+    },
+    "rtk": {
+      "status": "not_checked",
+      "checked_at": null,
+      "version": null,
+      "evidence": null,
+      "notes": null
+    },
+    "superpowers": {
+      "status": "not_checked",
+      "checked_at": null,
+      "version": null,
+      "evidence": null,
+      "notes": null
+    },
+    "gstack": {
+      "status": "not_checked",
+      "checked_at": null,
+      "version": null,
+      "evidence": null,
+      "notes": null
+    },
+    "context7": {
+      "status": "not_checked",
+      "checked_at": null,
+      "version": null,
+      "evidence": null,
+      "notes": null
+    },
+    "github_spec_kit": {
+      "status": "not_checked",
+      "checked_at": null,
+      "version": null,
+      "evidence": null,
+      "notes": null
+    }
+  }
+}

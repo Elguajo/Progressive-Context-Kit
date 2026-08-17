@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import argparse, json, re
+from common import chars, current_phase, project_file, read, resolve_path, template_file
+from context_compile import completion_bridge, completion_record
+
+EXPECTED_SKILLS = {'architecture-decision','code-review','documentation-governance','project-bootstrap','existing-project-adoption','tooling-bootstrap','project-doctor','security-sensitive-change','session-handoff','systematic-debugging','workflow-audit','implementation-execution'}
+EXPECTED_TOOLS = {'semble','serena','rtk','superpowers','gstack','context7','github_spec_kit'}
+REQUIRED = [
+    'AGENTS.md','CLAUDE.md','.progressive/VERSION','.progressive/PROFILE','.progressive/AGENT_TARGET','.progressive/ADOPTION_STATE',
+    '.progressive/project/PROJECT_BRIEF.md','.progressive/project/ARCHITECTURE.md','.progressive/project/ROADMAP.md','.progressive/project/NEXT_SESSION.md','.progressive/project/CONTEXT_MANIFEST.json','.progressive/project/TOOLING_STATUS.json',
+    '.progressive/system/CONTEXT_PROTOCOL.md','.progressive/system/HANDOFF_PROTOCOL.md','.progressive/system/LAYER_OWNERSHIP.md','.progressive/system/QUALITY_PROTOCOL.md','.progressive/system/TOOL_ROUTING.md',
+    '.progressive/integrations/TOOL_REGISTRY.json','.progressive/integrations/PROFILES.md',
+    '.progressive/templates/PHASE.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/audit.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
+]
+VISIBLE_FRAMEWORK_DIRS = {'docs','global','integrations','profiles','prompts','templates','tools'}
+
+def fail_if(c, errors, msg):
+    if c: errors.append(msg)
+
+def verify_skills(root, errors):
+    a = {p.parent.name:p for p in (root/'.agents/skills').glob('*/SKILL.md')}
+    c = {p.parent.name:p for p in (root/'.claude/skills').glob('*/SKILL.md')}
+    if set(a) != EXPECTED_SKILLS: errors.append('Skill set mismatch')
+    if set(a) != set(c): errors.append('Codex/Claude Skill sets differ')
+    for name in set(a) & set(c):
+        if a[name].read_bytes() != c[name].read_bytes(): errors.append('Skill mirror drift: '+name)
+
+def verify_tooling(root, errors):
+    try:
+        reg = json.loads(read(resolve_path(root,'integrations/TOOL_REGISTRY.json')))
+        status = json.loads(read(project_file(root,'TOOLING_STATUS.json')))
+    except Exception as exc:
+        errors.append('invalid tooling JSON: '+str(exc)); return
+    if set(reg.get('tools',{})) != EXPECTED_TOOLS: errors.append('Tool Registry set mismatch')
+    for key in EXPECTED_TOOLS:
+        if key not in status.get('tools',{}): errors.append('tooling status missing tool: '+key)
+
+def verify_project_state(root, errors, warns):
+    road = read(project_file(root,'ROADMAP.md'))
+    markers = re.findall(r'^- \[([ >x])\].*?`((?:docs|\.progressive)/phases/[^`]+\.md)`', road, re.M)
+    if markers:
+        active = [p for marker,p in markers if marker == '>']
+        if len(active) > 1: errors.append('Roadmap has more than one active phase')
+        if not active and not all(marker == 'x' for marker,_ in markers): errors.append('Initialized Roadmap must have exactly one active phase unless all phases are complete')
+        for marker,rel in markers:
+            p = root/rel
+            if not p.is_file(): errors.append('Roadmap phase file missing: '+rel); continue
+            if marker == 'x' and not completion_record(p): warns.append('completed phase lacks Completion Record: '+rel)
+    phase = current_phase(root) or template_file(root,'PHASE.template.md')
+    project_chars = sum(chars(project_file(root,n)) for n in ['PROJECT_BRIEF.md','ARCHITECTURE.md','ROADMAP.md']) + chars(phase)
+    if current_phase(root):
+        _, record = completion_bridge(root,current_phase(root)); project_chars += len(record)
+    if project_chars > 22000: warns.append(f'project default context exceeds 22000-char soft budget: {project_chars}')
+
+def main():
+    ap=argparse.ArgumentParser(); ap.add_argument('--root',default='.'); a=ap.parse_args(); root=Path(a.root).resolve(); errors=[]; warns=[]
+    for rel in REQUIRED: fail_if(not (root/rel).is_file(), errors, 'missing required runtime file: '+rel)
+    for d in VISIBLE_FRAMEWORK_DIRS: fail_if((root/d).exists(), errors, 'framework surface leaked into project root: '+d+'/')
+    fail_if('@AGENTS.md' not in read(root/'CLAUDE.md'), errors, 'CLAUDE.md must import @AGENTS.md')
+    fail_if('.progressive/' not in read(root/'AGENTS.md'), errors, 'AGENTS.md must route into hidden .progressive runtime')
+    if (root/'.progressive/PROFILE').is_file(): fail_if(read(root/'.progressive/PROFILE').strip() not in {'standalone','personal'},errors,'invalid runtime PROFILE')
+    if (root/'.progressive/ADOPTION_STATE').is_file(): fail_if(read(root/'.progressive/ADOPTION_STATE').strip() == 'pending',errors,'existing-project adoption is pending; reconcile conflicts and finalize adoption')
+    if (root/'.progressive/AGENT_TARGET').is_file(): fail_if(read(root/'.progressive/AGENT_TARGET').strip() not in {'codex','claude','both'},errors,'invalid AGENT_TARGET')
+    verify_skills(root,errors); verify_tooling(root,errors); verify_project_state(root,errors,warns)
+    for x in errors: print('ERROR:',x)
+    for x in warns: print('WARN:',x)
+    if errors:
+        print(f'RUNTIME AUDIT: FAIL ({len(errors)} errors, {len(warns)} warnings)'); return 1
+    print(f'RUNTIME AUDIT: PASS (0 errors, {len(warns)} warnings)'); return 0
+if __name__=='__main__': raise SystemExit(main())

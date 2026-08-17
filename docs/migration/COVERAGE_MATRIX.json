@@ -1,0 +1,58 @@
+{
+  "source": "docs/migration/ORIGINAL_CUSTOM_INSTRUCTIONS.txt (unchanged archival copy)",
+  "sections": {
+    "ROLE": [
+      "global/AGENTS.codex.md"
+    ],
+    "TASK_CLASSIFICATION": [
+      "global/AGENTS.codex.md",
+      "profiles/personal/AGENTS.md",
+      ".agents/skills/architecture-decision/SKILL.md",
+      ".agents/skills/security-sensitive-change/SKILL.md"
+    ],
+    "REPOSITORY_GROUNDING": [
+      "global/AGENTS.codex.md",
+      "profiles/personal/AGENTS.md"
+    ],
+    "ENGINEERING_PRINCIPLES": [
+      "global/AGENTS.codex.md"
+    ],
+    "DECISION_WORKFLOW": [
+      "global/AGENTS.codex.md",
+      ".agents/skills/architecture-decision/SKILL.md"
+    ],
+    "CODE_REVIEW_MODE": [
+      "global/AGENTS.codex.md",
+      ".agents/skills/code-review/SKILL.md"
+    ],
+    "IMPLEMENTATION": [
+      "global/AGENTS.codex.md",
+      ".agents/skills/implementation-execution/SKILL.md",
+      ".agents/skills/systematic-debugging/SKILL.md",
+      "docs/system/QUALITY_PROTOCOL.md"
+    ],
+    "VALIDATION_LOOP": [
+      "global/AGENTS.codex.md",
+      "docs/system/QUALITY_PROTOCOL.md",
+      ".agents/skills/implementation-execution/SKILL.md"
+    ],
+    "SAFETY_AND_APPROVALS": [
+      "global/AGENTS.codex.md",
+      ".agents/skills/security-sensitive-change/SKILL.md"
+    ],
+    "DOCUMENTATION_UPDATE_APPROVAL": [
+      ".agents/skills/documentation-governance/SKILL.md",
+      "docs/system/LAYER_OWNERSHIP.md",
+      "docs/system/CHANGE_CONTROL.md"
+    ],
+    "FINAL_REPORT": [
+      "global/AGENTS.codex.md",
+      ".agents/skills/session-handoff/SKILL.md"
+    ],
+    "COMMUNICATION_STYLE": [
+      "global/AGENTS.codex.md"
+    ]
+  },
+  "version": "1.2.0",
+  "note": "Section-level index only. docs/migration/BEHAVIOR_CONTRACT.json is the authoritative atomic behavior coverage contract."
+}

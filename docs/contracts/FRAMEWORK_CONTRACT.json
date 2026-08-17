@@ -1,0 +1,223 @@
+{
+  "schema": 1,
+  "contract": "progressive-context-framework",
+  "rule_count": 36,
+  "rules": [
+    {
+      "id": "FW-001",
+      "owner": "profiles/personal/AGENTS.md",
+      "anchor": "docs/system/LINEAGE.md",
+      "summary": "LINEAGE excluded from normal warm-up"
+    },
+    {
+      "id": "FW-002",
+      "owner": "integrations/TOOL_REGISTRY.json",
+      "anchor": "MinishLab/semble",
+      "summary": "Semble is preferred semantic discovery implementation"
+    },
+    {
+      "id": "FW-003",
+      "owner": "integrations/TOOL_REGISTRY.json",
+      "anchor": "oraios/serena",
+      "summary": "Serena is preferred symbol/refactor implementation"
+    },
+    {
+      "id": "FW-004",
+      "owner": "integrations/TOOL_REGISTRY.json",
+      "anchor": "rtk-ai/rtk",
+      "summary": "RTK is preferred compact-output implementation"
+    },
+    {
+      "id": "FW-005",
+      "owner": "integrations/TOOL_REGISTRY.json",
+      "anchor": "obra/superpowers",
+      "summary": "Superpowers is preferred implementation-discipline implementation"
+    },
+    {
+      "id": "FW-006",
+      "owner": "integrations/TOOL_REGISTRY.json",
+      "anchor": "garrytan/gstack",
+      "summary": "gstack is preferred challenge/QA/release implementation"
+    },
+    {
+      "id": "FW-007",
+      "owner": "integrations/TOOL_REGISTRY.json",
+      "anchor": "upstash/context7",
+      "summary": "Context7 is preferred fresh-doc implementation"
+    },
+    {
+      "id": "FW-008",
+      "owner": "integrations/TOOL_REGISTRY.json",
+      "anchor": "github/spec-kit",
+      "summary": "GitHub Spec Kit is conditional advanced-spec implementation"
+    },
+    {
+      "id": "FW-009",
+      "owner": "profiles/personal/AGENTS.md",
+      "anchor": "If a preferred tool is absent and materially useful",
+      "summary": "Missing materially useful preferred tooling routes to bootstrap"
+    },
+    {
+      "id": "FW-010",
+      "owner": "profiles/personal/AGENTS.md",
+      "anchor": "Do not interrupt a tiny task just to install tooling",
+      "summary": "Tiny tasks do not block on optional install"
+    },
+    {
+      "id": "FW-011",
+      "owner": "prompts/SETUP_TOOLING.md",
+      "anchor": "current official source",
+      "summary": "Install procedure freshness is dynamic"
+    },
+    {
+      "id": "FW-012",
+      "owner": "prompts/SETUP_TOOLING.md",
+      "anchor": "Group compatible installation/configuration changes",
+      "summary": "Tool installation uses focused grouped approval"
+    },
+    {
+      "id": "FW-013",
+      "owner": "docs/project/TOOLING_STATUS.json",
+      "anchor": "not_checked",
+      "summary": "Tooling status is persisted project state"
+    },
+    {
+      "id": "FW-014",
+      "owner": "prompts/ADOPT_EXISTING_PROJECT.md",
+      "anchor": "without treating it as a blank project",
+      "summary": "Existing project adoption is first-class"
+    },
+    {
+      "id": "FW-015",
+      "owner": "prompts/ADOPT_EXISTING_PROJECT.md",
+      "anchor": "current architecture",
+      "summary": "Adoption reconstructs current architecture"
+    },
+    {
+      "id": "FW-016",
+      "owner": "prompts/ADOPT_EXISTING_PROJECT.md",
+      "anchor": "already-completed capabilities",
+      "summary": "Adoption distinguishes completed from remaining work"
+    },
+    {
+      "id": "FW-017",
+      "owner": "docs/system/CONTEXT_PROTOCOL.md",
+      "anchor": "tools/context_compile.py",
+      "summary": "Context compiler is supported"
+    },
+    {
+      "id": "FW-018",
+      "owner": "docs/project/CONTEXT_MANIFEST.json",
+      "anchor": "\"phases\"",
+      "summary": "Context manifest exists"
+    },
+    {
+      "id": "FW-019",
+      "owner": "integrations/PROFILES.md",
+      "anchor": "Installed ≠ loaded ≠ invoked",
+      "summary": "Installed tooling is not automatic context/use"
+    },
+    {
+      "id": "FW-020",
+      "owner": "docs/system/TOOL_ROUTING.md",
+      "anchor": "one primary route",
+      "summary": "Discovery avoids redundant parallel routing"
+    },
+    {
+      "id": "FW-021",
+      "owner": "integrations/PROFILES.md",
+      "anchor": "never replaces project Brief/Architecture/Roadmap/handoff",
+      "summary": "Advanced spec cannot become project truth"
+    },
+    {
+      "id": "FW-022",
+      "owner": "docs/system/LINEAGE.md",
+      "anchor": "Non-regression rule",
+      "summary": "Lineage protects inherited capability removal"
+    },
+    {
+      "id": "FW-023",
+      "owner": "docs/system/LAYER_OWNERSHIP.md",
+      "anchor": "one canonical owner",
+      "summary": "Canonical ownership is explicit"
+    },
+    {
+      "id": "FW-024",
+      "owner": "docs/evals/agent/MODEL_EVAL_PROTOCOL.md",
+      "anchor": "Controlled comparison",
+      "summary": "Real-agent evals are separate from static tests"
+    },
+    {
+      "id": "FW-025",
+      "owner": "docs/evals/static/README.md",
+      "anchor": "do not execute a model",
+      "summary": "Static eval claims are bounded"
+    },
+    {
+      "id": "FW-026",
+      "owner": "prompts/ADOPT_EXISTING_PROJECT.md",
+      "anchor": "reconcile conflicts instead of blindly stacking",
+      "summary": "Adoption reconciles instruction conflicts"
+    },
+    {
+      "id": "FW-027",
+      "owner": "CLAUDE.md",
+      "anchor": "@AGENTS.md",
+      "summary": "Claude project adapter imports the active repository profile"
+    },
+    {
+      "id": "FW-028",
+      "owner": "global/CLAUDE.md",
+      "anchor": "# Global Claude Code Working Agreement",
+      "summary": "Claude Personal has an explicit user-level universal contract"
+    },
+    {
+      "id": "FW-029",
+      "owner": "profiles/personal/AGENTS.md",
+      "anchor": "Universal engineering behavior is supplied by the user-global layer",
+      "summary": "Personal repository router is vendor-neutral"
+    },
+    {
+      "id": "FW-030",
+      "owner": "global/README.md",
+      "anchor": "mixed Codex + Claude Personal deployment",
+      "summary": "Mixed-agent Personal deployment avoids duplicate universal project context"
+    },
+    {
+      "id": "FW-031",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "before moving the Roadmap marker",
+      "summary": "Phase completion persists durable record before status transition"
+    },
+    {
+      "id": "FW-032",
+      "owner": "templates/PHASE.template.md",
+      "anchor": "## Completion Record",
+      "summary": "Phase template has durable completion record slot"
+    },
+    {
+      "id": "FW-033",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "overwrite `NEXT_SESSION.md` in place",
+      "summary": "NEXT_SESSION is overwritten hot state rather than accumulated history"
+    },
+    {
+      "id": "FW-034",
+      "owner": "docs/system/CONTEXT_PROTOCOL.md",
+      "anchor": "immediate predecessor's `Completion Record`",
+      "summary": "Default compiled context carries immediate prior phase outcome"
+    },
+    {
+      "id": "FW-035",
+      "owner": "docs/system/CONTEXT_PROTOCOL.md",
+      "anchor": "never the full completed phase by default",
+      "summary": "Previous-phase bridge excludes full completed phase body"
+    },
+    {
+      "id": "FW-036",
+      "owner": "profiles/personal/AGENTS.md",
+      "anchor": "prior phase's `Completion Record` when present",
+      "summary": "Manual default read set also carries prior completion bridge"
+    }
+  ]
+}
