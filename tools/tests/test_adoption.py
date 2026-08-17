@@ -12,7 +12,7 @@ class AdoptionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             t=Path(d)/'p'; t.mkdir(); (t/'AGENTS.md').write_text('# Existing\nUse pnpm only.\n')
             r=self.run_cmd(t,'--adopt-existing'); self.assertEqual(r.returncode,0,r.stdout+r.stderr)
-            text=(t/'AGENTS.md').read_text(); self.assertIn('Progressive Context Spec Kit — Personal Repository Router',text); self.assertIn('PROJECT-SPECIFIC-INSTRUCTIONS',text); self.assertIn('Use pnpm only.',text)
+            text=(t/'AGENTS.md').read_text(); self.assertIn('Progressive Context Kit — Personal Repository Router',text); self.assertIn('PROJECT-SPECIFIC-INSTRUCTIONS',text); self.assertIn('Use pnpm only.',text)
             self.assertTrue((t/'.progressive/adoption-backup/AGENTS.before.md').is_file())
             audit=subprocess.run([sys.executable,str(t/'.progressive/tools/audit.py'),'--root',str(t)],capture_output=True,text=True); self.assertEqual(audit.returncode,0,audit.stdout+audit.stderr)
     def test_update_preserves_project_specific_suffix(self):
