@@ -22,9 +22,15 @@ def main():
     write_runtime(root, stage, profile=args.profile, agent=args.agent)
     zip_path = dist / f'{name}.zip'
     if zip_path.exists(): zip_path.unlink()
-    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
         for p in sorted(stage.rglob('*')):
-            if p.is_file(): zf.write(p, p.relative_to(stage.parent))
+            if not p.is_file():
+                continue
+            rel = p.relative_to(stage.parent).as_posix()
+            info = zipfile.ZipInfo(rel, date_time=(1980, 1, 1, 0, 0, 0))
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o100644 << 16
+            zf.writestr(info, p.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
     print(zip_path)
 
 if __name__ == '__main__':

@@ -20,7 +20,7 @@ REQUIRED=[
 'docs/contracts/FRAMEWORK_CONTRACT.json','docs/contracts/FRAMEWORK_IDS.sha256',
 'docs/evals/static/BEHAVIOR_SCENARIOS.json','docs/evals/static/FRAMEWORK_SCENARIOS.json','docs/evals/agent/MODEL_EVAL_PROTOCOL.md',
 'templates/PHASE.template.md','templates/CONTEXT_MANIFEST.template.json',
-'tools/context_report.py','tools/context_compile.py','tools/runtime_layout.py','tools/runtime_audit.py','tools/build_runtime.py','tools/behavior_contract.py','tools/framework_contract.py','tools/duplication_audit.py','tools/sync_profiles.py','tools/sync_skills.py','tools/tooling_status.py','tools/tooling_bootstrap.py','tools/init_project.py']
+'tools/context_report.py','tools/context_compile.py','tools/runtime_layout.py','tools/runtime_audit.py','tools/build_runtime.py','tools/build_release.py','tools/behavior_contract.py','tools/framework_contract.py','tools/duplication_audit.py','tools/sync_profiles.py','tools/sync_skills.py','tools/tooling_status.py','tools/tooling_bootstrap.py','tools/init_project.py']
 
 def fail_if(c,errors,m):
     if c: errors.append(m)

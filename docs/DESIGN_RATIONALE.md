@@ -72,3 +72,11 @@ AGENTS.md / CLAUDE.md     agent entrypoints
 ```
 
 Framework migration evidence, human onboarding, release tooling, source tests, profile generation, and framework contracts remain Framework Source concerns and are not shipped into normal product repositories.
+
+## Canonical Source and generated Runtime
+
+**Project Runtime is generated output, never a second source of truth.**
+
+All framework behavior, routing, Skills, templates, protocols, tests, and release rules are maintained only in Framework Source. The user-facing Project Runtime is disposable build output created from Source by `tools/build_release.py`.
+
+The release builder validates Source first, generates the Runtime through `tools/build_runtime.py`, audits the extracted Runtime, compiles its default context, and emits a SHA-256 checksum plus machine-readable manifest. Runtime files must never be patched separately to fix framework behavior; the fix belongs in Source and the Runtime is rebuilt.

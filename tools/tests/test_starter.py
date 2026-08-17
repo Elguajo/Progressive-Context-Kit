@@ -28,6 +28,33 @@ class RuntimeReleaseTests(unittest.TestCase):
             compile_=subprocess.run([sys.executable,str(runtime/'.progressive/tools/context_compile.py'),'--root',str(runtime)],capture_output=True,text=True)
             self.assertEqual(compile_.returncode,0,compile_.stdout+compile_.stderr)
 
+    def test_runtime_build_is_deterministic(self):
+        first=subprocess.run([sys.executable,str(ROOT/'tools/build_runtime.py')],capture_output=True,text=True)
+        self.assertEqual(first.returncode,0,first.stdout+first.stderr)
+        z=ROOT/f'dist/Progressive-Context-Project-Runtime-v{VERSION}.zip'
+        import hashlib
+        h1=hashlib.sha256(z.read_bytes()).hexdigest()
+        second=subprocess.run([sys.executable,str(ROOT/'tools/build_runtime.py')],capture_output=True,text=True)
+        self.assertEqual(second.returncode,0,second.stdout+second.stderr)
+        h2=hashlib.sha256(z.read_bytes()).hexdigest()
+        self.assertEqual(h1,h2)
+
+    def test_release_builder_generates_manifest_and_checksum(self):
+        result=subprocess.run([sys.executable,str(ROOT/'tools/build_release.py'),'--skip-unit-tests'],capture_output=True,text=True)
+        self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+        z=ROOT/f'dist/Progressive-Context-Project-Runtime-v{VERSION}.zip'
+        manifest=z.with_suffix('.manifest.json')
+        checksums=ROOT/'dist/SHA256SUMS.txt'
+        self.assertTrue(manifest.is_file())
+        self.assertTrue(checksums.is_file())
+        import hashlib,json
+        digest=hashlib.sha256(z.read_bytes()).hexdigest()
+        data=json.loads(manifest.read_text())
+        self.assertTrue(data['generated'])
+        self.assertEqual(data['source_of_truth'],'Framework Source')
+        self.assertEqual(data['sha256'],digest)
+        self.assertIn(digest,checksums.read_text())
+
     def test_legacy_build_starter_command_builds_runtime(self):
         result=subprocess.run([sys.executable,str(ROOT/'tools/build_starter.py')],capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stdout+result.stderr)

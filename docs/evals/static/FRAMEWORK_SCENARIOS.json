@@ -77,6 +77,14 @@
         "FW-035",
         "FW-036"
       ]
+    },
+    {
+      "id": "runtime-release-derivation",
+      "description": "A release is prepared after Framework Source changes.",
+      "covers": [
+        "FW-037"
+      ],
+      "expected": "Only Framework Source is edited. tools/build_release.py validates Source and generates the disposable Project Runtime artifact plus release metadata."
     }
   ]
 }

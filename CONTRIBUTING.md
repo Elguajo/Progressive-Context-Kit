@@ -21,3 +21,8 @@ python3 tools/build_starter.py
 
 If `global/AGENTS.codex.md` or the Personal router grows, justify why that behavior must be
 always loaded. If it shrinks, prove no Behavior Contract rule or high-frequency guarantee was lost.
+
+
+## Release artifacts
+
+Framework Source is the only editable source of truth. Do not patch Project Runtime or Starter archives manually. Build the user-facing artifact with `python3 tools/build_release.py`; the release workflow uses the same command.

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-framework",
-  "rule_count": 36,
+  "rule_count": 37,
   "rules": [
     {
       "id": "FW-001",
@@ -218,6 +218,12 @@
       "owner": "profiles/personal/AGENTS.md",
       "anchor": "prior phase's `Completion Record` when present",
       "summary": "Manual default read set also carries prior completion bridge"
+    },
+    {
+      "id": "FW-037",
+      "owner": "docs/DESIGN_RATIONALE.md",
+      "anchor": "Project Runtime is generated output, never a second source of truth.",
+      "summary": "Project Runtime is derived from canonical Framework Source and is never maintained independently"
     }
   ]
 }

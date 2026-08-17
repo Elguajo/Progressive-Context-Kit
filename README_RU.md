@@ -73,7 +73,7 @@ Human-only инструкция находится в `docs/human/GETTING_STARTE
 ## Сборка Project Runtime
 
 ```bash
-python3 tools/build_runtime.py
+python3 tools/build_release.py
 ```
 
 Результат:

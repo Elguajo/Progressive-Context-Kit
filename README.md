@@ -72,14 +72,18 @@ Human onboarding lives at `docs/human/GETTING_STARTED.md` and stays source-only.
 ## Build the Project Runtime
 
 ```bash
-python3 tools/build_runtime.py
+python3 tools/build_release.py
 ```
 
 Output:
 
 ```text
 dist/Progressive-Context-Project-Runtime-v1.6.0.zip
+dist/Progressive-Context-Project-Runtime-v1.6.0.manifest.json
+dist/SHA256SUMS.txt
 ```
+
+`tools/build_release.py` is the canonical release entrypoint: it validates Framework Source, builds Runtime, audits the extracted Runtime, and writes release metadata. `tools/build_runtime.py` is the lower-level packaging step.
 
 `tools/build_starter.py` remains as a compatibility alias, but **Project Runtime** is the user-facing name from v1.6 onward.
 
