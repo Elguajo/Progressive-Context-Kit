@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import argparse, json, re
-from common import PHASE_RE, current_phase, project_file, read, resolve_path
+from common import PHASE_RE, current_phase, project_file, read, resolve_path, safe_join
 
 CORE=['docs/project/PROJECT_BRIEF.md','docs/project/ARCHITECTURE.md','docs/project/ROADMAP.md']
 PLACEHOLDER_PATTERNS=[r'^Status:\s*UNINITIALIZED\s*$',r'^<.*>$',r'^\.\.\.$']
+MAX_REQUIRED_FILES=16
+MAX_TOTAL_EXTRA_CHARS=16000
 
 
 def compact(text):
@@ -20,7 +22,14 @@ def compact(text):
 
 def roadmap_entries(root):
     road=read(project_file(root,'ROADMAP.md'))
-    return [(m.group('marker'),m.group('path'),root/m.group('path')) for m in PHASE_RE.finditer(road)]
+    entries=[]
+    for m in PHASE_RE.finditer(road):
+        try:
+            p=safe_join(root,m.group('path'))
+        except ValueError:
+            continue
+        entries.append((m.group('marker'),m.group('path'),p))
+    return entries
 
 
 def previous_completed_phase(root, phase):
@@ -63,6 +72,7 @@ def manifest_for_phase(root, phase):
 
 
 def build(root,max_extra_chars=4000):
+    root=root.resolve()
     phase=current_phase(root)
     chunks=['# Compiled Current Context','Generated deterministically; canonical files remain source of truth.']
     for rel in CORE:
@@ -77,13 +87,24 @@ def build(root,max_extra_chars=4000):
     if hints['skills']: chunks.append('## Skill hints\n'+'\n'.join('- '+x for x in hints['skills']))
     if hints['notes']: chunks.append('## Context notes\n'+'\n'.join('- '+x for x in hints['notes']))
     if hints['required']:
+        required=hints['required']
+        overflow=len(required)-MAX_REQUIRED_FILES
         parts=[]
-        for rel in hints['required']:
-            p=resolve_path(root,rel)
+        total=0
+        for rel in required[:MAX_REQUIRED_FILES]:
+            try:
+                p=resolve_path(root,rel)
+            except ValueError as e:
+                parts.append(f'### {rel}\nREJECTED — {e}'); continue
             if not p.is_file(): parts.append(f'### {rel}\nMISSING — verify manifest/repository state.'); continue
             text=read(p)
-            if len(text)<=max_extra_chars: parts.append(f'### {rel}\n{text.strip()}')
-            else: parts.append(f'### {rel}\nPOINTER ONLY — {len(text)} chars exceeds compact inline limit; read targeted sections if needed.')
+            if len(text)>max_extra_chars:
+                parts.append(f'### {rel}\nPOINTER ONLY — {len(text)} chars exceeds compact inline limit; read targeted sections if needed.'); continue
+            if total+len(text)>MAX_TOTAL_EXTRA_CHARS:
+                parts.append(f'### {rel}\nPOINTER ONLY — manifest total-context budget ({MAX_TOTAL_EXTRA_CHARS} chars) reached; read targeted sections if needed.'); continue
+            total+=len(text); parts.append(f'### {rel}\n{text.strip()}')
+        if overflow>0:
+            parts.append(f'### (budget)\n{overflow} additional manifest-required file(s) omitted — exceeds max_required_files ({MAX_REQUIRED_FILES}).')
         chunks.append('## Manifest-required context\n'+'\n\n'.join(parts))
     return '\n\n'.join(chunks).strip()+'\n'
 

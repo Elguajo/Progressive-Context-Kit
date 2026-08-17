@@ -62,7 +62,7 @@ def merge_claude(root,target,adopt=False):
         bp=target/'.progressive/adoption-backup/CLAUDE.before.md'; bp.parent.mkdir(parents=True,exist_ok=True); bp.write_text(old,encoding='utf-8')
         dst.write_text(src+CLAUDE_SENTINEL+old,encoding='utf-8')
     else:
-        dst.write_text(src,encoding='utf-8')
+        raise RuntimeError('CLAUDE.md is not a recognized Progressive form/preserved adoption form; reconcile it before --update-framework')
 
 
 def write_marker(root,target,profile,agent,state='ready'):
@@ -97,12 +97,19 @@ def finalize(target):
 
 def main():
     ap=argparse.ArgumentParser()
-    ap.add_argument('target'); ap.add_argument('--profile',choices=['personal','standalone'],default='personal'); ap.add_argument('--agent',choices=['codex','claude','both'])
+    ap.add_argument('target'); ap.add_argument('--profile',choices=['personal','standalone'],default=None); ap.add_argument('--agent',choices=['codex','claude','both'])
     ap.add_argument('--update-framework',action='store_true'); ap.add_argument('--adopt-existing',action='store_true'); ap.add_argument('--finalize-adoption',action='store_true'); ap.add_argument('--dry-run',action='store_true')
     a=ap.parse_args(); root=Path(__file__).resolve().parents[1]; target=Path(a.target).expanduser().resolve()
     existing_agent=target/'.progressive/AGENT_TARGET'
     agent=a.agent or (existing_agent.read_text(encoding='utf-8').strip() if existing_agent.is_file() else 'both')
     if agent not in {'codex','claude','both'}: agent='both'
+    existing_profile=target/'.progressive/PROFILE'
+    if a.profile is None:
+        if a.update_framework and existing_profile.is_file():
+            a.profile=existing_profile.read_text(encoding='utf-8').strip()
+            if a.profile not in {'personal','standalone'}: a.profile='personal'
+        else:
+            a.profile='personal'
     if sum(bool(x) for x in [a.update_framework,a.adopt_existing,a.finalize_adoption])>1:
         print('ERROR: choose only one of --update-framework, --adopt-existing, --finalize-adoption'); return 2
     if a.finalize_adoption: return finalize(target)
@@ -136,9 +143,9 @@ def main():
     conflicts=[]
     try:
         merge_agents(root,target,a.profile,backup=a.adopt_existing)
+        merge_claude(root,target,adopt=a.adopt_existing)
     except RuntimeError as exc:
         print('ERROR:',exc); return 2
-    merge_claude(root,target,adopt=a.adopt_existing)
 
     for src,dst,transform in ops:
         if a.adopt_existing and dst.exists():

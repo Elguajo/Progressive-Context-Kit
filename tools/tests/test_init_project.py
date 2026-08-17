@@ -63,6 +63,34 @@ class InitTests(unittest.TestCase):
             self.assertEqual(result.returncode,0,result.stdout+result.stderr)
             self.assertEqual(brief.read_text(encoding='utf-8'),'USER PROJECT STATE')
 
+    def test_update_without_explicit_profile_keeps_existing_profile(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p'
+            self.assertEqual(self.run_cmd(target,'--profile','standalone').returncode,0)
+            result=self.run_cmd(target,'--update-framework')
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            self.assertEqual((target/'.progressive/PROFILE').read_text().strip(),'standalone')
+
+    def test_update_refuses_unrecognized_claude_md(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p'
+            self.assertEqual(self.run_cmd(target,'--profile','standalone').returncode,0)
+            (target/'CLAUDE.md').write_text('USER CUSTOM CLAUDE INSTRUCTIONS',encoding='utf-8')
+            result=self.run_cmd(target,'--update-framework')
+            self.assertNotEqual(result.returncode,0)
+            self.assertEqual((target/'CLAUDE.md').read_text(encoding='utf-8'),'USER CUSTOM CLAUDE INSTRUCTIONS')
+
+    def test_adopt_existing_preserves_unrecognized_claude_md_via_sentinel(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p'; target.mkdir()
+            (target/'CLAUDE.md').write_text('USER CUSTOM CLAUDE INSTRUCTIONS',encoding='utf-8')
+            result=self.run_cmd(target,'--profile','standalone','--adopt-existing')
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            merged=(target/'CLAUDE.md').read_text(encoding='utf-8')
+            self.assertIn('USER CUSTOM CLAUDE INSTRUCTIONS',merged)
+            self.assertIn('PROJECT-SPECIFIC-CLAUDE-INSTRUCTIONS',merged)
+            self.assertEqual((target/'.progressive/adoption-backup/CLAUDE.before.md').read_text(encoding='utf-8'),'USER CUSTOM CLAUDE INSTRUCTIONS')
+
     def test_update_refuses_unmarked_repo(self):
         with tempfile.TemporaryDirectory() as d:
             target=Path(d)/'p'; target.mkdir(); (target/'AGENTS.md').write_text('USER')

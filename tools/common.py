@@ -23,13 +23,25 @@ def chars(p: Path):
 def is_runtime(root: Path) -> bool:
     return (root / '.progressive' / 'VERSION').is_file()
 
+def safe_join(root: Path, rel: str) -> Path:
+    """Resolve rel under root, rejecting absolute paths, traversal, and symlink escapes."""
+    if not rel or Path(rel).is_absolute():
+        raise ValueError(f'path must be relative and non-empty: {rel!r}')
+    root_r = root.resolve()
+    target = (root_r / rel).resolve()
+    try:
+        target.relative_to(root_r)
+    except ValueError:
+        raise ValueError(f'path escapes repository root: {rel!r}')
+    return target
+
 def resolve_path(root: Path, rel: str) -> Path:
     if is_runtime(root):
         for old, new in PREFIX_MAP.items():
             if rel.startswith(old):
                 rel = new + rel[len(old):]
                 break
-    return root / rel
+    return safe_join(root, rel)
 
 def project_file(root: Path, name: str) -> Path:
     return resolve_path(root, f'docs/project/{name}')
@@ -44,6 +56,9 @@ def current_phase(root: Path):
     road = read(project_file(root, 'ROADMAP.md'))
     for m in PHASE_RE.finditer(road):
         if m.group('marker') == '>':
-            p = root / m.group('path')
+            try:
+                p = safe_join(root, m.group('path'))
+            except ValueError:
+                return None
             return p if p.is_file() else None
     return None

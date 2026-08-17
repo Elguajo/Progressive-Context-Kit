@@ -35,4 +35,12 @@ class ContextTests(unittest.TestCase):
         d=context_report.collect(ROOT,'personal')
         self.assertEqual(d['archived_old_custom_instructions_chars'],len((ROOT/'docs/migration/ORIGINAL_CUSTOM_INSTRUCTIONS.txt').read_text(encoding='utf-8')))
 
+    def test_skill_accounting_splits_metadata_from_body(self):
+        d=context_report.collect(ROOT,'personal')
+        self.assertIn('skill_metadata_chars_loaded',d)
+        self.assertIn('skill_full_body_chars_not_loaded',d)
+        self.assertGreater(d['skill_metadata_chars_loaded'],0)
+        self.assertGreater(d['skill_full_body_chars_not_loaded'],d['skill_metadata_chars_loaded'])
+        self.assertNotIn('all_skill_chars_not_normally_loaded',d)
+
 if __name__=='__main__': unittest.main()

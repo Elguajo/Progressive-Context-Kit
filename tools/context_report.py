@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import argparse, json
+import argparse, json, re
 from common import chars, current_phase, is_runtime, project_file, resolve_path, template_file
 from context_compile import completion_bridge
+
+FRONTMATTER_RE = re.compile(r'\A---\n(.*?\n)---\n', re.S)
+
+
+def skill_metadata_chars(path: Path) -> int:
+    text = path.read_text(encoding='utf-8') if path.is_file() else ''
+    m = FRONTMATTER_RE.match(text)
+    return len(m.group(0)) if m else 0
 
 
 def collect(root: Path, profile: str, agent: str = 'codex') -> dict:
@@ -17,6 +25,8 @@ def collect(root: Path, profile: str, agent: str = 'codex') -> dict:
         phase,
     ]
     skills = sorted((root / '.agents/skills').glob('*/SKILL.md'))
+    skill_metadata_total = sum(skill_metadata_chars(p) for p in skills)
+    skill_full_body_total = sum(chars(p) for p in skills)
     if is_runtime(root):
         # Project Runtime is self-contained by default; root AGENTS.md is the actual always-loaded repo layer.
         global_chars = 0
@@ -66,7 +76,8 @@ def collect(root: Path, profile: str, agent: str = 'codex') -> dict:
         'project_default_token_estimate_rough': round(project_chars / 4),
         'skill_count': len(skills),
         'largest_skill_chars': max([chars(p) for p in skills] or [0]),
-        'all_skill_chars_not_normally_loaded': sum(chars(p) for p in skills),
+        'skill_metadata_chars_loaded': skill_metadata_total,
+        'skill_full_body_chars_not_loaded': skill_full_body_total - skill_metadata_total,
         'behavior_rule_count': behavior_rule_count,
         'behavior_scenario_count': behavior_scenario_count,
         'framework_rule_count': framework_rule_count,

@@ -51,4 +51,51 @@ class ContextCompileTests(unittest.TestCase):
             m=json.loads((dst/'docs/project/CONTEXT_MANIFEST.json').read_text()); m['default']['required']=['big.txt']; (dst/'docs/project/CONTEXT_MANIFEST.json').write_text(json.dumps(m))
             self.assertIn('POINTER ONLY',build(dst,max_extra_chars=1000))
 
+    def test_manifest_absolute_path_is_rejected_not_read(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            secret=Path(d)/'outside-secret.txt'; secret.write_text('SUPER SECRET VALUE')
+            m=json.loads((dst/'docs/project/CONTEXT_MANIFEST.json').read_text()); m['default']['required']=[str(secret)]; (dst/'docs/project/CONTEXT_MANIFEST.json').write_text(json.dumps(m))
+            text=build(dst)
+            self.assertNotIn('SUPER SECRET VALUE',text)
+            self.assertIn('REJECTED',text)
+
+    def test_manifest_parent_traversal_is_rejected_not_read(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            secret=Path(d)/'outside-secret.txt'; secret.write_text('SUPER SECRET VALUE')
+            m=json.loads((dst/'docs/project/CONTEXT_MANIFEST.json').read_text()); m['default']['required']=['../outside-secret.txt']; (dst/'docs/project/CONTEXT_MANIFEST.json').write_text(json.dumps(m))
+            text=build(dst)
+            self.assertNotIn('SUPER SECRET VALUE',text)
+            self.assertIn('REJECTED',text)
+
+    def test_manifest_required_file_count_is_capped(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            names=[]
+            for i in range(20):
+                fn=f'extra{i}.txt'; (dst/fn).write_text(f'content {i}'); names.append(fn)
+            m=json.loads((dst/'docs/project/CONTEXT_MANIFEST.json').read_text()); m['default']['required']=names; (dst/'docs/project/CONTEXT_MANIFEST.json').write_text(json.dumps(m))
+            text=build(dst)
+            self.assertIn('additional manifest-required file(s) omitted',text)
+            self.assertNotIn('extra19.txt',text)
+
+    def test_manifest_total_chars_budget_is_enforced(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            names=[]
+            for i in range(10):
+                fn=f'chunk{i}.txt'; (dst/fn).write_text('y'*3000); names.append(fn)
+            m=json.loads((dst/'docs/project/CONTEXT_MANIFEST.json').read_text()); m['default']['required']=names; (dst/'docs/project/CONTEXT_MANIFEST.json').write_text(json.dumps(m))
+            text=build(dst,max_extra_chars=4000)
+            self.assertIn('manifest total-context budget',text)
+
+    def test_roadmap_phase_traversal_path_is_ignored(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            secret=dst.parent/'outside-phase-secret.md'; secret.write_text('PHASE SECRET SHOULD NOT LOAD')
+            (dst/'docs/project/ROADMAP.md').write_text('# Roadmap\n- [>] Escape `docs/phases/../../../outside-phase-secret.md`\n')
+            text=build(dst)
+            self.assertNotIn('PHASE SECRET SHOULD NOT LOAD',text)
+
 if __name__=='__main__': unittest.main()
