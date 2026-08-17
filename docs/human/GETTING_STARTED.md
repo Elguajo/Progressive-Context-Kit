@@ -19,7 +19,7 @@ Progressive-Context-Project-Runtime-v1.7.0.zip
 from:
 
 ```text
-https://github.com/Elguajo/Progressive-Context-Spec-Kit/releases/latest
+https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 ```
 
 Extract it into the directory that will become your project.

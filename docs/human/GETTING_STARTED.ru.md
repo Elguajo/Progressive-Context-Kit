@@ -49,7 +49,7 @@ Progressive-Context-Project-Runtime-v1.7.0.zip
 со страницы:
 
 ```text
-https://github.com/Elguajo/Progressive-Context-Spec-Kit/releases/latest
+https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 ```
 
 Распакуй его в директорию, которая станет твоим проектом.

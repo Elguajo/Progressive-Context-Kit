@@ -18,7 +18,7 @@ For a new project, download the latest release asset:
 
 **`Progressive-Context-Project-Runtime-v1.7.0.zip`**
 
-from **GitHub Releases**: https://github.com/Elguajo/Progressive-Context-Spec-Kit/releases/latest
+from **GitHub Releases**: https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 
 The Project Runtime is intentionally small and self-contained. After extraction, Progressive occupies only standard agent entrypoints plus hidden framework directories:
 

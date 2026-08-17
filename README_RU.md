@@ -18,7 +18,7 @@
 
 **`Progressive-Context-Project-Runtime-v1.7.0.zip`**
 
-https://github.com/Elguajo/Progressive-Context-Spec-Kit/releases/latest
+https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 
 Project Runtime специально собран так, чтобы framework почти не был виден внутри реального проекта:
 
