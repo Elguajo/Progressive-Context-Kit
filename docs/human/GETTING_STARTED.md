@@ -1,8 +1,10 @@
-# Progressive Context Spec Kit — Getting Started
+# Progressive Context Kit — Getting Started
 
 > **Human-only onboarding guide.** This file belongs to Framework Source and is deliberately excluded from the Project Runtime release.
 >
 > Russian version: [`GETTING_STARTED.ru.md`](GETTING_STARTED.ru.md)
+
+**Token-Efficient · Quality-First · Spec-Driven**
 
 ## 1. Recommended path: download Project Runtime
 
@@ -187,7 +189,7 @@ python3 tools/init_project.py /path/to/existing-project --profile standalone --a
 python3 tools/init_project.py /path/to/existing-project --profile standalone --adopt-existing
 ```
 
-## 11. If you are developing Progressive itself
+## 11. If you are developing Progressive Context Kit itself
 
 Clone the Framework Source repository instead of the Project Runtime release.
 
@@ -203,10 +205,10 @@ tools/
 docs/
 ```
 
-Those files exist to develop and verify Progressive; they should not be copied wholesale into product repositories.
+Those files exist to develop and verify Progressive Context Kit; they should not be copied wholesale into product repositories.
 
 ## 12. Main rule
 
-Use Progressive as a workflow, not as another prompt collection you must manually manage.
+Use Progressive Context Kit as a workflow, not as another prompt collection you must manually manage.
 
 The user mainly owns desired outcome and real decisions. The agent owns context routing, project state, implementation, validation, and continuity.

@@ -1,8 +1,10 @@
-# Progressive Context Spec Kit — Быстрый старт
+# Progressive Context Kit — Быстрый старт
 
 > **Гайд только для человека.** Этот файл принадлежит Framework Source и намеренно исключён из релиза Project Runtime — агент не должен читать его как обычный context.
 >
 > English version: [`GETTING_STARTED.md`](GETTING_STARTED.md)
+
+**Token-Efficient · Quality-First · Spec-Driven**
 
 ## 0. Зачем это нужно
 
@@ -10,7 +12,7 @@
 
 На маленьком проекте это терпимо. На долгом проекте это превращается в повторное чтение файлов, разрастающиеся prompts и риск того, что новая сессия примет решения, противоречащие предыдущим.
 
-Progressive Context хранит состояние проекта отдельно от чата:
+Progressive Context Kit хранит состояние проекта отдельно от чата:
 
 ```text
 Идея продукта
@@ -133,7 +135,7 @@ My idea:
 - `.progressive/phases/*` — контракты реализации и acceptance criteria;
 - `Completion Record` завершённой фазы — компактный устойчивый мост между фазами;
 - `.progressive/project/NEXT_SESSION.md` — перезаписываемая горячая навигация;
-- `.progressive/decisions/*` — консequential rationale, когда ADR оправдан.
+- `.progressive/decisions/*` — consequential rationale, когда ADR оправдан.
 
 Тебе не нужно вручную указывать агенту, какие из этих файлов поддерживать в актуальном состоянии — это часть workflow.
 
@@ -224,7 +226,7 @@ python3 tools/init_project.py /path/to/existing-project --profile standalone --a
 ```text
 Use prompts/ADOPT_EXISTING_PROJECT.md.
 
-Adopt Progressive Context Spec Kit into this existing repository.
+Adopt Progressive Context Kit into this existing repository.
 Do not treat this as a blank project.
 
 First understand the product and architecture that actually exist from repository evidence.
@@ -237,7 +239,7 @@ Reconcile existing AGENTS.md / CLAUDE.md and documentation instead of blindly re
 
 Агент не должен придумывать новую архитектуру и описывать её так, будто она уже существует. Сначала — исследование фактического состояния, отдельно — желаемые будущие изменения.
 
-## 11. Если ты развиваешь сам Progressive Context
+## 11. Если ты развиваешь сам Progressive Context Kit
 
 Клонируй репозиторий Framework Source вместо релиза Project Runtime.
 
@@ -253,7 +255,7 @@ tools/
 docs/
 ```
 
-Эти файлы существуют для разработки и проверки Progressive; их не нужно копировать целиком в продуктовые репозитории.
+Эти файлы существуют для разработки и проверки Progressive Context Kit; их не нужно копировать целиком в продуктовые репозитории.
 
 Сборка нового Project Runtime:
 
@@ -325,7 +327,7 @@ Recommend and configure only tools that materially improve this project.
 
 ## 13. Как работают Skills
 
-В Spec Kit есть специализированные workflow-Skills:
+В Progressive Context Kit есть специализированные workflow-Skills:
 
 | Skill | Когда подключается |
 |---|---|
@@ -340,7 +342,7 @@ Recommend and configure only tools that materially improve this project.
 | `documentation-governance` | материальное изменение durable governance-документации |
 | `session-handoff` | завершение значимой сессии реализации/ревью |
 | `project-doctor` | неясное/противоречивое состояние проекта |
-| `workflow-audit` | проверка целостности самого Progressive Context |
+| `workflow-audit` | проверка целостности самого Progressive Context Kit |
 
 Главное правило:
 
@@ -350,7 +352,7 @@ Recommend and configure only tools that materially improve this project.
 
 ## 14. Рекомендуемые инструменты
 
-Progressive Context не пытается заменить сильные специализированные инструменты. Recommended-профиль явно знает о следующих:
+Progressive Context Kit не пытается заменить сильные специализированные инструменты. Recommended-профиль явно знает о следующих:
 
 | Инструмент | Для чего |
 |---|---|
@@ -419,7 +421,7 @@ python3 -m unittest discover -s tools/tests -v
 Использовать `--adopt-existing`. Не заменяй существующий файл вслепую — adoption workflow должен сохранить project-specific инструкции и согласовать их с framework router.
 
 **Чем Framework Source отличается от Project Runtime?**
-Framework Source — это GitHub-репозиторий для разработки, тестирования и релиза самого Progressive Context. Project Runtime — сгенерированный из него release asset, минимальный и в основном скрытый (`.progressive/`), который распаковывается прямо в продуктовый проект. Runtime генерируется автоматически из Framework Source, поэтому это не два независимых Spec Kit, которые нужно синхронизировать вручную.
+Framework Source — это GitHub-репозиторий для разработки, тестирования и релиза самого Progressive Context Kit. Project Runtime — сгенерированный из него release asset, минимальный и в основном скрытый (`.progressive/`), который распаковывается прямо в продуктовый проект. Runtime генерируется автоматически из Framework Source, поэтому это не две независимые системы, которые нужно синхронизировать вручную.
 
 ## 17. Как понять, что всё работает правильно
 
@@ -449,6 +451,6 @@ agent восстанавливает Project Brief / Architecture / Roadmap / т
 
 ## 18. Главное правило
 
-Используй Progressive как workflow, а не как ещё одну коллекцию prompts, которую нужно вручную поддерживать.
+Используй Progressive Context Kit как workflow, а не как ещё одну коллекцию prompts, которую нужно вручную поддерживать.
 
 Пользователь владеет желаемым результатом и реальными решениями. Агент владеет context routing, состоянием проекта, реализацией, проверкой и непрерывностью между сессиями.

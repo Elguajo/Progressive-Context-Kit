@@ -1,4 +1,4 @@
-# Lineage — Token-Efficient Spec Kit → Progressive Context Spec Kit
+# Lineage — Token-Efficient Spec Kit → Progressive Context Kit
 
 **Framework-maintenance evidence only. Do not load this file during normal product work.**
 

@@ -1,4 +1,4 @@
-# Progressive Context Spec Kit — Personal Repository Router
+# Progressive Context Kit — Personal Repository Router
 
 Universal engineering behavior is supplied by the user-global layer in Personal deployment and composed directly into the repository instructions in Standalone deployment. This router owns repository context, workflow/tool routing, and project-state ownership.
 

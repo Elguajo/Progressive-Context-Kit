@@ -1,8 +1,10 @@
-# Progressive Context Spec Kit v1.7.0
+# Progressive Context Kit v1.7.0
+
+**Token-Efficient · Quality-First · Spec-Driven**
 
 > 🇷🇺 Русская версия: [`README_RU.md`](README_RU.md) · подробный гайд: [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md)
 
-A **quality-first, token-efficient Spec-Driven Development workflow** for AI coding agents.
+A development kit for AI coding agents that keeps active context bounded while preserving project knowledge, engineering quality, and Spec-Driven workflow.
 
 > **Minimize active context, not available knowledge.**
 
@@ -10,7 +12,7 @@ A **quality-first, token-efficient Spec-Driven Development workflow** for AI cod
 
 Do **not** copy this whole repository into your product.
 
-This repository is the **Framework Source** used to develop, test, and release Progressive Context itself.
+This repository is the **Framework Source** used to develop, test, and release Progressive Context Kit itself.
 
 For a new project, download the latest release asset:
 
@@ -46,24 +48,24 @@ My idea:
 ## One framework, two surfaces
 
 ```text
-Progressive Context — canonical Framework Source
-                    │
-                    ├── Framework Source
-                    │   GitHub repository
-                    │   development / tests / migration / release tooling
-                    │
-                    └── Project Runtime
-                        GitHub Release asset
-                        minimal hidden runtime placed in real projects
+Progressive Context Kit — canonical Framework Source
+                        │
+                        ├── Framework Source
+                        │   GitHub repository
+                        │   development / tests / migration / release tooling
+                        │
+                        └── Project Runtime
+                            GitHub Release asset
+                            minimal hidden runtime placed in real projects
 ```
 
-The Runtime is **generated from this repository**. It is not maintained as a second independent Spec Kit, so the two surfaces cannot intentionally drift.
+The Runtime is **generated from this repository**. It is not maintained as a second independent kit, so the two surfaces cannot intentionally drift.
 
 ## Framework Source
 
 Use this repository when you want to:
 
-- develop Progressive Context itself;
+- develop Progressive Context Kit itself;
 - change behavior contracts, Skills, protocols, or installers;
 - maintain Codex / Claude adapters;
 - run migration and framework regression tests;

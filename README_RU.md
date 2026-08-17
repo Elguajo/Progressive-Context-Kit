@@ -1,8 +1,10 @@
-# Progressive Context Spec Kit v1.7.0
+# Progressive Context Kit v1.7.0
+
+**Token-Efficient · Quality-First · Spec-Driven**
 
 > 🇬🇧 English version: [`README.md`](README.md) · подробный гайд: [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md)
 
-**Качественно-ориентированный, token-efficient Spec-Driven Development workflow** для AI coding-агентов.
+**Набор для Spec-Driven разработки с AI coding-агентами, ориентированный на качество и эффективное использование контекста.**
 
 > **Минимизировать активный контекст, а не доступные знания.**
 
@@ -10,7 +12,7 @@
 
 **Не копируй весь этот GitHub-репозиторий в свой проект.**
 
-Этот репозиторий — **Framework Source**: исходники для разработки, тестирования и выпуска самого Progressive Context.
+Этот репозиторий — **Framework Source**: исходники для разработки, тестирования и выпуска Progressive Context Kit.
 
 Чтобы начать новый проект, скачай из GitHub Releases файл:
 
@@ -46,24 +48,24 @@ My idea:
 ## Один framework — две поверхности
 
 ```text
-Progressive Context — единый Framework Source
-                    │
-                    ├── Framework Source
-                    │   GitHub repository
-                    │   разработка / тесты / migration / release tooling
-                    │
-                    └── Project Runtime
-                        GitHub Release asset
-                        минимальный runtime для реальных проектов
+Progressive Context Kit — единый Framework Source
+                        │
+                        ├── Framework Source
+                        │   GitHub repository
+                        │   разработка / тесты / migration / release tooling
+                        │
+                        └── Project Runtime
+                            GitHub Release asset
+                            минимальный runtime для реальных проектов
 ```
 
-Runtime **генерируется автоматически** из Framework Source. Это не два независимых Spec Kit, поэтому их не нужно синхронизировать вручную.
+Runtime **генерируется автоматически** из Framework Source. Это не два независимых Kit, поэтому их не нужно синхронизировать вручную.
 
 ## Когда нужен Framework Source
 
 Этот GitHub-репозиторий нужен, если ты:
 
-- развиваешь сам Progressive Context;
+- развиваешь сам Progressive Context Kit;
 - меняешь Skills, contracts, protocols или installer;
 - поддерживаешь Claude/Codex adapters;
 - работаешь с migration/evaluation evidence;
