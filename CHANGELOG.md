@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.1 — 2026-08-18
+
+- Added `docs/project/NEXT_SESSION.md` to the Default Read Set: it is now read on resume (both the preferred `tools/context_compile.py` path and the manual fallback in `AGENTS.md`), so hot next-action state actually reaches new sessions instead of being skipped.
+- Changed the `NEXT SESSION PROMPT` block in `templates/NEXT_SESSION.template.md` to lead with the session's concrete `Next action` instead of pure boilerplate, so a pasted resume prompt carries distinguishing content (also improves auto-generated chat titles in client UIs that title from the first message).
+- Compacted the `profiles/personal/AGENTS.md` / `AGENTS.md` context-routing line (dropped repeated `docs/project/` path prefixes) to stay within the unchanged 3,600-char hard budget; preserved the FW-036 Framework Contract anchor verbatim.
+- No Behavior Contract or Framework Contract rules changed; all 80 unit tests, the framework/behavior contract audits, and the profile-mirror check pass unchanged.
+
 ## 1.7.0 — 2026-08-17
 
 - Added **Action-First Communication** to both universal adapters (`global/AGENTS.codex.md`, `global/CLAUDE.md`): minimum-sufficient-information principle, explicit output priority (`Correctness > Safety > Task completeness > Actionability > Concision`), bounded numbered steps, tangent suppression, `location -> cause -> fix` error reporting, no speculative time estimates, and no manufactured next action after a complete request.

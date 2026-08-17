@@ -60,7 +60,7 @@ Universal engineering behavior is supplied by the user-global layer in Personal 
 ## Context routing
 
 - **Tiny/local task:** target file + nearby evidence/tests only; project docs only when product/architecture constraints matter.
-- **Normal product work:** prefer `python3 tools/context_compile.py`; otherwise read `docs/project/PROJECT_BRIEF.md` → `docs/project/ARCHITECTURE.md` → `docs/project/ROADMAP.md` → the `[>]` phase → the prior phase's `Completion Record` when present, then only relevant ADR/source/tests/schemas/current docs.
+- **Normal product work:** prefer `python3 tools/context_compile.py`; otherwise read `docs/project/PROJECT_BRIEF.md` → `ARCHITECTURE.md` → `ROADMAP.md` → `NEXT_SESSION.md` when present → `[>]` phase → prior phase's `Completion Record` when present, then only relevant ADR/source/tests/schemas/current docs.
 - Never warm up by reading full completed phases, all ADRs, `docs/system/*`, `docs/system/LINEAGE.md`, full chat history, or large manuals.
 - `ROADMAP.md` is canonical for current phase. If every phase is `[x]`, new work is a change request.
 - If Git is unavailable, continue without treating that as an error.

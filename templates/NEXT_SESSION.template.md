@@ -21,6 +21,8 @@ Outcome: <IN PROGRESS | PHASE COMPLETE | PROJECT COMPLETE>
 
 ## NEXT SESSION PROMPT
 ```text
+Continue: <same one concrete action as "Next action" above>
+
 Read the active instruction layers, recover project state from the Default Read Set,
 verify the Roadmap marker, and continue the next action autonomously. Do not reread
 full completed phases or chat history unless evidence requires it.

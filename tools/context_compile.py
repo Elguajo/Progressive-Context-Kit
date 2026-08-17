@@ -3,7 +3,7 @@ from pathlib import Path
 import argparse, json, re
 from common import PHASE_RE, current_phase, project_file, read, resolve_path, safe_join
 
-CORE=['docs/project/PROJECT_BRIEF.md','docs/project/ARCHITECTURE.md','docs/project/ROADMAP.md']
+CORE=['docs/project/PROJECT_BRIEF.md','docs/project/ARCHITECTURE.md','docs/project/ROADMAP.md','docs/project/NEXT_SESSION.md']
 PLACEHOLDER_PATTERNS=[r'^Status:\s*UNINITIALIZED\s*$',r'^<.*>$',r'^\.\.\.$']
 MAX_REQUIRED_FILES=16
 MAX_TOTAL_EXTRA_CHARS=16000
