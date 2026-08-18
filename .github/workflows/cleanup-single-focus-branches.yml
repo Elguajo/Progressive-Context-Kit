@@ -1,0 +1,49 @@
+name: Cleanup single-focus branches
+
+on:
+  pull_request:
+    branches:
+      - cleanup/single-focus-base
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete temporary branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import urllib.parse
+          import urllib.request
+
+          repo = os.environ['GITHUB_REPOSITORY']
+          token = os.environ['GH_TOKEN']
+          branches = [
+              'fix/single-focus-next-session',
+              'cleanup/single-focus-trigger',
+              'cleanup/single-focus-base',
+          ]
+          for branch in branches:
+              url = f"https://api.github.com/repos/{repo}/git/refs/heads/{urllib.parse.quote(branch, safe='')}"
+              request = urllib.request.Request(
+                  url,
+                  method='DELETE',
+                  headers={
+                      'Authorization': f'Bearer {token}',
+                      'Accept': 'application/vnd.github+json',
+                      'X-GitHub-Api-Version': '2022-11-28',
+                  },
+              )
+              try:
+                  with urllib.request.urlopen(request) as response:
+                      print(branch, response.status)
+              except urllib.error.HTTPError as exc:
+                  if exc.code != 404:
+                      raise
+                  print(branch, 'already absent')
+          PY
