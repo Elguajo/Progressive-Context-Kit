@@ -13,7 +13,19 @@ REQUIRED = [
     '.progressive/integrations/TOOL_REGISTRY.json','.progressive/integrations/PROFILES.md',
     '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/audit.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
 ]
-VISIBLE_FRAMEWORK_DIRS = {'docs','global','integrations','profiles','prompts','templates','tools'}
+# Real products may legitimately own root directories named docs/, tools/, templates/,
+# integrations/, profiles/, or prompts/. Detect legacy Framework Source leakage by
+# framework-specific sentinel paths instead of reserving generic project directory names.
+LEGACY_FRAMEWORK_MARKERS = [
+    'docs/project/PROJECT_BRIEF.md',
+    'docs/system/CONTEXT_PROTOCOL.md',
+    'global/AGENTS.codex.md',
+    'profiles/standalone/AGENTS.md',
+    'prompts/START_NEW_PROJECT.md',
+    'templates/PHASE.template.md',
+    'integrations/TOOL_REGISTRY.json',
+    'tools/context_compile.py',
+]
 
 def fail_if(c, errors, msg):
     if c: errors.append(msg)
@@ -45,8 +57,13 @@ def verify_project_state(root, errors, warns):
         if not active and not all(marker == 'x' for marker,_ in markers): errors.append('Initialized Roadmap must have exactly one active phase unless all phases are complete')
         for marker,rel in markers:
             p = root/rel
-            if not p.is_file(): errors.append('Roadmap phase file missing: '+rel); continue
-            if marker == 'x' and not completion_record(p): warns.append('completed phase lacks Completion Record: '+rel)
+            # Completed and active phases are execution evidence and must exist. Planned
+            # future phases may remain Roadmap-only until they become active.
+            if marker in {'x','>'} and not p.is_file():
+                errors.append('Roadmap phase file missing: '+rel)
+                continue
+            if marker == 'x' and p.is_file() and not completion_record(p):
+                warns.append('completed phase lacks Completion Record: '+rel)
     phase = current_phase(root) or template_file(root,'PHASE.template.md')
     project_chars = sum(chars(project_file(root,n)) for n in ['PROJECT_BRIEF.md','ARCHITECTURE.md','ROADMAP.md']) + chars(phase)
     if current_phase(root):
@@ -56,7 +73,8 @@ def verify_project_state(root, errors, warns):
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--root',default='.'); a=ap.parse_args(); root=Path(a.root).resolve(); errors=[]; warns=[]
     for rel in REQUIRED: fail_if(not (root/rel).is_file(), errors, 'missing required runtime file: '+rel)
-    for d in VISIBLE_FRAMEWORK_DIRS: fail_if((root/d).exists(), errors, 'framework surface leaked into project root: '+d+'/')
+    for rel in LEGACY_FRAMEWORK_MARKERS:
+        fail_if((root/rel).exists(), errors, 'legacy framework surface leaked into project root: '+rel)
     fail_if('@AGENTS.md' not in read(root/'CLAUDE.md'), errors, 'CLAUDE.md must import @AGENTS.md')
     fail_if('.progressive/' not in read(root/'AGENTS.md'), errors, 'AGENTS.md must route into hidden .progressive runtime')
     if (root/'.progressive/PROFILE').is_file(): fail_if(read(root/'.progressive/PROFILE').strip() not in {'standalone','personal'},errors,'invalid runtime PROFILE')

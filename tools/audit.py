@@ -97,8 +97,12 @@ def verify_project_state(root,errors,warns):
         if not active and not all(marker=='x' for marker,_ in markers): errors.append('Initialized Roadmap must have exactly one active phase unless all phases are complete')
         for marker,rel in markers:
             p=root/rel
-            if not p.is_file(): errors.append('Roadmap phase file missing: '+rel); continue
-            if marker=='x' and not completion_record(p):
+            # Completed and active phases must have detailed phase files. Planned future
+            # phases may remain Roadmap-only until they become active.
+            if marker in {'x','>'} and not p.is_file():
+                errors.append('Roadmap phase file missing: '+rel)
+                continue
+            if marker=='x' and p.is_file() and not completion_record(p):
                 warns.append('completed phase lacks durable Completion Record (legacy/migration gap): '+rel)
     phase=current_phase(root) or root/'templates/PHASE.template.md'
     project_chars=sum(chars(root/rel) for rel in ['docs/project/PROJECT_BRIEF.md','docs/project/ARCHITECTURE.md','docs/project/ROADMAP.md'])+chars(phase)

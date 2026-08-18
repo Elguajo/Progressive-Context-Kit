@@ -53,6 +53,68 @@ class RuntimeReleaseTests(unittest.TestCase):
             compile_=subprocess.run([sys.executable,str(runtime/'.progressive/tools/context_compile.py'),'--root',str(runtime)],capture_output=True,text=True)
             self.assertEqual(compile_.returncode,0,compile_.stdout+compile_.stderr)
 
+    def test_runtime_audit_allows_real_project_dirs_and_roadmap_only_future_phases(self):
+        build=subprocess.run([sys.executable,str(ROOT/'tools/build_runtime.py')],capture_output=True,text=True)
+        self.assertEqual(build.returncode,0,build.stdout+build.stderr)
+        z=ROOT/f'dist/Progressive-Context-Project-Runtime-v{VERSION}.zip'
+        with tempfile.TemporaryDirectory() as d:
+            with zipfile.ZipFile(z) as zf: zf.extractall(d)
+            runtime=Path(d)/f'Progressive-Context-Project-Runtime-v{VERSION}'
+
+            # Common application-owned directory names must remain available to real projects.
+            for rel in [
+                'docs/architecture.md',
+                'tools/project-helper.txt',
+                'templates/email.txt',
+                'integrations/app-provider.txt',
+                'profiles/customer.txt',
+                'prompts/product-copy.txt',
+                'global/constants.txt',
+            ]:
+                p=runtime/rel; p.parent.mkdir(parents=True,exist_ok=True); p.write_text('project-owned\n')
+
+            phase0=runtime/'.progressive/phases/00-complete.md'
+            phase0.write_text(
+                '# Phase 00 — Complete\n\n'
+                '## Completion Record\n'
+                'Status: COMPLETE\n'
+                'Outcome: baseline complete\n',
+                encoding='utf-8',
+            )
+            phase1=runtime/'.progressive/phases/01-active.md'
+            phase1.write_text('# Phase 01 — Active\n\n## Goal\nContinue.\n',encoding='utf-8')
+            future=[runtime/f'.progressive/phases/{n:02d}-future.md' for n in range(2,6)]
+            roadmap=runtime/'.progressive/project/ROADMAP.md'
+            roadmap.write_text(
+                '# Roadmap\n\n'
+                '- [x] Phase 00 — `.progressive/phases/00-complete.md`\n'
+                '- [>] Phase 01 — `.progressive/phases/01-active.md`\n'
+                '- [ ] Phase 02 — `.progressive/phases/02-future.md`\n'
+                '- [ ] Phase 03 — `.progressive/phases/03-future.md`\n'
+                '- [ ] Phase 04 — `.progressive/phases/04-future.md`\n'
+                '- [ ] Phase 05 — `.progressive/phases/05-future.md`\n',
+                encoding='utf-8',
+            )
+            self.assertTrue(all(not p.exists() for p in future))
+
+            audit=subprocess.run([sys.executable,str(runtime/'.progressive/tools/audit.py'),'--root',str(runtime)],capture_output=True,text=True)
+            self.assertEqual(audit.returncode,0,audit.stdout+audit.stderr)
+
+            # Active/completed execution evidence is still mandatory.
+            phase1.unlink()
+            missing_active=subprocess.run([sys.executable,str(runtime/'.progressive/tools/audit.py'),'--root',str(runtime)],capture_output=True,text=True)
+            self.assertNotEqual(missing_active.returncode,0)
+            self.assertIn('Roadmap phase file missing: .progressive/phases/01-active.md',missing_active.stdout)
+            phase1.write_text('# Phase 01 — Active\n\n## Goal\nContinue.\n',encoding='utf-8')
+
+            # Genuine legacy Framework Source leakage is still rejected by exact marker.
+            leaked=runtime/'docs/system/CONTEXT_PROTOCOL.md'
+            leaked.parent.mkdir(parents=True,exist_ok=True)
+            leaked.write_text('legacy framework copy\n',encoding='utf-8')
+            leak_audit=subprocess.run([sys.executable,str(runtime/'.progressive/tools/audit.py'),'--root',str(runtime)],capture_output=True,text=True)
+            self.assertNotEqual(leak_audit.returncode,0)
+            self.assertIn('legacy framework surface leaked into project root: docs/system/CONTEXT_PROTOCOL.md',leak_audit.stdout)
+
     def test_runtime_build_is_deterministic(self):
         first=subprocess.run([sys.executable,str(ROOT/'tools/build_runtime.py')],capture_output=True,text=True)
         self.assertEqual(first.returncode,0,first.stdout+first.stderr)
