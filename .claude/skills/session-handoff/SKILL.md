@@ -21,6 +21,14 @@ For a non-trivial completed task inside an active phase, preserve only a compact
 evidence, and decisions/issues in the phase file when later work needs them. Do not create one
 completion file per routine task.
 
+Use Single-Focus Continuation for `NEXT_SESSION`: one handoff prompt = one unresolved
+execution target. If the current task, acceptance criterion, manual verification, blocker, or
+other gate remains open, both `Next action` and the copyable prompt must focus only on closing
+that target. Do not name or preload the next queued task/phase with wording such as "then
+continue" or "after that start". Multiple substeps are allowed only when they all complete the
+same target and share one acceptance boundary. Select later work only after the current target
+is genuinely complete and its evidence/state has been persisted.
+
 Do not repeat the diff line by line, claim success beyond observed evidence, or ask for
 post-hoc approval after a clean finish unless another risky step remains. Include the
 ready-to-copy next-session prompt when the project continues. Never end a turn with only
