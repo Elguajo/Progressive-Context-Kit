@@ -1,60 +1,37 @@
 # Progressive Context Kit — Быстрый старт
 
-> **Гайд только для человека.** Этот файл принадлежит Framework Source и намеренно исключён из релиза Project Runtime — агент не должен читать его как обычный context.
+> **Гайд только для человека.** Этот файл принадлежит Framework Source и намеренно исключён из Project Runtime.
 >
 > English version: [`GETTING_STARTED.md`](GETTING_STARTED.md)
 
 **Token-Efficient · Quality-First · Spec-Driven**
 
-## 0. Зачем это нужно
+Если хочешь сначала понять идею, а не команды:
 
-Когда AI-агент работает с проектом без дополнительной системы, ему часто приходится заново выяснять: что это за продукт, какая у него архитектура, что уже сделано, что делать следующим, какие решения уже приняты, какие ограничения нельзя нарушать, какие тесты запускать и где закончилась предыдущая сессия.
+- [`Как работает Progressive Context`](HOW_PROGRESSIVE_CONTEXT_WORKS.ru.md)
+- [`Модель памяти проекта`](PROJECT_MEMORY_MODEL.ru.md)
+- [`Безопасное обновление Project Runtime`](UPDATING_RUNTIME.ru.md)
+- [`Визуальный onboarding`](../visuals/user-onboarding.md)
 
-На маленьком проекте это терпимо. На долгом проекте это превращается в повторное чтение файлов, разрастающиеся prompts и риск того, что новая сессия примет решения, противоречащие предыдущим.
+## 1. Скачай Project Runtime
 
-Progressive Context Kit хранит состояние проекта отдельно от чата:
-
-```text
-Идея продукта
-      ↓
-Project Brief
-      ↓
-Architecture
-      ↓
-Roadmap
-      ↓
-текущая Phase
-      ↓
-реализация
-      ↓
-проверка
-      ↓
-Completion Record / Handoff
-      ↓
-Next Session
-```
-
-Северная звезда дизайна: **минимизировать активный контекст, а не доступные знания.** Ничего не удаляется — просто не всё грузится в каждую сессию.
-
-## 1. Рекомендуемый путь: скачать Project Runtime
-
-Для обычной продуктовой работы не клонируй и не копируй весь репозиторий Framework Source.
+Для обычной продуктовой работы **не клонируй и не копируй весь Framework Source**.
 
 Скачай последний release asset:
 
 ```text
-Progressive-Context-Project-Runtime-v1.7.0.zip
+Progressive-Context-Project-Runtime-v1.8.0.zip
 ```
 
-со страницы:
+со страницы GitHub Releases:
 
 ```text
 https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 ```
 
-Распакуй его в директорию, которая станет твоим проектом.
+Распакуй архив в директорию будущего проекта.
 
-Начальная поверхность framework должна выглядеть так:
+Начальная поверхность должна выглядеть так:
 
 ```text
 my-project/
@@ -65,24 +42,24 @@ my-project/
 └── CLAUDE.md
 ```
 
-Всё, что относится к Progressive и не обязано быть нативной agent-точкой входа, живёт в скрытой директории `.progressive/`. Видимых framework-папок вроде `global/`, `integrations/`, `profiles/`, `prompts/`, `templates/`, `tools/` или `docs/` в корне продукта не будет.
+Всё Progressive-специфичное, что не обязано быть нативной точкой входа агента, живёт внутри скрытой `.progressive/`.
 
-## 2. Глобальная настройка не обязательна
+## 2. Глобальная настройка для основного релиза не нужна
 
-Основной релиз Project Runtime использует **Standalone profile**.
+Основной Project Runtime использует **Standalone profile**.
 
-Это значит, что перед началом работы не нужно ничего устанавливать в:
+Перед началом работы не нужно ничего устанавливать в:
 
 ```text
 ~/.claude/CLAUDE.md
 ~/.codex/AGENTS.md
 ```
 
-Это осознанное решение: основной download должен работать с минимальным количеством шагов настройки и минимальной неоднозначностью установки.
+Это специально сделано так, чтобы основной download был zero-setup.
 
 ## 3. Запусти Claude Code или Codex
 
-Пример с Claude Code:
+Например:
 
 ```bash
 cd /path/to/my-project
@@ -96,7 +73,7 @@ Project-level Claude Skills остаются в:
 .claude/skills/
 ```
 
-Не копируй их в user-level `~/.claude/skills/` в рамках обычной установки Project Runtime.
+Не копируй их в `~/.claude/skills/` как часть обычной установки Runtime.
 
 ## 4. Первый prompt
 
@@ -106,60 +83,61 @@ Project-level Claude Skills остаются в:
 Use .progressive/prompts/START_NEW_PROJECT.md.
 
 My idea:
-<опиши проблему, целевых пользователей, желаемый результат, реальные ограничения и явные non-goals>
+<опиши проблему, пользователей, желаемый результат, реальные ограничения и явные non-goals>
 ```
 
-Описывай в первую очередь **что** ты хочешь получить и реальные ограничения.
+Описывай прежде всего **что** нужно получить и реальные ограничения.
 
-Не выбирай заранее framework, базу данных, hosting, state management или структуру директорий, если это не настоящее продуктовое/организационное требование. Workflow сам должен определить подходящий scope, архитектуру, roadmap, фазы реализации и стратегию проверки.
+Не выбирай заранее framework, database, hosting, state management или структуру директорий, если это не настоящее продуктовое или организационное требование. Workflow должен сам определить подходящий scope, архитектуру, Roadmap, phases и validation strategy.
 
-## 5. Что Progressive должен поддерживать
+## 5. Что Progressive поддерживает в актуальном состоянии
 
 ```text
 Идея
-→ Project Brief
-→ Architecture
-→ Roadmap
-→ текущая Phase
-→ Реализация
-→ Проверка
-→ Completion Record / Handoff
-→ Next Session
+→ PROJECT_BRIEF
+→ ARCHITECTURE
+→ ROADMAP
+→ Current Phase
+→ Implementation
+→ Verification
+→ Phase Completion Report + compact Completion Record
+→ Next Phase / NEXT_SESSION
 ```
 
-Владельцы состояния в Runtime:
+Основные владельцы состояния:
 
-- `.progressive/project/PROJECT_BRIEF.md` — истина о продукте;
+- `.progressive/project/PROJECT_BRIEF.md` — продуктовая истина;
 - `.progressive/project/ARCHITECTURE.md` — текущая истина о системе;
-- `.progressive/project/ROADMAP.md` — канонический порядок/статус фаз;
-- `.progressive/phases/*` — контракты реализации и acceptance criteria;
-- `Completion Record` завершённой фазы — компактный устойчивый мост между фазами;
-- `.progressive/project/NEXT_SESSION.md` — перезаписываемая горячая навигация;
-- `.progressive/decisions/*` — consequential rationale, когда ADR оправдан.
+- `.progressive/project/ROADMAP.md` — порядок и статус phases;
+- `.progressive/phases/*` — execution + acceptance contracts;
+- `.progressive/completions/*` — подробная долговременная история завершённых phases, читаемая on demand;
+- `Completion Record` завершённой Phase — компактный мост между фазами;
+- `.progressive/project/NEXT_SESSION.md` — перезаписываемая hot navigation;
+- `.progressive/decisions/*` — consequential rationale, когда нужен ADR.
 
-Тебе не нужно вручную указывать агенту, какие из этих файлов поддерживать в актуальном состоянии — это часть workflow.
+Подробно: [`Модель памяти проекта`](PROJECT_MEMORY_MODEL.ru.md).
 
-## 6. Продолжение работы между сессиями
+## 6. Продолжение между сессиями
 
 После значимой сессии:
 
 1. дай агенту провалидировать результат и подготовить handoff;
 2. полностью закрой сессию;
-3. открой новую сессию в том же репозитории;
+3. открой новую в том же репозитории;
 4. вставь только сгенерированный `NEXT SESSION PROMPT`;
-5. не пересказывай проект заново вручную, если только что-то действительно важное не потерялось.
+5. не пересказывай весь проект вручную, если что-то действительно не потерялось.
 
-Это практический тест непрерывности, который Progressive должен проходить.
-
-Для новой сессии можно также использовать:
+Можно также использовать:
 
 ```text
 Use .progressive/prompts/CONTINUE_PROJECT.md and continue autonomously.
 ```
 
+Визуальный flow: [`session-context-flow.md`](../visuals/session-context-flow.md).
+
 ## 7. Что агент должен читать по умолчанию
 
-Для обычной продуктовой работы предпочтителен минимально достаточный context:
+Минимально достаточный context:
 
 ```text
 repository behavior
@@ -167,12 +145,14 @@ repository behavior
 + Architecture
 + Roadmap
 + текущая Phase
-+ Completion Record непосредственно предыдущей фазы (когда релевантно)
-+ релевантный код/тесты по задаче
++ предыдущий compact Completion Record, когда нужен
++ релевантный код/тесты
 + подходящий Skill/protocol
 ```
 
-Агент не должен рекурсивно прогреваться из всей директории `.progressive/`. Human-документы, migration evidence, framework-тесты, полные тела завершённых фаз и история framework намеренно отсутствуют в пакете Runtime.
+Агент не должен рекурсивно прогреваться из всей `.progressive/`.
+
+Human docs, visual explanations, migration evidence, framework tests, полные старые phases и подробные completion reports не должны попадать в обычный warm-up.
 
 ## 8. Проверка Runtime
 
@@ -181,69 +161,111 @@ python3 .progressive/tools/audit.py --root .
 python3 .progressive/tools/context_compile.py --root .
 ```
 
-Runtime audit проверяет только целостность проекта/runtime. Полные behavior/framework contracts остаются в Framework Source.
+Runtime audit проверяет целостность проекта/runtime. Полные behavior/framework contracts остаются во Framework Source.
 
-## 9. Personal deployment — опциональный продвинутый режим
+## 9. Ежедневные задачи
 
-Personal-режим по-прежнему поддерживается для тех, кто осознанно хочет один user-global слой инженерных правил, общий для многих репозиториев.
-
-Из доверенной копии Framework Source:
-
-Claude Code:
+### Исправить ошибку
 
 ```text
-global/CLAUDE.md → ~/.claude/CLAUDE.md
+Use .progressive/prompts/BUG_FIX.md.
+
+Problem:
+<что сломалось и что наблюдаешь>
 ```
 
-Codex:
+### Добавить или изменить возможность
 
 ```text
-global/AGENTS.codex.md → ~/.codex/AGENTS.md
+Use .progressive/prompts/CHANGE_REQUEST.md.
+
+Change:
+<что нужно изменить>
 ```
 
-Затем установка в проект:
+### Провести review
 
-```bash
-python3 tools/init_project.py /path/to/project --profile personal --agent both --dry-run
-python3 tools/init_project.py /path/to/project --profile personal --agent both
+```text
+Use .progressive/prompts/REVIEW.md.
+
+Review the current implementation/change.
+Prioritize only meaningful correctness, security, regression and maintainability findings.
 ```
 
-Не добавляй поверх Personal-глобальных инструкций Progressive старый длинный custom instructions prompt, если только не хочешь намеренно продублировать поведение.
+### Настроить tooling
 
-Installer никогда сам не изменяет home-level agent configuration.
+```text
+Use .progressive/prompts/SETUP_TOOLING.md.
+Inspect the current project and tooling status.
+Recommend and configure only tools that materially improve this project.
+```
 
-## 10. Существующие проекты
+## 10. Как работают Skills
 
-Adoption остаётся операцией Framework Source, потому что требует reconciliation/update tooling, а не только финальный Runtime payload:
+Главное правило:
+
+> **Installed ≠ loaded ≠ invoked.**
+
+Наличие Skill не означает, что он загружается в каждую сессию.
+
+Примеры routing:
+
+- implementation → `implementation-execution`;
+- неясная root cause → `systematic-debugging`;
+- architecture choice → `architecture-decision`;
+- auth/payments/secrets/permissions и другие sensitive changes → `security-sensitive-change`;
+- review → `code-review`;
+- meaningful handoff → `session-handoff`.
+
+Визуально: [`tool-routing.md`](../visuals/tool-routing.md).
+
+## 11. Existing project
+
+Adoption требует Framework Source tooling:
 
 ```bash
 python3 tools/init_project.py /path/to/existing-project --profile standalone --adopt-existing --dry-run
 python3 tools/init_project.py /path/to/existing-project --profile standalone --adopt-existing
 ```
 
-Дай агенту:
+Не относись к существующему репозиторию как к blank project. Сначала восстанови фактический product/system state из evidence, затем уже планируй будущее.
 
-```text
-Use prompts/ADOPT_EXISTING_PROJECT.md.
+## 12. Обновление Runtime
 
-Adopt Progressive Context Kit into this existing repository.
-Do not treat this as a blank project.
+Не распаковывай новый ZIP вслепую поверх важного проекта.
 
-First understand the product and architecture that actually exist from repository evidence.
-Preserve existing code, documentation, Git changes and project-specific instructions.
+Предпочтительный путь из доверенного Framework Source checkout:
 
-Reconstruct the canonical project state: PROJECT_BRIEF, ARCHITECTURE, ROADMAP, current PHASE.
-Separate already-completed capabilities from future work.
-Reconcile existing AGENTS.md / CLAUDE.md and documentation instead of blindly replacing them.
+```bash
+python3 tools/init_project.py /path/to/project --update-framework --dry-run
+python3 tools/init_project.py /path/to/project --update-framework
 ```
 
-Агент не должен придумывать новую архитектуру и описывать её так, будто она уже существует. Сначала — исследование фактического состояния, отдельно — желаемые будущие изменения.
+Подробно: [`Безопасное обновление Project Runtime`](UPDATING_RUNTIME.ru.md).
 
-## 11. Если ты развиваешь сам Progressive Context Kit
+## 13. Personal deployment — опционально
 
-Клонируй репозиторий Framework Source вместо релиза Project Runtime.
+Если сознательно нужен user-global engineering layer для многих репозиториев:
 
-Framework Source намеренно содержит видимые directories для разработки:
+```text
+global/CLAUDE.md → ~/.claude/CLAUDE.md
+global/AGENTS.codex.md → ~/.codex/AGENTS.md
+```
+
+Затем:
+
+```bash
+python3 tools/init_project.py /path/to/project --profile personal --agent both --dry-run
+python3 tools/init_project.py /path/to/project --profile personal --agent both
+```
+
+Installer сам не меняет home-level agent configuration.
+
+## 14. Если ты развиваешь Progressive Context Kit
+
+Тогда нужен именно Framework Source, а не Runtime ZIP.
+
+Framework Source содержит:
 
 ```text
 global/
@@ -255,9 +277,7 @@ tools/
 docs/
 ```
 
-Эти файлы существуют для разработки и проверки Progressive Context Kit; их не нужно копировать целиком в продуктовые репозитории.
-
-Сборка нового Project Runtime:
+Сборка Project Runtime:
 
 ```bash
 python3 tools/build_release.py
@@ -266,12 +286,10 @@ python3 tools/build_release.py
 Результат:
 
 ```text
-dist/Progressive-Context-Project-Runtime-v1.7.0.zip
-dist/Progressive-Context-Project-Runtime-v1.7.0.manifest.json
+dist/Progressive-Context-Project-Runtime-v1.8.0.zip
+dist/Progressive-Context-Project-Runtime-v1.8.0.manifest.json
 dist/SHA256SUMS.txt
 ```
-
-`tools/build_release.py` — канонический release entrypoint: проверяет Framework Source, собирает Runtime, аудирует распакованный Runtime и пишет release metadata. `tools/build_runtime.py` — более низкоуровневый шаг упаковки. `tools/build_starter.py` сохранён как compatibility alias, но с v1.6 пользовательский пакет называется **Project Runtime**.
 
 Проверка Framework Source:
 
@@ -284,173 +302,10 @@ python3 tools/build_runtime.py
 python3 -m unittest discover -s tools/tests -v
 ```
 
-## 12. Как пользоваться каждый день
+Human-only схемы находятся в [`docs/visuals/`](../visuals/README.md) и намеренно не попадают в Runtime.
 
-После первоначального bootstrap не нужно каждый раз пересказывать агенту всю историю проекта.
+## 15. Главное правило
 
-**Исправить ошибку:**
+Используй Progressive Context Kit как workflow, а не как коллекцию prompts, которую нужно вручную поддерживать.
 
-```text
-Use .progressive/prompts/BUG_FIX.md.
-
-Problem:
-<опиши, что сломалось и что ты наблюдаешь>
-```
-
-**Добавить новую возможность или изменить существующую:**
-
-```text
-Use .progressive/prompts/CHANGE_REQUEST.md.
-
-Change:
-<что ты хочешь изменить>
-```
-
-**Провести code review:**
-
-```text
-Use .progressive/prompts/REVIEW.md.
-
-Review the current implementation/change.
-Prioritize only meaningful correctness, security, regression and maintainability findings.
-```
-
-**Настроить tooling:**
-
-```text
-Use .progressive/prompts/SETUP_TOOLING.md.
-Inspect the current project and tooling status.
-Recommend and configure only tools that materially improve this project.
-```
-
-> Если ты работаешь из клона Framework Source (не из скачанного Runtime), пути к этим prompts — `prompts/...` без префикса `.progressive/`.
-
-## 13. Как работают Skills
-
-В Progressive Context Kit есть специализированные workflow-Skills:
-
-| Skill | Когда подключается |
-|---|---|
-| `project-bootstrap` | инициализация нового продукта |
-| `existing-project-adoption` | adoption существующего репозитория |
-| `tooling-bootstrap` | отсутствует материально полезный preferred tool |
-| `implementation-execution` | нетривиальная реализация после согласованного направления |
-| `architecture-decision` | материальный архитектурный/технологический выбор |
-| `security-sensitive-change` | auth/payments/permissions/secrets/private data/untrusted input/SQL/CSRF/redirects/webhooks/migrations |
-| `systematic-debugging` | неясная/нестабильная/stateful первопричина |
-| `code-review` | ревью кода/diff/PR или вставленный код без конкретного вопроса |
-| `documentation-governance` | материальное изменение durable governance-документации |
-| `session-handoff` | завершение значимой сессии реализации/ревью |
-| `project-doctor` | неясное/противоречивое состояние проекта |
-| `workflow-audit` | проверка целостности самого Progressive Context Kit |
-
-Главное правило:
-
-> **Установленный Skill ≠ Skill загружается в каждую сессию.**
-
-Например, обычное изменение текста на кнопке не должно подключать `security-sensitive-change` или `architecture-decision`. Но задача про payment integration может подключить `security-sensitive-change` + `implementation-execution` + релевантный project context одновременно.
-
-## 14. Рекомендуемые инструменты
-
-Progressive Context Kit не пытается заменить сильные специализированные инструменты. Recommended-профиль явно знает о следующих:
-
-| Инструмент | Для чего |
-|---|---|
-| **Semble** | поиск логики по смыслу (intent/semantic discovery) в большом codebase |
-| **Serena** | symbols, references, implementations, безопасный refactor по известным символам |
-| **RTK** | более компактный вывод terminal/test/build/git |
-| **Superpowers** | дисциплина implementation/TDD/debugging |
-| **gstack** | challenge/review/browser QA/release checks |
-| **Context7** | актуальная документация библиотек и API |
-| **GitHub Spec Kit** | опциональный Advanced Spec Mode — глубокая формальная specification для сложных/high-risk фаз |
-
-Если полезный инструмент отсутствует, агент не должен просто делать вид, что его нет:
-
-```text
-нужна capability
-      ↓
-preferred tool установлен?
-      ↓
-да → использовать
-нет
-      ↓
-инструмент действительно даст заметную пользу?
-      ↓
-да → предложить установку/подключение (Skill tooling-bootstrap)
-нет → продолжить native средствами
-```
-
-Мелкая задача не должна блокироваться только ради установки дополнительного инструмента. Installed ≠ loaded ≠ invoked — сам факт установки не означает, что инструмент подключается в каждой сессии.
-
-## 15. Проверка установки
-
-Для Project Runtime, из корня распакованного проекта:
-
-```bash
-python3 .progressive/tools/audit.py --root .
-python3 .progressive/tools/context_compile.py --root .
-```
-
-Для Framework Source, из корня этого репозитория:
-
-```bash
-python3 tools/audit.py
-python3 tools/behavior_contract.py
-python3 tools/framework_contract.py
-python3 tools/duplication_audit.py
-python3 -m unittest discover -s tools/tests -v
-```
-
-Для ежедневной разработки не нужно вручную запускать весь набор Framework Source после каждой маленькой задачи — это проверки самого framework, а не обычная продуктовая работа.
-
-## 16. Частые вопросы
-
-**Нужно ли устанавливать Progressive отдельно для Codex и Claude?**
-Нет. Один и тот же Project Runtime (или один repository router `AGENTS.md` для Framework Source) обслуживает Codex, Claude Code или оба сразу — выбор делается флагом `--agent` при сборке/установке.
-
-**Нужно ли копировать global instructions в каждый проект?**
-Нет. В режиме Personal они устанавливаются один раз (`~/.codex/AGENTS.md`, `~/.claude/CLAUDE.md`). Основной релиз Project Runtime вообще не требует global-настройки — он самодостаточен через Standalone profile.
-
-**Все Skills постоянно расходуют токены?**
-Нет. Они предназначены для progressive/on-demand loading. Сам факт наличия Skill в проекте не означает, что всё его содержимое попадает в каждую сессию.
-
-**Human-документы вроде этого гайда будут постоянно читаться агентом?**
-Нет. `docs/human/` (Framework Source) намеренно исключена из сборки Project Runtime и не входит в обычный warm-up context.
-
-**Что делать, если в существующем проекте уже есть `AGENTS.md`?**
-Использовать `--adopt-existing`. Не заменяй существующий файл вслепую — adoption workflow должен сохранить project-specific инструкции и согласовать их с framework router.
-
-**Чем Framework Source отличается от Project Runtime?**
-Framework Source — это GitHub-репозиторий для разработки, тестирования и релиза самого Progressive Context Kit. Project Runtime — сгенерированный из него release asset, минимальный и в основном скрытый (`.progressive/`), который распаковывается прямо в продуктовый проект. Runtime генерируется автоматически из Framework Source, поэтому это не две независимые системы, которые нужно синхронизировать вручную.
-
-## 17. Как понять, что всё работает правильно
-
-После хорошей настройки ожидаемое поведение выглядит так:
-
-```text
-Ты открываешь новую AI-сессию
-        ↓
-пишешь коротко: "Continue the project"
-        ↓
-agent восстанавливает Project Brief / Architecture / Roadmap / текущую Phase
-        ↓
-не перечитывает весь проект без причины
-        ↓
-подключает нужный Skill/tool только при реальной необходимости
-        ↓
-реализует изменение
-        ↓
-проверяет результат
-        ↓
-обновляет состояние (Completion Record, Roadmap, NEXT_SESSION)
-        ↓
-готовит следующую сессию
-```
-
-Тебе не нужно каждый раз писать огромный prompt и вручную пересказывать AI, что происходило в предыдущих сессиях.
-
-## 18. Главное правило
-
-Используй Progressive Context Kit как workflow, а не как ещё одну коллекцию prompts, которую нужно вручную поддерживать.
-
-Пользователь владеет желаемым результатом и реальными решениями. Агент владеет context routing, состоянием проекта, реализацией, проверкой и непрерывностью между сессиями.
+Пользователь в первую очередь владеет желаемым результатом и реальными решениями. Агент владеет context routing, состоянием проекта, реализацией, проверкой и continuity между сессиями.
