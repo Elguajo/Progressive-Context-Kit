@@ -2,11 +2,30 @@
 
 **Token-Efficient · Quality-First · Spec-Driven**
 
+[![Release](https://img.shields.io/github/v/release/Elguajo/Progressive-Context-Kit?label=release)](https://github.com/Elguajo/Progressive-Context-Kit/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Contributing](https://img.shields.io/badge/contributions-guide-informational.svg)](CONTRIBUTING.md)
+
 > 🇷🇺 Русская версия: [`README_RU.md`](README_RU.md) · detailed guide: [`docs/human/GETTING_STARTED.md`](docs/human/GETTING_STARTED.md)
 
 A development kit for AI coding agents that keeps active context bounded while preserving project knowledge, engineering quality, and Spec-Driven workflow.
 
 > **Minimize active context, not available knowledge.**
+
+## Contents
+
+- [Start here — most users](#start-here--most-users)
+- [One framework, two surfaces](#one-framework-two-surfaces)
+- [Understand the model](#understand-the-model)
+- [Framework Source](#framework-source)
+- [Build the Project Runtime](#build-the-project-runtime)
+- [Personal profile — optional advanced setup](#personal-profile--optional-advanced-setup)
+- [Runtime context model](#runtime-context-model)
+- [Preferred tooling](#preferred-tooling)
+- [Verify Framework Source](#verify-framework-source)
+- [Verify a Project Runtime](#verify-a-project-runtime)
+- [License](#license)
+- [Contributing](#contributing)
 
 ```mermaid
 flowchart LR
@@ -182,3 +201,12 @@ python3 .progressive/tools/context_compile.py --root .
 ```
 
 Static framework gates remain in Framework Source; the Project Runtime carries only runtime integrity and project execution machinery.
+
+## License
+
+Released under the [MIT License](LICENSE).
+
+## Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the canonical-ownership rules, the required
+pre-submit checks, and the release-artifact policy for this repository.

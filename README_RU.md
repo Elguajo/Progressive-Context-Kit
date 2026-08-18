@@ -2,11 +2,30 @@
 
 **Token-Efficient · Quality-First · Spec-Driven**
 
+[![Release](https://img.shields.io/github/v/release/Elguajo/Progressive-Context-Kit?label=release)](https://github.com/Elguajo/Progressive-Context-Kit/releases/latest)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Contributing](https://img.shields.io/badge/contributions-guide-informational.svg)](CONTRIBUTING.md)
+
 > 🇬🇧 English version: [`README.md`](README.md) · подробный гайд: [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md)
 
 **Набор для Spec-Driven разработки с AI coding-агентами, ориентированный на качество и эффективное использование контекста.**
 
 > **Минимизировать активный контекст, а не доступные знания.**
+
+## Содержание
+
+- [С чего начать — для большинства пользователей](#с-чего-начать--для-большинства-пользователей)
+- [Один framework — две поверхности](#один-framework--две-поверхности)
+- [Понять модель](#понять-модель)
+- [Когда нужен Framework Source](#когда-нужен-framework-source)
+- [Сборка Project Runtime](#сборка-project-runtime)
+- [Personal profile — опционально](#personal-profile--опционально)
+- [Runtime context](#runtime-context)
+- [Preferred tooling](#preferred-tooling)
+- [Проверка Framework Source](#проверка-framework-source)
+- [Проверка Project Runtime](#проверка-project-runtime)
+- [Лицензия](#лицензия)
+- [Как внести вклад](#как-внести-вклад)
 
 ```mermaid
 flowchart LR
@@ -179,3 +198,12 @@ python3 -m unittest discover -s tools/tests -v
 python3 .progressive/tools/audit.py --root .
 python3 .progressive/tools/context_compile.py --root .
 ```
+
+## Лицензия
+
+Распространяется по лицензии [MIT](LICENSE).
+
+## Как внести вклад
+
+Правила канонического владения фактами, обязательные проверки перед отправкой изменений и
+политика release-артефактов — в [`CONTRIBUTING.md`](CONTRIBUTING.md).
