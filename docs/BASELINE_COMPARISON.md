@@ -1,4 +1,4 @@
-# Baseline Comparison — v1.7.0 Deployment + Tooling
+# Baseline Comparison — v1.7.2 Deployment + Tooling
 
 Counts use deterministic Unicode characters. `chars / 4` is rough intuition only, not exact tokenizer/billing output.
 
@@ -11,33 +11,33 @@ Counts use deterministic Unicode characters. `chars / 4` is rough intuition only
 ## Codex Personal always-loaded layers
 
 - `global/AGENTS.codex.md`: **4,939 characters**
-- `profiles/personal/AGENTS.md`: **3,561 characters**
-- combined: **8,500 characters** (at the 8,500-char hard budget)
-- rough intuition: **~2,125 tokens**
-- reduction versus the old Custom Instructions **alone**: **26.3%**
+- `profiles/personal/AGENTS.md`: **3,552 characters**
+- combined: **8,491 characters** (8,500-char hard budget, 9 chars headroom)
+- rough intuition: **~2,123 tokens**
+- reduction versus the old Custom Instructions **alone**: **26.4%**
 
 ## Claude Personal always-loaded layers
 
 - `global/CLAUDE.md`: **4,995 characters**
-- shared `profiles/personal/AGENTS.md`: **3,561 characters**
-- combined: **8,556 characters**
-- rough intuition: **~2,139 tokens**
+- shared `profiles/personal/AGENTS.md`: **3,552 characters**
+- combined: **8,547 characters**
+- rough intuition: **~2,137 tokens**
 - reduction versus the old Custom Instructions **alone**: **25.9%**
 
 Project `CLAUDE.md` imports only the active root `@AGENTS.md`; it does not import Standalone directly in Personal mode. This prevents a second copy of universal behavior from entering Claude startup context.
 
 ## Standalone
 
-- composed root `AGENTS.md`: **8,686 characters**
-- rough intuition: **~2,172 tokens**
-- reduction versus old Custom Instructions alone: **24.7%**
+- composed root `AGENTS.md`: **8,672 characters**
+- rough intuition: **~2,168 tokens**
+- reduction versus old Custom Instructions alone: **24.9%**
 
 The old real tandem also loaded repository instructions on top of the 11.5k global prompt, so comparisons against the old Custom Instructions alone remain conservative.
 
 ## Progressive context
 
 - **12 task-triggered Skills**
-- all Skill bodies together: **11,233 characters**, not intended to load together
+- all Skill bodies together: **11,590 characters**, not intended to load together
 - largest Skill: **2,012 characters** (`architecture-decision`)
 - uninitialized canonical project default context: **825 characters** (~206 chars/4 rough tokens)
 

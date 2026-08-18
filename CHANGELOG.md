@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.2 — 2026-08-18
+
+- Broadened the `session-handoff` router trigger (`profiles/personal/AGENTS.md` / generated `AGENTS.md` / `profiles/standalone/AGENTS.md`) from "meaningful implementation/review session ending" to also fire on "session ending or user-only decision/blocker", so an agent pausing mid-phase for user confirmation is routed to handoff instead of silently ending the turn.
+- Added an explicit invariant to `session-handoff/SKILL.md` (`.agents/skills` canonical, mirrored to `.claude/skills`): never end a turn with only "waiting for confirmation/next action is X" — persist state and supply the ready-to-copy continuation prompt before yielding to the user.
+- Updated `docs/BASELINE_COMPARISON.md` always-loaded character counts to the current measured values; all combined budgets remain within their unchanged hard limits (Codex 8,491/8,500, Claude 8,547/8,600, Standalone 8,672/9,000, personal router 3,552/3,600).
+- No Behavior Contract or Framework Contract rules changed; audits, duplication check, and profile/skill-mirror checks pass unchanged (147/22 behavior, 41/10 framework).
+
 ## 1.7.1 — 2026-08-18
 
 - Added `docs/project/NEXT_SESSION.md` to the Default Read Set: it is now read on resume (both the preferred `tools/context_compile.py` path and the manual fallback in `AGENTS.md`), so hot next-action state actually reaches new sessions instead of being skipped.

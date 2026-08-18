@@ -20,4 +20,6 @@ The completion report must remain concise and evidence-bounded:
 
 Do not repeat the diff line by line, claim success beyond observed evidence, or ask for
 post-hoc approval after a clean finish unless another risky step remains. Include the
-ready-to-copy next-session prompt when the project continues.
+ready-to-copy next-session prompt when the project continues. Never end a turn with only
+"waiting for confirmation/next action is X" — persist state and provide the continuation
+prompt before yielding to the user.

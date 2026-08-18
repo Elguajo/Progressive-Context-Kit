@@ -22,7 +22,7 @@ Load only matching Skills/protocols:
 - unclear/intermittent/stateful root cause → `systematic-debugging`
 - code/diff/PR review or pasted code without a specific question → `code-review`
 - material durable-governance documentation edit → `documentation-governance`
-- meaningful implementation/review session ending → `session-handoff`
+- session ending or user-only decision/blocker → `session-handoff`
 - unclear/inconsistent project state → `project-doctor`
 
 For implementation completion use `docs/system/QUALITY_PROTOCOL.md`. Installed Skills are not warm-up context.
