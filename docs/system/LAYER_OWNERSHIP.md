@@ -7,8 +7,9 @@ Each durable rule/fact gets one canonical owner.
 - Brief → product outcome/users/scope/constraints/success.
 - Architecture → current stack/system shape/trust boundaries/operational assumptions.
 - Roadmap → phase order/status/current pointer.
-- Current Phase → execution tasks/acceptance/verification.
-- Completed Phase `Completion Record` → compact durable outcome/evidence/debt/cross-phase assumptions.
+- Current Phase → execution tasks/acceptance/verification plus compact task-completion notes when later work needs them.
+- Completed Phase `Completion Record` → compact cross-phase bridge and pointer to the final report; remains normal warm-up context.
+- Phase Completion Report (`docs/completions/`; Runtime: `.progressive/completions/`) → detailed durable human-readable result/evidence/implementation notes/debt for one completed phase; read on demand, not normal warm-up.
 - `CONTEXT_MANIFEST.json` → optional non-obvious phase-specific context/Skill hints; never duplicate full docs.
 - ADR → one consequential decision rationale.
 - `TOOL_REGISTRY.json` → preferred branded capability mapping/install policy.
@@ -18,6 +19,8 @@ Each durable rule/fact gets one canonical owner.
 - LINEAGE → framework-maintenance evidence only, never normal task warm-up.
 
 References/routing are allowed; copying the same long policy into multiple always-loaded layers is not.
+
+Backward compatibility: a legacy completed phase whose durable history exists only in its `Completion Record` remains valid. The separate completion-report layer is additive and does not require retroactive migration.
 
 ## Agent adapters
 
