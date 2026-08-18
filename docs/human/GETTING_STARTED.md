@@ -6,6 +6,14 @@
 
 **Token-Efficient · Quality-First · Spec-Driven**
 
+Visual onboarding: [`../visuals/user-onboarding.md`](../visuals/user-onboarding.md)
+
+Conceptual guides:
+
+- [`HOW_PROGRESSIVE_CONTEXT_WORKS.md`](HOW_PROGRESSIVE_CONTEXT_WORKS.md)
+- [`PROJECT_MEMORY_MODEL.md`](PROJECT_MEMORY_MODEL.md)
+- [`UPDATING_RUNTIME.md`](UPDATING_RUNTIME.md)
+
 ## 1. Recommended path: download Project Runtime
 
 For normal product work, do not clone/copy the entire Framework Source repository.
@@ -13,7 +21,7 @@ For normal product work, do not clone/copy the entire Framework Source repositor
 Download the latest release asset:
 
 ```text
-Progressive-Context-Project-Runtime-v1.7.0.zip
+Progressive-Context-Project-Runtime-v1.8.0.zip
 ```
 
 from:
@@ -97,8 +105,8 @@ Idea
 → Current Phase
 → Implementation
 → Validation
-→ Completion Record / Handoff
-→ Next Session
+→ Phase Completion Report + compact Completion Record
+→ Next Phase / Next Session
 ```
 
 Runtime owners:
@@ -107,9 +115,12 @@ Runtime owners:
 - `.progressive/project/ARCHITECTURE.md` — current system truth;
 - `.progressive/project/ROADMAP.md` — canonical phase order/status;
 - `.progressive/phases/*` — execution and acceptance contracts;
-- completed phase `Completion Record` — compact durable bridge;
+- `.progressive/completions/*` — detailed durable history for completed phases, read on demand;
+- completed phase `Completion Record` — compact durable cross-phase bridge;
 - `.progressive/project/NEXT_SESSION.md` — overwriteable hot navigation;
 - `.progressive/decisions/*` — consequential rationale when an ADR is justified.
+
+See [`PROJECT_MEMORY_MODEL.md`](PROJECT_MEMORY_MODEL.md) for the ownership model.
 
 You should not have to manually tell the agent which of these files to maintain during normal use.
 
@@ -124,6 +135,8 @@ After a meaningful session:
 5. do not manually re-explain the project unless something important was actually lost.
 
 This is the practical continuity test Progressive is designed to pass.
+
+Visual flow: [`../visuals/session-context-flow.md`](../visuals/session-context-flow.md)
 
 ## 7. What the agent should normally read
 
@@ -142,7 +155,7 @@ repository behavior
 
 It should not recursively warm up from the entire `.progressive/` directory.
 
-Human docs, migration evidence, framework tests, full completed phase bodies, and framework history are intentionally absent from the Runtime package.
+Human docs, visual explanations, migration evidence, framework tests, full completed phase bodies, detailed completion reports, and framework history are intentionally absent from normal warm-up.
 
 ## 8. Verify the Runtime
 
@@ -188,6 +201,8 @@ Adoption remains a Framework Source operation because it needs reconciliation/up
 python3 tools/init_project.py /path/to/existing-project --profile standalone --adopt-existing --dry-run
 python3 tools/init_project.py /path/to/existing-project --profile standalone --adopt-existing
 ```
+
+For later Runtime upgrades, use the update path described in [`UPDATING_RUNTIME.md`](UPDATING_RUNTIME.md) rather than blindly extracting a new ZIP over project-owned state.
 
 ## 11. If you are developing Progressive Context Kit itself
 
