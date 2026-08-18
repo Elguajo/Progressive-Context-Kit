@@ -108,10 +108,32 @@ class ProgressiveContextInvariantTests(unittest.TestCase):
             'Human explanatory assets are source-only documentation and must never be required for Runtime operation or packaged into Project Runtime.',
             guide,
         )
-        self.assertTrue((ROOT / 'docs/visuals/README.md').is_file())
+        human_guides = [
+            'HOW_PROGRESSIVE_CONTEXT_WORKS.md',
+            'HOW_PROGRESSIVE_CONTEXT_WORKS.ru.md',
+            'PROJECT_MEMORY_MODEL.md',
+            'PROJECT_MEMORY_MODEL.ru.md',
+            'UPDATING_RUNTIME.md',
+            'UPDATING_RUNTIME.ru.md',
+        ]
+        for name in human_guides:
+            self.assertTrue((ROOT / 'docs/human' / name).is_file(), name)
+        visual_guides = [
+            'progressive-context-overview.md',
+            'session-context-flow.md',
+            'project-memory-model.md',
+            'user-onboarding.md',
+            'phase-completion-lifecycle.md',
+            'tool-routing.md',
+            'source-runtime-release.md',
+            'framework-update-safety.md',
+        ]
+        for name in visual_guides:
+            self.assertTrue((ROOT / 'docs/visuals' / name).is_file(), name)
         layout = (ROOT / 'tools/runtime_layout.py').read_text(encoding='utf-8')
         self.assertNotIn("'docs/visuals/'", layout)
-        self.assertNotIn('VISUAL_EXPLANATIONS.md', layout)
+        for name in ['VISUAL_EXPLANATIONS.md', *human_guides]:
+            self.assertNotIn(name, layout)
 
 
 if __name__ == '__main__':

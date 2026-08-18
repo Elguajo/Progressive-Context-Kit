@@ -13,7 +13,17 @@ class RuntimeReleaseTests(unittest.TestCase):
                 names=zf.namelist()
                 zf.extractall(d)
             self.assertFalse(any('/docs/visuals/' in n or '/.progressive/visuals/' in n for n in names), names)
-            self.assertFalse(any(n.endswith('/VISUAL_EXPLANATIONS.md') for n in names), names)
+            source_only_human_docs = [
+                'VISUAL_EXPLANATIONS.md',
+                'HOW_PROGRESSIVE_CONTEXT_WORKS.md',
+                'HOW_PROGRESSIVE_CONTEXT_WORKS.ru.md',
+                'PROJECT_MEMORY_MODEL.md',
+                'PROJECT_MEMORY_MODEL.ru.md',
+                'UPDATING_RUNTIME.md',
+                'UPDATING_RUNTIME.ru.md',
+            ]
+            for source_only in source_only_human_docs:
+                self.assertFalse(any(n.endswith('/'+source_only) for n in names), source_only)
             runtime=Path(d)/f'Progressive-Context-Project-Runtime-v{VERSION}'
             # Only standard agent entrypoints + hidden framework dirs should exist before app code is added.
             visible={p.name for p in runtime.iterdir() if not p.name.startswith('.')}
