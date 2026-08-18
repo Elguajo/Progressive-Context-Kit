@@ -1,4 +1,4 @@
-# Progressive Context Kit v1.7.0
+# Progressive Context Kit v1.8.0
 
 **Token-Efficient · Quality-First · Spec-Driven**
 
@@ -16,7 +16,7 @@
 
 Чтобы начать новый проект, скачай из GitHub Releases файл:
 
-**`Progressive-Context-Project-Runtime-v1.7.0.zip`**
+**`Progressive-Context-Project-Runtime-v1.8.0.zip`**
 
 https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 
@@ -61,6 +61,18 @@ Progressive Context Kit — единый Framework Source
 
 Runtime **генерируется автоматически** из Framework Source. Это не два независимых Kit, поэтому их не нужно синхронизировать вручную.
 
+## Визуальные объяснения — только для человека
+
+Сложные идеи framework, которые быстрее понимать через схемы, собраны в [`docs/visuals/`](docs/visuals/README.md). Сейчас там есть визуальные объяснения для:
+
+- active/hot и cold/on-demand контекста;
+- lifecycle завершения Phase;
+- потока Framework Source → Runtime → Release;
+- ownership документов и слоёв;
+- безопасного обновления framework без потери project-owned state.
+
+Эти схемы — только поясняющий human layer, а не второй source of truth. Они остаются **только во Framework Source и никогда не попадают в Project Runtime**. Правила добавления новых схем: [`docs/human/VISUAL_EXPLANATIONS.md`](docs/human/VISUAL_EXPLANATIONS.md).
+
 ## Когда нужен Framework Source
 
 Этот GitHub-репозиторий нужен, если ты:
@@ -83,7 +95,9 @@ python3 tools/build_release.py
 Результат:
 
 ```text
-dist/Progressive-Context-Project-Runtime-v1.7.0.zip
+dist/Progressive-Context-Project-Runtime-v1.8.0.zip
+dist/Progressive-Context-Project-Runtime-v1.8.0.manifest.json
+dist/SHA256SUMS.txt
 ```
 
 Старый `tools/build_starter.py` сохранён как compatibility alias, но начиная с v1.6 пользовательский пакет называется **Project Runtime**.
@@ -120,7 +134,7 @@ repository behavior
 → нужный Skill/protocol + релевантный код/тесты
 ```
 
-Завершённые фазы, human docs, migration evidence и framework-development материалы не должны попадать в обычный warm-up.
+Завершённые фазы, human docs, visual explanations, migration evidence и framework-development материалы не должны попадать в обычный warm-up.
 
 ## Проверка Framework Source
 
