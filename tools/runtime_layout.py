@@ -7,6 +7,7 @@ RUNTIME_DIR = '.progressive'
 TEXT_REPLACEMENTS = [
     ('docs/project/', '.progressive/project/'),
     ('docs/phases/', '.progressive/phases/'),
+    ('docs/completions/', '.progressive/completions/'),
     ('docs/decisions/', '.progressive/decisions/'),
     ('docs/system/', '.progressive/system/'),
     ('prompts/', '.progressive/prompts/'),
@@ -141,4 +142,5 @@ def write_runtime(root: Path, target: Path, profile: str = 'standalone', agent: 
     (meta / 'AGENT_TARGET').write_text(agent + '\n', encoding='utf-8')
     (meta / 'ADOPTION_STATE').write_text('ready\n', encoding='utf-8')
     (meta / 'phases').mkdir(exist_ok=True)
+    (meta / 'completions').mkdir(exist_ok=True)
     (meta / 'decisions').mkdir(exist_ok=True)

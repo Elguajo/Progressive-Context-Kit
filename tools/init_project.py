@@ -3,7 +3,7 @@ from pathlib import Path
 import argparse, json, shutil, subprocess, sys
 from runtime_layout import render_agent_profile, runtime_entries, transform_text
 
-PROJECT_OWNED_PREFIXES = ('.progressive/project/', '.progressive/phases/', '.progressive/decisions/')
+PROJECT_OWNED_PREFIXES = ('.progressive/project/', '.progressive/phases/', '.progressive/completions/', '.progressive/decisions/')
 AGENT_SENTINEL='\n\n<!-- PROJECT-SPECIFIC-INSTRUCTIONS -->\n\n'
 CLAUDE_SENTINEL='\n\n<!-- PROJECT-SPECIFIC-CLAUDE-INSTRUCTIONS -->\n\n'
 
@@ -71,7 +71,7 @@ def write_marker(root,target,profile,agent,state='ready'):
     (m/'PROFILE').write_text(profile+'\n',encoding='utf-8')
     (m/'AGENT_TARGET').write_text(agent+'\n',encoding='utf-8')
     (m/'ADOPTION_STATE').write_text(state+'\n',encoding='utf-8')
-    (m/'phases').mkdir(exist_ok=True); (m/'decisions').mkdir(exist_ok=True)
+    (m/'phases').mkdir(exist_ok=True); (m/'completions').mkdir(exist_ok=True); (m/'decisions').mkdir(exist_ok=True)
 
 
 def write_entry(src,dst,transform):

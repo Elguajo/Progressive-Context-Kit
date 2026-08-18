@@ -7,27 +7,39 @@ Roadmap stays canonical for phase status.
 
 When a phase satisfies its acceptance criteria:
 
-1. persist the durable phase result in its `## Completion Record` **before moving the Roadmap marker**;
-2. update Architecture/ADR/other canonical owners first when system shape or a consequential decision changed; the Completion Record should reference effects, not duplicate full rationale;
-3. mark the completed phase `[x]` and exactly one next phase `[>]` when one exists;
-4. overwrite `NEXT_SESSION.md` in place with only the hot state needed to continue.
+1. update Architecture/ADR/other canonical owners first when system shape or a consequential decision changed;
+2. write the durable phase report under `docs/completions/<phase-name>.md` using `templates/PHASE_COMPLETION.template.md`; Runtime uses `.progressive/completions/<phase-name>.md`;
+3. persist a compact `## Completion Record` in the completed phase **before moving the Roadmap marker**. It should point to the final report and keep only the small cross-phase bridge needed for progressive context;
+4. mark the completed phase `[x]` and exactly one next phase `[>]` when one exists;
+5. overwrite `NEXT_SESSION.md` in place with only the hot state needed to continue.
 
-A Completion Record is compact durable history. Capture only:
-- **Delivered** — capabilities/artifacts that now exist;
-- **Validation Evidence** — checks actually observed and their results;
-- **Decisions Affecting Later Phases** — concise consequences and ADR/reference when applicable;
-- **Deviations / Technical Debt** — known gaps that survived completion;
+The phase completion report is durable human-readable history. Capture evidence-bounded detail that would otherwise bloat hot context:
+- **Outcome / Delivered** — capabilities and artifacts that now exist;
+- **Implementation notes** — durable technical facts worth preserving, not a diff diary;
+- **Decisions made** — consequences plus ADR/canonical references when applicable;
+- **Deviations / technical debt** — gaps surviving completion;
+- **Problems discovered** — durable issues/workarounds worth remembering;
+- **Verification evidence** — checks actually observed and results;
+- **Architectural impact / Follow-up** — what later phases may rely on and explicit later work.
+
+A Completion Record remains compact durable routing history. Capture only:
+- **Status / Completed** — completion state/date when useful;
+- **Final report** — relative path to the phase completion report when one exists;
+- **Outcome** — one concise result;
+- **Validation summary** — only the evidence needed to trust the transition;
+- **Decisions / Technical Debt affecting later phases** — concise consequences;
 - **Handoff to Next Phase** — assumptions/capabilities the next phase may safely rely on.
 
-Do not turn a Completion Record into a session diary, diff summary, or duplicate specification. If the
-session remains `IN PROGRESS`, keep the phase active and do not fabricate a completion record.
+Do not duplicate the full completion report inside the Completion Record. Normal warm-up reads only the compact Completion Record; the detailed report is read on demand when investigation, audit, or historical context requires it.
+
+Backward compatibility: completed phases created before phase completion reports existed remain valid with only their existing `## Completion Record`. Do not force migrations merely to satisfy the new convention. Add a report retroactively only when its durable detail is materially useful.
+
+For non-trivial tasks inside an active phase, keep a compact Task Completion note in the phase file when the result/evidence/decision matters later. Do not create one completion file per routine task.
+
+If the session remains `IN PROGRESS`, keep the phase active and do not fabricate a phase completion report or completion record.
 
 On project completion every phase is `[x]` and none is `[>]`.
 
 ## NEXT_SESSION semantics
 
-`NEXT_SESSION.md` is volatile hot navigation, not project history. Overwrite it on each meaningful
-handoff; do not create an accumulating chain of `NEXT_SESSION_001.md`, `NEXT_SESSION_002.md`, etc.
-It contains only current phase, completed work from the just-ended session, verification,
-blockers/uncertainty, next action, and a ready-to-copy prompt. Durable completed-phase history belongs
-in that phase's Completion Record; full technical history belongs in version control when available.
+`NEXT_SESSION.md` is volatile hot navigation, not project history. Overwrite it on each meaningful handoff; do not create an accumulating chain of `NEXT_SESSION_001.md`, `NEXT_SESSION_002.md`, etc. It contains only current phase, completed work from the just-ended session, verification, blockers/uncertainty, next action, and a ready-to-copy prompt. Durable completed-phase detail belongs in `docs/completions/` (Runtime: `.progressive/completions/`); the phase keeps only its compact Completion Record; full source history remains in version control when available.

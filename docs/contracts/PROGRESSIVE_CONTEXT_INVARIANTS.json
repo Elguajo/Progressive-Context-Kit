@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "contract": "progressive-context-architectural-invariants",
+  "invariant_count": 10,
+  "invariants": [
+    {
+      "id": "PC-001",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "Normal warm-up reads only the compact Completion Record; the detailed report is read on demand",
+      "summary": "Phase completion reports stay out of the default read set"
+    },
+    {
+      "id": "PC-002",
+      "owner": "tools/context_compile.py",
+      "anchor": "Previous phase completion bridge",
+      "summary": "The context compiler loads the prior compact Completion Record, not the full completion report"
+    },
+    {
+      "id": "PC-003",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "docs/completions/<phase-name>.md",
+      "summary": "Each completed phase has one canonical phase completion report path"
+    },
+    {
+      "id": "PC-004",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "Do not create one completion file per routine task",
+      "summary": "Routine tasks do not create separate completion-report files"
+    },
+    {
+      "id": "PC-005",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "compact `## Completion Record`",
+      "summary": "Completion Record remains a compact cross-phase bridge"
+    },
+    {
+      "id": "PC-006",
+      "owner": "docs/system/LAYER_OWNERSHIP.md",
+      "anchor": "Each durable rule/fact gets one canonical owner",
+      "summary": "Brief, Architecture and ADR remain canonical truth; completion reports are historical detail, not competing sources of truth"
+    },
+    {
+      "id": "PC-007",
+      "owner": "docs/system/LAYER_OWNERSHIP.md",
+      "anchor": "legacy completed phase whose durable history exists only in its `Completion Record` remains valid",
+      "summary": "Legacy projects without separate completion reports remain valid"
+    },
+    {
+      "id": "PC-008",
+      "owner": "tools/init_project.py",
+      "anchor": ".progressive/completions/",
+      "summary": "Framework updates preserve project-owned completion reports"
+    },
+    {
+      "id": "PC-009",
+      "owner": "templates/NEXT_SESSION.template.md",
+      "anchor": "Volatile hot context. Overwrite this file on each meaningful handoff",
+      "summary": "NEXT_SESSION remains volatile hot navigation rather than durable history"
+    },
+    {
+      "id": "PC-010",
+      "owner": "tools/audit.py",
+      "anchor": "personal repo router exceeds 3600-char hard budget",
+      "summary": "Completion-report functionality must not justify increasing always-loaded token budgets"
+    }
+  ]
+}
