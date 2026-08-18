@@ -6,6 +6,9 @@ on:
       - 'v*'
     branches:
       - 'build/v1.8.0-runtime'
+  pull_request:
+    branches:
+      - 'build/v1.8.0-runtime'
   workflow_dispatch:
 
 permissions:
