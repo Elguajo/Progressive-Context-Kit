@@ -1,0 +1,27 @@
+name: Cleanup visual docs branches
+
+on:
+  pull_request:
+    branches:
+      - 'cleanup/visual-docs-base'
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: ${{ github.event.pull_request.head.ref == 'cleanup/visual-docs-trigger' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete temporary branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          for branch in \
+            docs/human-visual-explanations \
+            cleanup/visual-docs-trigger \
+            cleanup/visual-docs-base
+          do
+            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch}" || true
+          done
