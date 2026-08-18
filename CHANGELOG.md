@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.8.0 — 2026-08-18
+
+- Added durable **phase completion reports**: an additive completion-report layer on top of phase execution, preserving v1.7.2 compatibility, cold-context behavior, project-owned history, and hard token-budget invariants (`templates/PHASE_COMPLETION.template.md`, `templates/PHASE.template.md`, `tools/runtime_layout.py`).
+- Added a formal **Progressive Context Invariants** contract (`docs/contracts/PROGRESSIVE_CONTEXT_INVARIANTS.json` + pinned `PROGRESSIVE_CONTEXT_INVARIANT_IDS.sha256`) and wired it into `tools/framework_contract.py` / `tools/init_project.py`, with dedicated regression coverage (`tools/tests/test_progressive_context_invariants.py`, `tools/tests/test_completion_reports.py`).
+- Expanded `docs/system/HANDOFF_PROTOCOL.md` and `session-handoff/SKILL.md` (canonical `.agents/skills`, mirrored `.claude/skills`) to **enforce single-focus `NEXT_SESSION.md` continuation** — resume state must carry one concrete next action, not a list — and updated `templates/NEXT_SESSION.template.md` to match.
+- Fixed `tools/build_runtime.py` so empty runtime state directories (`.progressive/completions/`, `.progressive/decisions/`, `.progressive/phases/`) survive packaging into the release ZIP instead of being silently dropped.
+- Added a full set of **human-only visual explanations** (`docs/human/VISUAL_EXPLANATIONS.md` plus diagrams under `docs/visuals/`: Progressive Context overview, phase-completion lifecycle, source→runtime release, layer ownership, framework update safety, project memory model, session context flow, tool routing, user onboarding) and companion human guides (`docs/human/HOW_PROGRESSIVE_CONTEXT_WORKS.md`, `PROJECT_MEMORY_MODEL.md`, `UPDATING_RUNTIME.md`, each with a Russian translation), linked from `README.md` / `README_RU.md`. These are guarded as source-only and asserted (by test) to never enter the Runtime ZIP, so the always-loaded agent context is unchanged.
+- Refreshed `docs/human/GETTING_STARTED.md` / `.ru.md` onboarding for v1.8.0 and the new modular human docs.
+- No inherited Behavior Contract or previously-pinned Framework Contract rule changed; the new Progressive Context Invariants are additive and covered by their own regression tests.
+
 ## 1.7.2 — 2026-08-18
 
 - Broadened the `session-handoff` router trigger (`profiles/personal/AGENTS.md` / generated `AGENTS.md` / `profiles/standalone/AGENTS.md`) from "meaningful implementation/review session ending" to also fire on "session ending or user-only decision/blocker", so an agent pausing mid-phase for user confirmation is routed to handoff instead of silently ending the turn.
