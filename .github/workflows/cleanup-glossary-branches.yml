@@ -1,0 +1,27 @@
+name: Cleanup glossary branches
+
+on:
+  pull_request:
+    branches:
+      - cleanup/glossary-base
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.event.pull_request.head.ref == 'cleanup/glossary-trigger'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete temporary branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for branch in \
+            docs/human-glossary \
+            docs/human-glossary-v2 \
+            cleanup/glossary-trigger \
+            cleanup/glossary-base
+          do
+            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch}" || true
+          done
