@@ -46,7 +46,6 @@ class AuditTests(unittest.TestCase):
             p=dst/'docs/migration/ORIGINAL_CUSTOM_INSTRUCTIONS.txt'; p.write_text(p.read_text()+'mutation')
             self.assertNotEqual(self.run_audit(dst).returncode,0)
 
-
     def test_legacy_completed_phase_without_record_warns_not_fails(self):
         with tempfile.TemporaryDirectory() as d:
             dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
@@ -55,6 +54,31 @@ class AuditTests(unittest.TestCase):
             result=self.run_audit(dst)
             self.assertEqual(result.returncode,0,result.stdout+result.stderr)
             self.assertIn('completed phase lacks durable Completion Record',result.stdout)
+
+    def test_planned_future_phase_may_remain_roadmap_only(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            active=dst/'docs/phases/90-active.md'; active.write_text('# Phase 90 — Active\n\n## Goal\nContinue.\n')
+            future=dst/'docs/phases/91-future.md'
+            if future.exists(): future.unlink()
+            (dst/'docs/project/ROADMAP.md').write_text(
+                '# Roadmap\n'
+                '- [>] Phase 90 — `docs/phases/90-active.md`\n'
+                '- [ ] Phase 91 — `docs/phases/91-future.md`\n'
+            )
+            result=self.run_audit(dst)
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            self.assertFalse(future.exists())
+
+    def test_missing_active_phase_file_still_fails(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            missing=dst/'docs/phases/99-missing-active.md'
+            if missing.exists(): missing.unlink()
+            (dst/'docs/project/ROADMAP.md').write_text('# Roadmap\n- [>] Phase 99 — `docs/phases/99-missing-active.md`\n')
+            result=self.run_audit(dst)
+            self.assertNotEqual(result.returncode,0)
+            self.assertIn('Roadmap phase file missing',result.stdout)
 
     def test_behavior_anchor_loss_fails(self):
         with tempfile.TemporaryDirectory() as d:
