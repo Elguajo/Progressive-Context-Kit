@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*'
+    branches:
+      - 'build/v1.8.0-runtime'
   workflow_dispatch:
 
 permissions:
@@ -32,6 +34,14 @@ jobs:
 
       - name: Build verified Project Runtime from Framework Source
         run: python3 tools/build_release.py
+
+      - name: Upload verified build artifact
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Progressive-Context-Project-Runtime-v1.8.0
+          path: dist/
+          if-no-files-found: error
 
       # A GitHub Release must stay pinned to the commit its tag points at. Only
       # a tag ref (tag push, or workflow_dispatch explicitly run against a tag)
