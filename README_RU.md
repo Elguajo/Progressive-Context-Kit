@@ -8,11 +8,31 @@
 
 > **Минимизировать активный контекст, а не доступные знания.**
 
+```mermaid
+flowchart LR
+    subgraph HOT[ACTIVE / HOT]
+        B[Brief]
+        A[Architecture]
+        R[Roadmap]
+        P[Current Phase]
+        C[Compact Completion Record]
+    end
+
+    subgraph COLD[COLD / ON DEMAND]
+        H[Completion Reports]
+        D[Decision history]
+        E[Historical evidence]
+    end
+
+    HOT -->|минимально достаточный набор| W[Текущая задача]
+    COLD -. читать только при необходимости .-> W
+```
+
 ## С чего начать — для большинства пользователей
 
 **Не копируй весь этот GitHub-репозиторий в свой проект.**
 
-Этот репозиторий — **Framework Source**: исходники для разработки, тестирования и выпуска Progressive Context Kit.
+Этот репозиторий — **Framework Source**: исходники для разработки, тестирования, документации и выпуска Progressive Context Kit.
 
 Чтобы начать новый проект, скачай из GitHub Releases файл:
 
@@ -32,7 +52,7 @@ my-project/
 └── <файлы самого продукта>
 ```
 
-В корне проекта больше не появляются видимые framework-папки `global/`, `integrations/`, `profiles/`, `prompts/`, `templates/`, `tools/` и `docs/`.
+В корне проекта не появляются видимые framework-папки `global/`, `integrations/`, `profiles/`, `prompts/`, `templates/`, `tools` и `docs/`.
 
 Project Runtime по умолчанию использует **Standalone profile**. Поэтому новый пользователь может распаковать архив и сразу открыть Claude Code или Codex без предварительной настройки `~/.claude/CLAUDE.md` или `~/.codex/AGENTS.md`.
 
@@ -45,33 +65,30 @@ My idea:
 <опиши продукт, пользователей, реальные ограничения и явные non-goals>
 ```
 
+Визуальный onboarding: [`docs/visuals/user-onboarding.md`](docs/visuals/user-onboarding.md).
+
 ## Один framework — две поверхности
 
-```text
-Progressive Context Kit — единый Framework Source
-                        │
-                        ├── Framework Source
-                        │   GitHub repository
-                        │   разработка / тесты / migration / release tooling
-                        │
-                        └── Project Runtime
-                            GitHub Release asset
-                            минимальный runtime для реальных проектов
+```mermaid
+flowchart LR
+    S[Framework Source\nGitHub repository] --> V[Contracts + tests + audit]
+    V --> B[build_release.py]
+    B --> R[Project Runtime ZIP]
+    R --> P[Реальный продуктовый репозиторий]
 ```
 
 Runtime **генерируется автоматически** из Framework Source. Это не два независимых Kit, поэтому их не нужно синхронизировать вручную.
 
-## Визуальные объяснения — только для человека
+## Понять модель
 
-Сложные идеи framework, которые быстрее понимать через схемы, собраны в [`docs/visuals/`](docs/visuals/README.md). Сейчас там есть визуальные объяснения для:
+Human-only гайды:
 
-- active/hot и cold/on-demand контекста;
-- lifecycle завершения Phase;
-- потока Framework Source → Runtime → Release;
-- ownership документов и слоёв;
-- безопасного обновления framework без потери project-owned state.
+- [`Как работает Progressive Context`](docs/human/HOW_PROGRESSIVE_CONTEXT_WORKS.ru.md)
+- [`Модель памяти проекта`](docs/human/PROJECT_MEMORY_MODEL.ru.md)
+- [`Безопасное обновление Project Runtime`](docs/human/UPDATING_RUNTIME.ru.md)
+- [`Быстрый старт`](docs/human/GETTING_STARTED.ru.md)
 
-Эти схемы — только поясняющий human layer, а не второй source of truth. Они остаются **только во Framework Source и никогда не попадают в Project Runtime**. Правила добавления новых схем: [`docs/human/VISUAL_EXPLANATIONS.md`](docs/human/VISUAL_EXPLANATIONS.md).
+Полная библиотека схем лежит в [`docs/visuals/`](docs/visuals/README.md). Эти схемы — поясняющий human layer, а не второй source of truth. Они остаются **только во Framework Source и никогда не попадают в Project Runtime**. Правила добавления новых схем: [`docs/human/VISUAL_EXPLANATIONS.md`](docs/human/VISUAL_EXPLANATIONS.md).
 
 ## Когда нужен Framework Source
 
@@ -82,9 +99,8 @@ Runtime **генерируется автоматически** из Framework S
 - поддерживаешь Claude/Codex adapters;
 - работаешь с migration/evaluation evidence;
 - запускаешь framework regression tests;
+- поддерживаешь human documentation и visual explanations;
 - собираешь новый Project Runtime release.
-
-Human-only инструкция находится в `docs/human/GETTING_STARTED.md` (русская версия: `docs/human/GETTING_STARTED.ru.md`) и в Runtime не попадает.
 
 ## Сборка Project Runtime
 
@@ -99,6 +115,8 @@ dist/Progressive-Context-Project-Runtime-v1.8.0.zip
 dist/Progressive-Context-Project-Runtime-v1.8.0.manifest.json
 dist/SHA256SUMS.txt
 ```
+
+`tools/build_release.py` — канонический release entrypoint: проверяет Framework Source, собирает Runtime, аудирует распакованный Runtime и пишет release metadata. `tools/build_runtime.py` — более низкоуровневый шаг упаковки.
 
 Старый `tools/build_starter.py` сохранён как compatibility alias, но начиная с v1.6 пользовательский пакет называется **Project Runtime**.
 
@@ -124,17 +142,25 @@ Installer никогда сам не изменяет home-level agent configura
 
 Обычная работа идёт через:
 
-```text
-repository behavior
-→ .progressive/project/PROJECT_BRIEF.md
-→ .progressive/project/ARCHITECTURE.md
-→ .progressive/project/ROADMAP.md
-→ текущая .progressive/phases/*
-→ компактный Completion Record предыдущей фазы
-→ нужный Skill/protocol + релевантный код/тесты
+```mermaid
+flowchart TD
+    A[Repository behavior] --> B[PROJECT_BRIEF]
+    B --> C[ARCHITECTURE]
+    C --> D[ROADMAP]
+    D --> E[Current Phase]
+    E --> F[Предыдущий compact Completion Record, когда нужен]
+    F --> G[Matching Skill + релевантный код/тесты]
+    G --> H[Работа + verification]
+    I[Cold history] -. только on demand .-> G
 ```
 
-Завершённые фазы, human docs, visual explanations, migration evidence и framework-development материалы не должны попадать в обычный warm-up.
+Завершённые phases, подробные completion reports, human docs, visual explanations, migration evidence и framework-development материалы не должны попадать в обычный warm-up.
+
+## Preferred tooling
+
+Framework Source сохраняет **Semble, Serena, RTK, Superpowers, gstack, Context7**, а **GitHub Spec Kit** используется как условный Advanced Spec Mode. Tool selection остаётся task-routed: installed ≠ loaded.
+
+Визуальная схема routing: [`docs/visuals/tool-routing.md`](docs/visuals/tool-routing.md).
 
 ## Проверка Framework Source
 
