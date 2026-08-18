@@ -1,0 +1,28 @@
+name: Cleanup human docs branches
+
+on:
+  pull_request:
+    branches:
+      - 'cleanup/human-docs-base'
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: ${{ github.event.pull_request.head.ref == 'cleanup/human-docs-trigger' && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete temporary branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          for branch in \
+            docs/human-guides-and-visuals \
+            cleanup/human-docs-trigger \
+            cleanup/human-docs-base
+          do
+            gh api -X DELETE "repos/${REPO}/git/refs/heads/${branch}" || true
+          done
