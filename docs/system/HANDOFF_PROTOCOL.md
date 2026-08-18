@@ -43,3 +43,20 @@ On project completion every phase is `[x]` and none is `[>]`.
 ## NEXT_SESSION semantics
 
 `NEXT_SESSION.md` is volatile hot navigation, not project history. Overwrite it on each meaningful handoff; do not create an accumulating chain of `NEXT_SESSION_001.md`, `NEXT_SESSION_002.md`, etc. It contains only current phase, completed work from the just-ended session, verification, blockers/uncertainty, next action, and a ready-to-copy prompt. Durable completed-phase detail belongs in `docs/completions/` (Runtime: `.progressive/completions/`); the phase keeps only its compact Completion Record; full source history remains in version control when available.
+
+### Single-focus continuation
+
+One handoff prompt = one unresolved execution target.
+
+Select the nearest unfinished target from canonical project state in this order:
+
+1. unresolved blocker, manual verification, acceptance criterion, or other gate on the current work;
+2. otherwise, the unfinished current task;
+3. only after that target is complete and its evidence/state is persisted, the next task may become the new target;
+4. only after the phase completion transaction is complete may work from the next phase become the new target.
+
+If a current target is unresolved, `## Next action` and `## NEXT SESSION PROMPT` must focus only on closing it. Do not name, describe, preview, or preload later queued tasks or phases in the handoff prompt. In particular, do not write transitions such as `then continue Task N+1`, `after that start ...`, or equivalent wording while the current target remains open.
+
+Several concrete substeps are allowed only when they share one acceptance boundary and are all necessary to finish the same target, for example `apply fix → run targeted verification → persist evidence`. That is still one execution target. `finish current task → start next task` is two targets and must be split across state transitions.
+
+Once the current target is genuinely complete and evidence is persisted, normal workflow may select the next target from the Phase/Roadmap. The previous handoff must not pre-plan or bundle that future target merely because it is already visible in canonical planning documents.
