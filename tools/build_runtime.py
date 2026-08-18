@@ -24,9 +24,17 @@ def main():
     if zip_path.exists(): zip_path.unlink()
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
         for p in sorted(stage.rglob('*')):
+            rel = p.relative_to(stage.parent).as_posix()
+            if p.is_dir():
+                if any(p.iterdir()):
+                    continue
+                info = zipfile.ZipInfo(rel.rstrip('/') + '/', date_time=(1980, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_STORED
+                info.external_attr = 0o40755 << 16
+                zf.writestr(info, b'')
+                continue
             if not p.is_file():
                 continue
-            rel = p.relative_to(stage.parent).as_posix()
             info = zipfile.ZipInfo(rel, date_time=(1980, 1, 1, 0, 0, 0))
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o100644 << 16
