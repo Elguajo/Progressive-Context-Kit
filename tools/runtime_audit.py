@@ -11,7 +11,7 @@ REQUIRED = [
     '.progressive/project/PROJECT_BRIEF.md','.progressive/project/ARCHITECTURE.md','.progressive/project/ROADMAP.md','.progressive/project/NEXT_SESSION.md','.progressive/project/CONTEXT_MANIFEST.json','.progressive/project/TOOLING_STATUS.json',
     '.progressive/system/CONTEXT_PROTOCOL.md','.progressive/system/HANDOFF_PROTOCOL.md','.progressive/system/LAYER_OWNERSHIP.md','.progressive/system/QUALITY_PROTOCOL.md','.progressive/system/TOOL_ROUTING.md',
     '.progressive/integrations/TOOL_REGISTRY.json','.progressive/integrations/PROFILES.md',
-    '.progressive/templates/PHASE.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/audit.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
+    '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/audit.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
 ]
 VISIBLE_FRAMEWORK_DIRS = {'docs','global','integrations','profiles','prompts','templates','tools'}
 
