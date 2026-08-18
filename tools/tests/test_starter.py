@@ -9,7 +9,11 @@ class RuntimeReleaseTests(unittest.TestCase):
         self.assertEqual(build.returncode,0,build.stdout+build.stderr)
         z=ROOT/f'dist/Progressive-Context-Project-Runtime-v{VERSION}.zip'; self.assertTrue(z.is_file())
         with tempfile.TemporaryDirectory() as d:
-            with zipfile.ZipFile(z) as zf: zf.extractall(d)
+            with zipfile.ZipFile(z) as zf:
+                names=zf.namelist()
+                zf.extractall(d)
+            self.assertFalse(any('/docs/visuals/' in n or '/.progressive/visuals/' in n for n in names), names)
+            self.assertFalse(any(n.endswith('/VISUAL_EXPLANATIONS.md') for n in names), names)
             runtime=Path(d)/f'Progressive-Context-Project-Runtime-v{VERSION}'
             # Only standard agent entrypoints + hidden framework dirs should exist before app code is added.
             visible={p.name for p in runtime.iterdir() if not p.name.startswith('.')}

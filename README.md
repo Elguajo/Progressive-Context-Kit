@@ -1,4 +1,4 @@
-# Progressive Context Kit v1.7.0
+# Progressive Context Kit v1.8.0
 
 **Token-Efficient · Quality-First · Spec-Driven**
 
@@ -16,7 +16,7 @@ This repository is the **Framework Source** used to develop, test, and release P
 
 For a new project, download the latest release asset:
 
-**`Progressive-Context-Project-Runtime-v1.7.0.zip`**
+**`Progressive-Context-Project-Runtime-v1.8.0.zip`**
 
 from **GitHub Releases**: https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 
@@ -61,6 +61,18 @@ Progressive Context Kit — canonical Framework Source
 
 The Runtime is **generated from this repository**. It is not maintained as a second independent kit, so the two surfaces cannot intentionally drift.
 
+## Human-only visual explanations
+
+Framework concepts that benefit from diagrams are explained under [`docs/visuals/`](docs/visuals/README.md), including:
+
+- active/hot vs cold/on-demand Progressive Context;
+- phase completion lifecycle;
+- Framework Source → Runtime → Release flow;
+- document/layer ownership;
+- framework-update safety boundaries.
+
+These visuals are explanatory, not canonical. They stay in Framework Source only and are **never packaged into Project Runtime**. Rules for adding them live in [`docs/human/VISUAL_EXPLANATIONS.md`](docs/human/VISUAL_EXPLANATIONS.md).
+
 ## Framework Source
 
 Use this repository when you want to:
@@ -82,8 +94,8 @@ python3 tools/build_release.py
 Output:
 
 ```text
-dist/Progressive-Context-Project-Runtime-v1.7.0.zip
-dist/Progressive-Context-Project-Runtime-v1.7.0.manifest.json
+dist/Progressive-Context-Project-Runtime-v1.8.0.zip
+dist/Progressive-Context-Project-Runtime-v1.8.0.manifest.json
 dist/SHA256SUMS.txt
 ```
 
@@ -129,7 +141,7 @@ bounded prior Completion Record
 matching Skill + protocol + relevant code/tests
 ```
 
-Completed phases, framework history, human docs, migration evidence, and framework-development tests remain out of normal warm-up.
+Completed phases, framework history, human docs, visual explanations, migration evidence, and framework-development tests remain out of normal warm-up.
 
 ## Preferred tooling
 
