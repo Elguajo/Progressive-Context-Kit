@@ -15,6 +15,8 @@ class RuntimeReleaseTests(unittest.TestCase):
             self.assertFalse(any('/docs/visuals/' in n or '/.progressive/visuals/' in n for n in names), names)
             source_only_human_docs = [
                 'VISUAL_EXPLANATIONS.md',
+                'GLOSSARY.md',
+                'GLOSSARY.ru.md',
                 'HOW_PROGRESSIVE_CONTEXT_WORKS.md',
                 'HOW_PROGRESSIVE_CONTEXT_WORKS.ru.md',
                 'PROJECT_MEMORY_MODEL.md',

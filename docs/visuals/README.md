@@ -2,6 +2,8 @@
 
 Human-only visual explanations for Progressive Context Kit. These files explain Framework Source concepts and are intentionally excluded from Project Runtime.
 
+Terminology and abbreviations used in these diagrams: [`../human/GLOSSARY.md`](../human/GLOSSARY.md) · [`../human/GLOSSARY.ru.md`](../human/GLOSSARY.ru.md)
+
 ## Core model
 
 - [`progressive-context-overview.md`](progressive-context-overview.md) — active/hot vs cold/on-demand knowledge.
@@ -24,6 +26,7 @@ Rules for adding more visuals: [`../human/VISUAL_EXPLANATIONS.md`](../human/VISU
 
 Human conceptual guides:
 
+- [`../human/GLOSSARY.md`](../human/GLOSSARY.md)
 - [`../human/HOW_PROGRESSIVE_CONTEXT_WORKS.md`](../human/HOW_PROGRESSIVE_CONTEXT_WORKS.md)
 - [`../human/PROJECT_MEMORY_MODEL.md`](../human/PROJECT_MEMORY_MODEL.md)
 - [`../human/UPDATING_RUNTIME.md`](../human/UPDATING_RUNTIME.md)

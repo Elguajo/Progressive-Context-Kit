@@ -8,6 +8,7 @@
 
 Если хочешь сначала понять идею, а не команды:
 
+- [`Глоссарий и терминология`](GLOSSARY.ru.md)
 - [`Как работает Progressive Context`](HOW_PROGRESSIVE_CONTEXT_WORKS.ru.md)
 - [`Модель памяти проекта`](PROJECT_MEMORY_MODEL.ru.md)
 - [`Безопасное обновление Project Runtime`](UPDATING_RUNTIME.ru.md)

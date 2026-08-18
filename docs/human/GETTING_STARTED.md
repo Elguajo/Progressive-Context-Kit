@@ -10,6 +10,7 @@ Visual onboarding: [`../visuals/user-onboarding.md`](../visuals/user-onboarding.
 
 Conceptual guides:
 
+- [`GLOSSARY.md`](GLOSSARY.md) — terminology and abbreviations
 - [`HOW_PROGRESSIVE_CONTEXT_WORKS.md`](HOW_PROGRESSIVE_CONTEXT_WORKS.md)
 - [`PROJECT_MEMORY_MODEL.md`](PROJECT_MEMORY_MODEL.md)
 - [`UPDATING_RUNTIME.md`](UPDATING_RUNTIME.md)

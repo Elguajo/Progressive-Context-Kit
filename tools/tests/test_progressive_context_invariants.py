@@ -125,6 +125,8 @@ class ProgressiveContextInvariantTests(unittest.TestCase):
             guide,
         )
         human_guides = [
+            'GLOSSARY.md',
+            'GLOSSARY.ru.md',
             'HOW_PROGRESSIVE_CONTEXT_WORKS.md',
             'HOW_PROGRESSIVE_CONTEXT_WORKS.ru.md',
             'PROJECT_MEMORY_MODEL.md',
@@ -150,6 +152,32 @@ class ProgressiveContextInvariantTests(unittest.TestCase):
         self.assertNotIn("'docs/visuals/'", layout)
         for name in ['VISUAL_EXPLANATIONS.md', *human_guides]:
             self.assertNotIn(name, layout)
+
+    def test_glossary_explains_framework_language_and_is_easy_to_find(self):
+        glossary = (ROOT / 'docs/human/GLOSSARY.md').read_text(encoding='utf-8')
+        glossary_ru = (ROOT / 'docs/human/GLOSSARY.ru.md').read_text(encoding='utf-8')
+        readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+        readme_ru = (ROOT / 'README_RU.md').read_text(encoding='utf-8')
+        getting_started = (ROOT / 'docs/human/GETTING_STARTED.md').read_text(encoding='utf-8')
+        getting_started_ru = (ROOT / 'docs/human/GETTING_STARTED.ru.md').read_text(encoding='utf-8')
+        visuals = (ROOT / 'docs/visuals/README.md').read_text(encoding='utf-8')
+
+        for anchor in [
+            '**PC**',
+            '**FW**',
+            '**DRS**',
+            '**ADR**',
+            'Default Read Set',
+            'Phase Completion Report',
+            'Single-Focus Continuation',
+        ]:
+            self.assertIn(anchor, glossary)
+        self.assertIn('Глоссарий', glossary_ru)
+        self.assertIn('GLOSSARY.md', readme)
+        self.assertIn('GLOSSARY.ru.md', readme_ru)
+        self.assertIn('GLOSSARY.md', getting_started)
+        self.assertIn('GLOSSARY.ru.md', getting_started_ru)
+        self.assertIn('../human/GLOSSARY.md', visuals)
 
 
 if __name__ == '__main__':

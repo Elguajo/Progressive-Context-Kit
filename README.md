@@ -12,6 +12,8 @@ A development kit for AI coding agents that keeps active context bounded while p
 
 > **Minimize active context, not available knowledge.**
 
+New to terms such as `PC-012`, ADR, Default Read Set, Completion Record, or `NEXT_SESSION`? See the human-only [`Glossary`](docs/human/GLOSSARY.md).
+
 ## Contents
 
 - [Start here — most users](#start-here--most-users)
@@ -102,6 +104,7 @@ The Runtime is **generated from this repository**. It is not maintained as a sec
 
 Human-only conceptual guides:
 
+- [`Glossary and terminology`](docs/human/GLOSSARY.md)
 - [`How Progressive Context works`](docs/human/HOW_PROGRESSIVE_CONTEXT_WORKS.md)
 - [`Project memory model`](docs/human/PROJECT_MEMORY_MODEL.md)
 - [`Updating Project Runtime safely`](docs/human/UPDATING_RUNTIME.md)

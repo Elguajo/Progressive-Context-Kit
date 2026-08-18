@@ -12,6 +12,8 @@
 
 > **Минимизировать активный контекст, а не доступные знания.**
 
+Если непонятны термины вроде `PC-012`, ADR, Default Read Set, Completion Record или `NEXT_SESSION`, смотри human-only [`Глоссарий`](docs/human/GLOSSARY.ru.md).
+
 ## Содержание
 
 - [С чего начать — для большинства пользователей](#с-чего-начать--для-большинства-пользователей)
@@ -102,6 +104,7 @@ Runtime **генерируется автоматически** из Framework S
 
 Human-only гайды:
 
+- [`Глоссарий и терминология`](docs/human/GLOSSARY.ru.md)
 - [`Как работает Progressive Context`](docs/human/HOW_PROGRESSIVE_CONTEXT_WORKS.ru.md)
 - [`Модель памяти проекта`](docs/human/PROJECT_MEMORY_MODEL.ru.md)
 - [`Безопасное обновление Project Runtime`](docs/human/UPDATING_RUNTIME.ru.md)
