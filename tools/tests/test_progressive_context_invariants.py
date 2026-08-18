@@ -102,6 +102,17 @@ class ProgressiveContextInvariantTests(unittest.TestCase):
         for anchor in expected:
             self.assertIn(anchor, audit, anchor)
 
+    def test_human_visual_explanations_remain_source_only(self):
+        guide = (ROOT / 'docs/human/VISUAL_EXPLANATIONS.md').read_text(encoding='utf-8')
+        self.assertIn(
+            'Human explanatory assets are source-only documentation and must never be required for Runtime operation or packaged into Project Runtime.',
+            guide,
+        )
+        self.assertTrue((ROOT / 'docs/visuals/README.md').is_file())
+        layout = (ROOT / 'tools/runtime_layout.py').read_text(encoding='utf-8')
+        self.assertNotIn("'docs/visuals/'", layout)
+        self.assertNotIn('VISUAL_EXPLANATIONS.md', layout)
+
 
 if __name__ == '__main__':
     unittest.main()
