@@ -2,17 +2,37 @@
 
 **Token-Efficient · Quality-First · Spec-Driven**
 
-> 🇷🇺 Русская версия: [`README_RU.md`](README_RU.md) · подробный гайд: [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md)
+> 🇷🇺 Русская версия: [`README_RU.md`](README_RU.md) · detailed guide: [`docs/human/GETTING_STARTED.md`](docs/human/GETTING_STARTED.md)
 
 A development kit for AI coding agents that keeps active context bounded while preserving project knowledge, engineering quality, and Spec-Driven workflow.
 
 > **Minimize active context, not available knowledge.**
 
+```mermaid
+flowchart LR
+    subgraph HOT[ACTIVE / HOT]
+        B[Brief]
+        A[Architecture]
+        R[Roadmap]
+        P[Current Phase]
+        C[Compact Completion Record]
+    end
+
+    subgraph COLD[COLD / ON DEMAND]
+        H[Completion Reports]
+        D[Decision history]
+        E[Historical evidence]
+    end
+
+    HOT -->|work from the smallest sufficient set| W[Current task]
+    COLD -. read only when evidence requires it .-> W
+```
+
 ## Start here — most users
 
 Do **not** copy this whole repository into your product.
 
-This repository is the **Framework Source** used to develop, test, and release Progressive Context Kit itself.
+This repository is the **Framework Source** used to develop, test, document, and release Progressive Context Kit itself.
 
 For a new project, download the latest release asset:
 
@@ -32,7 +52,7 @@ my-project/
 └── <your application files>
 ```
 
-You will **not** get visible framework folders such as `global/`, `integrations/`, `profiles/`, `prompts/`, `templates/`, `tools/`, or `docs/` in the product root.
+You will **not** get visible framework folders such as `global/`, `integrations/`, `profiles/`, `prompts/`, `templates/`, `tools`, or `docs/` in the product root.
 
 The default Project Runtime uses the **Standalone profile**, so a new user can extract it and start Claude Code or Codex without first configuring home-level global instructions.
 
@@ -45,33 +65,30 @@ My idea:
 <describe the desired product, users, real constraints, and explicit non-goals>
 ```
 
+Visual onboarding: [`docs/visuals/user-onboarding.md`](docs/visuals/user-onboarding.md).
+
 ## One framework, two surfaces
 
-```text
-Progressive Context Kit — canonical Framework Source
-                        │
-                        ├── Framework Source
-                        │   GitHub repository
-                        │   development / tests / migration / release tooling
-                        │
-                        └── Project Runtime
-                            GitHub Release asset
-                            minimal hidden runtime placed in real projects
+```mermaid
+flowchart LR
+    S[Framework Source\nGitHub repository] --> V[Contracts + tests + audit]
+    V --> B[build_release.py]
+    B --> R[Project Runtime ZIP]
+    R --> P[Real product repository]
 ```
 
 The Runtime is **generated from this repository**. It is not maintained as a second independent kit, so the two surfaces cannot intentionally drift.
 
-## Human-only visual explanations
+## Understand the model
 
-Framework concepts that benefit from diagrams are explained under [`docs/visuals/`](docs/visuals/README.md), including:
+Human-only conceptual guides:
 
-- active/hot vs cold/on-demand Progressive Context;
-- phase completion lifecycle;
-- Framework Source → Runtime → Release flow;
-- document/layer ownership;
-- framework-update safety boundaries.
+- [`How Progressive Context works`](docs/human/HOW_PROGRESSIVE_CONTEXT_WORKS.md)
+- [`Project memory model`](docs/human/PROJECT_MEMORY_MODEL.md)
+- [`Updating Project Runtime safely`](docs/human/UPDATING_RUNTIME.md)
+- [`Getting started`](docs/human/GETTING_STARTED.md)
 
-These visuals are explanatory, not canonical. They stay in Framework Source only and are **never packaged into Project Runtime**. Rules for adding them live in [`docs/human/VISUAL_EXPLANATIONS.md`](docs/human/VISUAL_EXPLANATIONS.md).
+The complete diagram library lives under [`docs/visuals/`](docs/visuals/README.md). These visuals are explanatory, not canonical. They stay in Framework Source only and are **never packaged into Project Runtime**. Rules for adding them live in [`docs/human/VISUAL_EXPLANATIONS.md`](docs/human/VISUAL_EXPLANATIONS.md).
 
 ## Framework Source
 
@@ -81,9 +98,8 @@ Use this repository when you want to:
 - change behavior contracts, Skills, protocols, or installers;
 - maintain Codex / Claude adapters;
 - run migration and framework regression tests;
+- maintain human documentation and visual explanations;
 - build the Project Runtime release.
-
-Human onboarding lives at `docs/human/GETTING_STARTED.md` (Russian: `docs/human/GETTING_STARTED.ru.md`) and stays source-only.
 
 ## Build the Project Runtime
 
@@ -125,27 +141,25 @@ The installer never modifies home-level agent configuration automatically.
 
 Normal product work progressively routes:
 
-```text
-repository behavior
-        ↓
-.progressive/project/PROJECT_BRIEF.md
-        ↓
-.progressive/project/ARCHITECTURE.md
-        ↓
-.progressive/project/ROADMAP.md
-        ↓
-current .progressive/phases/*
-        ↓
-bounded prior Completion Record
-        ↓
-matching Skill + protocol + relevant code/tests
+```mermaid
+flowchart TD
+    A[Repository behavior] --> B[PROJECT_BRIEF]
+    B --> C[ARCHITECTURE]
+    C --> D[ROADMAP]
+    D --> E[Current Phase]
+    E --> F[Prior compact Completion Record when relevant]
+    F --> G[Matching Skill + relevant code/tests]
+    G --> H[Work + verification]
+    I[Cold history] -. only on demand .-> G
 ```
 
-Completed phases, framework history, human docs, visual explanations, migration evidence, and framework-development tests remain out of normal warm-up.
+Completed phases, detailed completion reports, framework history, human docs, visual explanations, migration evidence, and framework-development tests remain out of normal warm-up.
 
 ## Preferred tooling
 
 The Framework Source retains **Semble, Serena, RTK, Superpowers, gstack, Context7**, with **GitHub Spec Kit** as conditional Advanced Spec Mode. Tool selection remains task-routed; installed does not mean loaded or invoked.
+
+Visual routing explanation: [`docs/visuals/tool-routing.md`](docs/visuals/tool-routing.md).
 
 ## Verify Framework Source
 
