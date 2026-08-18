@@ -1,4 +1,4 @@
-name: Publish v1.8.0 from verified main
+name: Cleanup obsolete branches
 
 on:
   pull_request:
@@ -9,39 +9,26 @@ permissions:
   contents: write
 
 jobs:
-  publish:
-    if: ${{ github.event.pull_request.head.ref == 'publish/v1.8.0-trigger' && github.event.pull_request.head.repo.full_name == github.repository }}
+  cleanup:
+    if: ${{ github.event.pull_request.head.ref == 'cleanup/obsolete-branches' && github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
-        with:
-          ref: main
-          fetch-depth: 0
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
-        with:
-          python-version: '3.12'
-      - name: Verify release source
-        shell: bash
-        run: |
-          test "$(cat VERSION)" = "1.8.0"
-          test "$(git rev-parse HEAD)" = "9c102668f0f9377d59667abb5b1afd09f9b42ab6"
-      - name: Build verified Project Runtime
-        run: python3 tools/build_release.py
-      - name: Publish immutable GitHub Release v1.8.0
+      - name: Delete obsolete branches
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: v1.8.0
-          SOURCE_SHA: 9c102668f0f9377d59667abb5b1afd09f9b42ab6
         shell: bash
         run: |
-          ASSET="dist/Progressive-Context-Project-Runtime-v1.8.0.zip"
-          MANIFEST="dist/Progressive-Context-Project-Runtime-v1.8.0.manifest.json"
-          CHECKSUMS="dist/SHA256SUMS.txt"
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release $TAG already exists; refusing to overwrite it." >&2
-            exit 1
-          fi
-          gh release create "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" \
-            --target "$SOURCE_SHA" \
-            --title "Progressive Context Kit v1.8.0" \
-            --generate-notes
+          set -euo pipefail
+          branches=(
+            'feat/phase-completion-reports'
+            'feat/phase-completion-reports-v172'
+            'fix/v1.8.0-runtime-empty-dirs'
+            'build/v1.8.0-trigger'
+            'publish/v1.8.0-trigger'
+            'cleanup/obsolete-branches'
+            'build/v1.8.0-runtime'
+          )
+          for branch in "${branches[@]}"; do
+            echo "Deleting $branch"
+            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch}" || true
+          done
