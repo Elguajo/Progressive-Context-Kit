@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-architectural-invariants",
-  "invariant_count": 10,
+  "invariant_count": 11,
   "invariants": [
     {
       "id": "PC-001",
@@ -62,6 +62,12 @@
       "owner": "tools/audit.py",
       "anchor": "personal repo router exceeds 3600-char hard budget",
       "summary": "Completion-report functionality must not justify increasing always-loaded token budgets"
+    },
+    {
+      "id": "PC-011",
+      "owner": "docs/human/VISUAL_EXPLANATIONS.md",
+      "anchor": "Human explanatory assets are source-only documentation and must never be required for Runtime operation or packaged into Project Runtime.",
+      "summary": "Human visual explanations stay Framework Source-only and never become a Runtime dependency"
     }
   ]
 }
