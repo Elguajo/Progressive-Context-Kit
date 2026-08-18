@@ -89,6 +89,22 @@ class ProgressiveContextInvariantTests(unittest.TestCase):
         self.assertIn('do not accumulate prior-session history', template)
         self.assertIn('completion reports, or chat history unless evidence requires it', template)
 
+    def test_next_session_prompt_is_single_focus_until_current_gate_closes(self):
+        template = (ROOT / 'templates/NEXT_SESSION.template.md').read_text(encoding='utf-8')
+        handoff = (ROOT / 'docs/system/HANDOFF_PROTOCOL.md').read_text(encoding='utf-8')
+        agent_skill = (ROOT / '.agents/skills/session-handoff/SKILL.md').read_text(encoding='utf-8')
+        claude_skill = (ROOT / '.claude/skills/session-handoff/SKILL.md').read_text(encoding='utf-8')
+
+        self.assertIn('<one unresolved execution target only>', template)
+        self.assertIn('Do not name or describe later queued work here.', template)
+        self.assertIn('do not bundle a second queued', template)
+        self.assertIn('One handoff prompt = one unresolved execution target.', handoff)
+        self.assertIn('finish current task → start next task', handoff)
+        self.assertIn('must focus only on closing it', handoff)
+        self.assertIn('Single-Focus Continuation', agent_skill)
+        self.assertIn('Do not name or preload the next queued task/phase', agent_skill)
+        self.assertEqual(agent_skill, claude_skill)
+
     def test_always_loaded_hard_budgets_remain_pinned_to_v172_values(self):
         audit = (ROOT / 'tools/audit.py').read_text(encoding='utf-8')
         expected = [
