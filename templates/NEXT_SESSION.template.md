@@ -17,13 +17,20 @@ Outcome: <IN PROGRESS | PHASE COMPLETE | PROJECT COMPLETE>
 - <none or exact issue>
 
 ## Next action
-<one concrete action>
+<one unresolved execution target only>
+
+If the current task, acceptance criterion, manual verification, blocker, or other gate is still unresolved, keep this action focused on closing that gate. Do not name or describe later queued work here.
 
 ## NEXT SESSION PROMPT
 ```text
-Continue: <same one concrete action as "Next action" above>
+Continue only: <same single unresolved execution target as "Next action" above>
+
+Finish and persist evidence for this target before selecting any later task or phase work.
+Substeps needed to complete this same target are allowed, but do not bundle a second queued
+execution target into this handoff. Do not use "then continue/start/implement <later task>"
+while this target remains unresolved.
 
 Read the active instruction layers, recover project state from the Default Read Set,
-verify the Roadmap marker, and continue the next action autonomously. Do not reread
+verify the Roadmap marker, and continue this one target autonomously. Do not reread
 full completed phases, completion reports, or chat history unless evidence requires it.
 ```
