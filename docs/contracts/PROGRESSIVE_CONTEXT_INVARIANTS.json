@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-architectural-invariants",
-  "invariant_count": 11,
+  "invariant_count": 12,
   "invariants": [
     {
       "id": "PC-001",
@@ -68,6 +68,12 @@
       "owner": "docs/human/VISUAL_EXPLANATIONS.md",
       "anchor": "Human explanatory assets are source-only documentation and must never be required for Runtime operation or packaged into Project Runtime.",
       "summary": "Human visual explanations stay Framework Source-only and never become a Runtime dependency"
+    },
+    {
+      "id": "PC-012",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "One handoff prompt = one unresolved execution target.",
+      "summary": "NEXT_SESSION_PROMPT never bundles unfinished current work with later queued work"
     }
   ]
 }
