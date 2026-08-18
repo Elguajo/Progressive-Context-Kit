@@ -1,87 +1,47 @@
-name: Build Project Runtime Release
+name: Publish v1.8.0 from verified main
 
 on:
-  push:
-    tags:
-      - 'v*'
-    branches:
-      - 'build/v1.8.0-runtime'
   pull_request:
     branches:
       - 'build/v1.8.0-runtime'
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  release:
+  publish:
+    if: ${{ github.event.pull_request.head.ref == 'publish/v1.8.0-trigger' && github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
+          ref: main
           fetch-depth: 0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: '3.12'
-
-      - name: Verify tag matches VERSION
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Verify release source
         shell: bash
         run: |
-          EXPECTED="v$(cat VERSION)"
-          if [[ "$GITHUB_REF_NAME" != "$EXPECTED" ]]; then
-            echo "Tag $GITHUB_REF_NAME does not match VERSION ($EXPECTED)" >&2
-            exit 1
-          fi
-
-      - name: Build verified Project Runtime from Framework Source
+          test "$(cat VERSION)" = "1.8.0"
+          test "$(git rev-parse HEAD)" = "9c102668f0f9377d59667abb5b1afd09f9b42ab6"
+      - name: Build verified Project Runtime
         run: python3 tools/build_release.py
-
-      - name: Upload verified build artifact
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: Progressive-Context-Project-Runtime-v1.8.0
-          path: dist/
-          if-no-files-found: error
-
-      # A GitHub Release must stay pinned to the commit its tag points at. Only
-      # a tag ref (tag push, or workflow_dispatch explicitly run against a tag)
-      # is allowed to publish/update a Release; a workflow_dispatch run against
-      # a branch builds and verifies the artifact but stops short of publishing,
-      # since there is no tag commit for the Release to be immutable against.
-      - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Publish immutable GitHub Release v1.8.0
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
+          TAG: v1.8.0
+          SOURCE_SHA: 9c102668f0f9377d59667abb5b1afd09f9b42ab6
         shell: bash
         run: |
-          ASSET="$(ls dist/Progressive-Context-Project-Runtime-v*.zip | head -n 1)"
-          MANIFEST="${ASSET%.zip}.manifest.json"
+          ASSET="dist/Progressive-Context-Project-Runtime-v1.8.0.zip"
+          MANIFEST="dist/Progressive-Context-Project-Runtime-v1.8.0.manifest.json"
           CHECKSUMS="dist/SHA256SUMS.txt"
           if gh release view "$TAG" >/dev/null 2>&1; then
-            EXISTING_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG}" --jq .object.sha)"
-            if [[ "$EXISTING_SHA" != "$GITHUB_SHA" ]]; then
-              echo "Release $TAG already exists and its tag points at $EXISTING_SHA, not this run's commit ($GITHUB_SHA)." >&2
-              echo "Refusing to overwrite an immutable release with artifacts from a different commit. Cut a new version instead." >&2
-              exit 1
-            fi
-            gh release upload "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" --clobber
-          else
-            gh release create "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" \
-              --target "$GITHUB_SHA" \
-              --title "Progressive Context Kit $TAG" \
-              --generate-notes
+            echo "Release $TAG already exists; refusing to overwrite it." >&2
+            exit 1
           fi
-
-      - name: Build-only verification (no tag, no publish)
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        env:
-          BUILD_REF: ${{ github.ref }}
-        shell: bash
-        run: |
-          echo "Built and verified Project Runtime from ref '$BUILD_REF'."
-          echo "Not publishing a GitHub Release: this run is not against a tag."
-          echo "Push a vX.Y.Z tag matching VERSION, or dispatch this workflow against that tag, to publish."
+          gh release create "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" \
+            --target "$SOURCE_SHA" \
+            --title "Progressive Context Kit v1.8.0" \
+            --generate-notes
