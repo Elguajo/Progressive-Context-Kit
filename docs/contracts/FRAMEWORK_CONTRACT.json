@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-framework",
-  "rule_count": 60,
+  "rule_count": 65,
   "rules": [
     {"id":"FW-001","owner":"profiles/personal/AGENTS.md","anchor":"docs/system/LINEAGE.md","summary":"LINEAGE excluded from normal warm-up"},
     {"id":"FW-002","owner":"integrations/TOOL_REGISTRY.json","anchor":"MinishLab/semble","summary":"Semble is preferred semantic discovery implementation"},
@@ -62,6 +62,11 @@
     {"id":"FW-057","owner":".agents/skills/implementation-execution/SKILL.md","anchor":"a lightweight development-only framework may be added autonomously","summary":"Substantial testable work may add a lightweight dev-only test framework within bounded scope"},
     {"id":"FW-058","owner":".agents/skills/documentation-governance/SKILL.md","anchor":"Update automatically when required by the approved implementation:","summary":"Implementation-coupled documentation accuracy is automatic while governance changes remain gated"},
     {"id":"FW-059","owner":"global/AGENTS.codex.md","anchor":"Final report: **Result**; **Manual check** only when useful","summary":"Codex completion report is result-first with optional manual verification"},
-    {"id":"FW-060","owner":"global/CLAUDE.md","anchor":"Final report: **Result**; **Manual check** only when useful","summary":"Claude completion report is result-first with optional manual verification"}
+    {"id":"FW-060","owner":"global/CLAUDE.md","anchor":"Final report: **Result**; **Manual check** only when useful","summary":"Claude completion report is result-first with optional manual verification"},
+    {"id":"FW-061","owner":"docs/system/PLANNING_DEPTH.md","anchor":"smallest sufficient planning depth","summary":"Planning uses the smallest sufficient DIRECT/FOCUSED/FULL depth"},
+    {"id":"FW-062","owner":"docs/system/PLANNING_DEPTH.md","anchor":"Planning depth is independent from simple size labels","summary":"Planning depth is based on uncertainty/reach/risk/reversibility/contracts rather than size alone"},
+    {"id":"FW-063","owner":"prompts/START_NEW_PROJECT.md","anchor":"record it in the Project Brief","summary":"New projects select and persist adaptive planning depth before specification expansion"},
+    {"id":"FW-064","owner":"prompts/CHANGE_REQUEST.md","anchor":"do not assume the project's original depth applies to every later change","summary":"Change requests re-evaluate task planning depth instead of inheriting project depth blindly"},
+    {"id":"FW-065","owner":"tools/runtime_layout.py","anchor":"'PLANNING_DEPTH.md'","summary":"Adaptive planning protocol is packaged into Project Runtime"}
   ]
 }

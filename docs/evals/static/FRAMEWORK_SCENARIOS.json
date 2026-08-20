@@ -44,6 +44,12 @@
       "description":"Codex or Claude operates with Progressive Context while a task may require architecture choice, implementation/testing, documentation accuracy, or completion reporting.",
       "covers":["FW-054","FW-055","FW-056","FW-057","FW-058","FW-059","FW-060"],
       "expected":"Universal adapters delegate project-specific behavior to Progressive; architecture options are evidence-driven rather than fixed filler; substantial testing can add a bounded dev-only framework; implementation-coupled docs update automatically while governance remains gated; final reports are result-first with Manual check only when useful."
+    },
+    {
+      "id":"adaptive-planning-depth",
+      "description":"A new project or change request needs enough planning for correctness without generating unnecessary specification work.",
+      "covers":["FW-061","FW-062","FW-063","FW-064","FW-065"],
+      "expected":"The agent selects the smallest sufficient DIRECT/FOCUSED/FULL depth from uncertainty, architectural reach, risk, reversibility, and contract impact rather than size alone; new projects persist the selected depth, later changes re-evaluate it independently, and the protocol is available in Project Runtime. Lower planning depth never bypasses required engineering, safety, acceptance, or validation work."
     }
   ]
 }
