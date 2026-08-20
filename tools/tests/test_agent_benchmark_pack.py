@@ -7,7 +7,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools"))
 
-from prepare_agent_benchmark import BENCHMARK_ROOT, fixture_digest, materialize_fixture
+from prepare_agent_benchmark import (
+    BENCHMARK_ROOT,
+    fixture_digest,
+    initialize_benchmark_project,
+    materialize_fixture,
+)
 from runtime_layout import runtime_entries
 
 
@@ -55,6 +60,29 @@ class AgentBenchmarkPackTests(unittest.TestCase):
                 self.assertFalse((first / ".progressive").exists())
                 for source in first.rglob("*.py"):
                     compile(source.read_text(encoding="utf-8"), str(source), "exec")
+
+    def test_injected_runtime_seeds_are_replaced_with_active_identical_project_state(self):
+        with tempfile.TemporaryDirectory() as d:
+            repo = Path(d) / "repo"
+            materialize_fixture("recon_batch", repo)
+            project = repo / ".progressive/project"
+            project.mkdir(parents=True)
+            for name in ["PROJECT_BRIEF.md", "ARCHITECTURE.md", "ROADMAP.md", "NEXT_SESSION.md"]:
+                (project / name).write_text("Status: UNINITIALIZED\n", encoding="utf-8")
+            (project / "TOOLING_STATUS.json").write_text("{}\n", encoding="utf-8")
+            (project / "TOOLING_STATUS.md").write_text("Status: UNINITIALIZED\n", encoding="utf-8")
+
+            initialize_benchmark_project(repo, "recon-batch")
+
+            for name in ["PROJECT_BRIEF.md", "ARCHITECTURE.md", "ROADMAP.md", "NEXT_SESSION.md"]:
+                text = (project / name).read_text(encoding="utf-8")
+                self.assertNotIn("UNINITIALIZED", text)
+            self.assertIn("Status: ACTIVE", (project / "PROJECT_BRIEF.md").read_text(encoding="utf-8"))
+            self.assertIn("[>] Phase 00", (project / "ROADMAP.md").read_text(encoding="utf-8"))
+            self.assertTrue((repo / ".progressive/phases/00-benchmark-task.md").is_file())
+            tooling = json.loads((project / "TOOLING_STATUS.json").read_text(encoding="utf-8"))
+            self.assertEqual(tooling["profile"], "benchmark-local")
+            self.assertEqual(tooling["tools"], {})
 
     def test_keyhole_fixture_is_materially_large_and_polling_fixture_is_long_running(self):
         with tempfile.TemporaryDirectory() as d:
