@@ -24,6 +24,20 @@ class ExecutionEfficiencyTests(unittest.TestCase):
         self.assertIn('do not install speculative packages', text)
         self.assertIn('small task into environment setup', text)
 
+    def test_polling_discipline_is_bounded_and_mirrored(self):
+        canonical = (ROOT / '.agents/skills/implementation-execution/SKILL.md').read_text(encoding='utf-8')
+        mirror = (ROOT / '.claude/skills/implementation-execution/SKILL.md').read_text(encoding='utf-8')
+
+        self.assertEqual(canonical, mirror)
+        for phrase in [
+            'Treat polling as a costed execution step',
+            'at least 30 seconds for builds or test suites',
+            'Do not send empty/no-op input only to peek',
+            'do not poll at all when the execution call',
+            'Poll sooner only when the command is expected to finish',
+        ]:
+            self.assertIn(phrase, canonical)
+
     def test_quality_protocol_stops_after_sufficient_required_evidence(self):
         text = (ROOT / 'docs/system/QUALITY_PROTOCOL.md').read_text(encoding='utf-8')
         for phrase in [
