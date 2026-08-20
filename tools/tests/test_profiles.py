@@ -58,9 +58,9 @@ class ProfileTests(unittest.TestCase):
 
     def test_execution_efficiency_grounding_exists_in_both_global_adapters(self):
         required = [
-            'one reconnaissance pass',
-            'smallest sufficient slice',
-            'Never truncate data that must be transformed or copied verbatim',
+            'batch independent facts',
+            'inspect smallest sufficient slices',
+            'never truncate data to transform/copy',
         ]
         for rel in ['global/AGENTS.codex.md', 'global/CLAUDE.md']:
             text = (ROOT / rel).read_text(encoding='utf-8')
@@ -69,9 +69,9 @@ class ProfileTests(unittest.TestCase):
 
     def test_execution_efficiency_grounding_is_generated_into_standalone(self):
         standalone = (ROOT/'profiles/standalone/AGENTS.md').read_text(encoding='utf-8')
-        self.assertIn('one reconnaissance pass', standalone)
-        self.assertIn('smallest sufficient slice', standalone)
-        self.assertIn('Never truncate data that must be transformed or copied verbatim', standalone)
+        self.assertIn('batch independent facts', standalone)
+        self.assertIn('inspect smallest sufficient slices', standalone)
+        self.assertIn('never truncate data to transform/copy', standalone)
 
     def test_action_first_is_generated_not_duplicated_in_personal_router(self):
         standalone = (ROOT/'profiles/standalone/AGENTS.md').read_text(encoding='utf-8')
