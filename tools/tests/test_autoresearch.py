@@ -67,6 +67,18 @@ class AutoresearchTests(unittest.TestCase):
     def test_current_registry_and_records_validate(self):
         self.assertEqual(autoresearch.validate_repository(ROOT), [])
 
+    def test_new_requires_observed_evidence_and_changed_surface(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            with self.isolated(root):
+                with self.assertRaises(autoresearch.AutoresearchError):
+                    autoresearch.create_experiment(self.new_args(evidence_ref=[]))
+                with self.assertRaises(autoresearch.AutoresearchError):
+                    autoresearch.create_experiment(self.new_args(file=[]))
+                registry = autoresearch.load_json(autoresearch.REGISTRY_PATH)
+                self.assertEqual(registry["next_experiment_number"], 1)
+                self.assertEqual(registry["experiments"], [])
+
     def test_full_lifecycle_new_evaluate_keep_is_valid(self):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
@@ -150,6 +162,11 @@ class AutoresearchTests(unittest.TestCase):
         }
         source_only.add((ROOT / "tools/autoresearch.py").resolve())
         self.assertTrue(source_only.isdisjoint(runtime_sources))
+
+    def test_release_builder_validates_autoresearch_before_runtime_build(self):
+        text = (ROOT / "tools/build_release.py").read_text(encoding="utf-8")
+        self.assertIn('"tools/autoresearch.py validate"', text)
+        self.assertIn('"autoresearch_records": True', text)
 
 
 if __name__ == "__main__":
