@@ -1,101 +1,31 @@
 {
   "schema": 1,
   "scenarios": [
+    {"id":"tooling-recommended-missing","covers":["FW-002","FW-003","FW-004","FW-005","FW-006","FW-007","FW-009","FW-011","FW-012","FW-013","FW-019","FW-020"]},
+    {"id":"tiny-edit-with-missing-tools","covers":["FW-010","FW-019"]},
+    {"id":"high-risk-formal-spec","covers":["FW-008","FW-021"]},
+    {"id":"existing-project-adoption","covers":["FW-014","FW-015","FW-016","FW-026"]},
+    {"id":"compiled-context-session","covers":["FW-001","FW-017","FW-018","FW-023"]},
+    {"id":"framework-evolution-audit","covers":["FW-022","FW-024","FW-025"]},
+    {"id":"agent-layering-personal-and-standalone","covers":["FW-027","FW-028","FW-029","FW-030"]},
+    {"id":"phase-transition-continuity","covers":["FW-031","FW-032","FW-033","FW-034","FW-035","FW-036"]},
     {
-      "id": "tooling-recommended-missing",
-      "covers": [
-        "FW-002",
-        "FW-003",
-        "FW-004",
-        "FW-005",
-        "FW-006",
-        "FW-007",
-        "FW-009",
-        "FW-011",
-        "FW-012",
-        "FW-013",
-        "FW-019",
-        "FW-020"
-      ]
+      "id":"runtime-release-derivation",
+      "description":"A release is prepared after Framework Source changes.",
+      "covers":["FW-037"],
+      "expected":"Only Framework Source is edited. tools/build_release.py validates Source and generates the disposable Project Runtime artifact plus release metadata."
     },
     {
-      "id": "tiny-edit-with-missing-tools",
-      "covers": [
-        "FW-010",
-        "FW-019"
-      ]
+      "id":"action-first-communication",
+      "description":"A normal implementation, debugging, review, or project-navigation response is produced.",
+      "covers":["FW-038","FW-039","FW-040","FW-041"],
+      "expected":"Codex and Claude universal contracts lead with the result/useful action, preserve correctness/safety/completeness over brevity, Standalone inherits the behavior through generated composition, and the Personal repository router does not duplicate the universal block."
     },
     {
-      "id": "high-risk-formal-spec",
-      "covers": [
-        "FW-008",
-        "FW-021"
-      ]
-    },
-    {
-      "id": "existing-project-adoption",
-      "covers": [
-        "FW-014",
-        "FW-015",
-        "FW-016",
-        "FW-026"
-      ]
-    },
-    {
-      "id": "compiled-context-session",
-      "covers": [
-        "FW-001",
-        "FW-017",
-        "FW-018",
-        "FW-023"
-      ]
-    },
-    {
-      "id": "framework-evolution-audit",
-      "covers": [
-        "FW-022",
-        "FW-024",
-        "FW-025"
-      ]
-    },
-    {
-      "id": "agent-layering-personal-and-standalone",
-      "covers": [
-        "FW-027",
-        "FW-028",
-        "FW-029",
-        "FW-030"
-      ]
-    },
-    {
-      "id": "phase-transition-continuity",
-      "covers": [
-        "FW-031",
-        "FW-032",
-        "FW-033",
-        "FW-034",
-        "FW-035",
-        "FW-036"
-      ]
-    },
-    {
-      "id": "runtime-release-derivation",
-      "description": "A release is prepared after Framework Source changes.",
-      "covers": [
-        "FW-037"
-      ],
-      "expected": "Only Framework Source is edited. tools/build_release.py validates Source and generates the disposable Project Runtime artifact plus release metadata."
-    },
-    {
-      "id": "action-first-communication",
-      "description": "A normal implementation, debugging, review, or project-navigation response is produced.",
-      "covers": [
-        "FW-038",
-        "FW-039",
-        "FW-040",
-        "FW-041"
-      ],
-      "expected": "Codex and Claude universal contracts lead with the result/useful action, preserve correctness/safety/completeness over brevity, Standalone inherits the behavior through generated composition, and the Personal repository router does not duplicate the universal block."
+      "id":"execution-efficiency",
+      "description":"A non-trivial coding task requires repository grounding, environment setup, implementation, validation, debugging, or waiting on a long-running command.",
+      "covers":["FW-042","FW-043","FW-044","FW-045","FW-046","FW-047"],
+      "expected":"Codex and Claude batch independent reconnaissance and bound inspection reads; implementation probes knowable prerequisites together; validation stops after required evidence is sufficient; repeated same-cause failures pivot the hypothesis/approach; long-running commands avoid frequent empty polling. None of these rules weakens correctness, acceptance criteria, security gates, or required tests."
     }
   ]
 }
