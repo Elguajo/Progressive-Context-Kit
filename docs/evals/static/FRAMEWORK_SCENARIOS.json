@@ -38,6 +38,12 @@
       "description":"A discovery benchmark or trace reveals a repeatable waste pattern and maintainers test a behavioral optimization.",
       "covers":["FW-050","FW-051","FW-052","FW-053"],
       "expected":"One experiment isolates one primary hypothesis/change, paired evidence must pass the quality gate before KEEP is allowed, decided records are terminal so MODIFY creates a linked new experiment, and release verification rejects inconsistent registry/lifecycle/evidence state."
+    },
+    {
+      "id":"progressive-aware-universal-v2-5",
+      "description":"Codex or Claude operates with Progressive Context while a task may require architecture choice, implementation/testing, documentation accuracy, or completion reporting.",
+      "covers":["FW-054","FW-055","FW-056","FW-057","FW-058","FW-059","FW-060"],
+      "expected":"Universal adapters delegate project-specific behavior to Progressive; architecture options are evidence-driven rather than fixed filler; substantial testing can add a bounded dev-only framework; implementation-coupled docs update automatically while governance remains gated; final reports are result-first with Manual check only when useful."
     }
   ]
 }
