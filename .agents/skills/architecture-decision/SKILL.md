@@ -14,8 +14,12 @@ Present:
 **Diagnosis:** core problem, key repository constraint, and main risk in 1–3 sentences.
 
 **Options:** list all materially different viable strategies worth considering as **A**, **B**,
-**C**, etc. Use no fixed count and never invent filler. For each: scope, effort, main
-risk/limitation, maintenance impact, and when appropriate.
+**C**, etc. Use no fixed count and never invent filler. Render as a bullet list; start each
+bullet with the label and a short name in bold, separated by an em dash (e.g. **A — Fast:**),
+followed by concise prose — not a nested sub-bullet per attribute. Cover scope, effort, main
+risk/limitation, maintenance impact, and compatibility when appropriate, compressed into one to
+two flowing sentences per option. Wrap package names, file paths, flags, and other technical
+identifiers in inline code spans.
 
 **My Recommendation:** choose exactly one option based on repository maturity, risk,
 reversibility, product impact, and maintenance cost.
