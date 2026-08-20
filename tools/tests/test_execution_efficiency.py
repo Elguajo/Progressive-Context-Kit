@@ -4,6 +4,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def normalized(text):
+    return ' '.join(text.split())
+
+
 class ExecutionEfficiencyTests(unittest.TestCase):
     def test_implementation_skill_batches_known_environment_prerequisites(self):
         canonical = (ROOT / '.agents/skills/implementation-execution/SKILL.md').read_text(encoding='utf-8')
@@ -29,14 +33,15 @@ class ExecutionEfficiencyTests(unittest.TestCase):
         mirror = (ROOT / '.claude/skills/implementation-execution/SKILL.md').read_text(encoding='utf-8')
 
         self.assertEqual(canonical, mirror)
+        text = normalized(canonical)
         for phrase in [
             'Treat polling as a costed execution step',
             'at least 30 seconds for builds or test suites',
             'Do not send empty/no-op input only to peek',
-            'do not poll at all when the execution call',
-            'Poll sooner only when the command is expected to finish',
+            'do not poll at all when the execution call already blocks until completion',
+            'Poll sooner only when the command is expected to finish quickly',
         ]:
-            self.assertIn(phrase, canonical)
+            self.assertIn(phrase, text)
 
     def test_quality_protocol_stops_after_sufficient_required_evidence(self):
         text = (ROOT / 'docs/system/QUALITY_PROTOCOL.md').read_text(encoding='utf-8')
