@@ -97,8 +97,12 @@ def validate_record(record: dict, *, root: Path | None = None) -> list[str]:
         if not isinstance(observation.get("text"), str) or not observation.get("text", "").strip():
             errors.append(f"{rid}: observation.text must be non-empty")
         refs = observation.get("evidence_refs")
-        if not isinstance(refs, list) or not all(isinstance(x, str) and x.strip() for x in refs):
-            errors.append(f"{rid}: observation.evidence_refs must be string array")
+        if (
+            not isinstance(refs, list)
+            or not refs
+            or not all(isinstance(x, str) and x.strip() for x in refs)
+        ):
+            errors.append(f"{rid}: observation.evidence_refs must be a non-empty string array")
 
     if not isinstance(record.get("hypothesis"), str) or not record.get("hypothesis", "").strip():
         errors.append(f"{rid}: hypothesis must be non-empty")
@@ -110,8 +114,12 @@ def validate_record(record: dict, *, root: Path | None = None) -> list[str]:
         if not isinstance(change.get("summary"), str) or not change.get("summary", "").strip():
             errors.append(f"{rid}: candidate_change.summary must be non-empty")
         files = change.get("files")
-        if not isinstance(files, list) or not all(isinstance(x, str) and x.strip() for x in files):
-            errors.append(f"{rid}: candidate_change.files must be string array")
+        if (
+            not isinstance(files, list)
+            or not files
+            or not all(isinstance(x, str) and x.strip() for x in files)
+        ):
+            errors.append(f"{rid}: candidate_change.files must be a non-empty string array")
 
     comparison = record.get("comparison")
     if not isinstance(comparison, dict):
