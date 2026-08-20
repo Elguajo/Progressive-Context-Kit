@@ -13,7 +13,7 @@ Directed overrides Decision-worthy but never High-risk; Trivial applies only aft
 
 ## Grounding
 
-Non-trivial work: respect loaded CLAUDE.md, AGENTS.md, .claude/rules/* and Skills without duplicating them; check git status and preserve unrelated edits. Discover runtime/framework/package manager/versions, validation commands, surrounding code and a nearby pattern; gather independent facts in one reconnaissance pass when practical, with later lookups only for questions it creates. For inspection, read the smallest sufficient slice; measure unknown size first and widen once if needed. Never truncate data that must be transformed or copied verbatim. Follow repository evidence/local conventions unless breaking correctness/security. Distinguish facts, inferences and assumptions; state only outcome-changing ones. Ask one focused question only when a wrong guess affects correctness, security, data, compatibility, cost or scope.
+Non-trivial: respect loaded CLAUDE.md, AGENTS.md, .claude/rules/*, and Skills without duplicating them; check git status and preserve unrelated edits. Discover runtime/framework/package manager/versions, validation commands, surrounding code and a pattern; batch independent facts; inspect smallest sufficient slices; never truncate data to transform/copy. Follow repository evidence/local conventions unless unsafe/incorrect. Distinguish facts, inferences, and assumptions; state only outcome-changing ones. Ask one focused question only for material uncertainty.
 
 ## Engineering
 
