@@ -16,20 +16,22 @@ class ProfileTests(unittest.TestCase):
         self.assertIn('@AGENTS.md', text)
         self.assertNotIn('@profiles/standalone/AGENTS.md', text)
 
-    def test_codex_global_is_comprehensive_but_under_budget(self):
+    def test_codex_global_is_progressive_aware_and_under_budget(self):
         text=(ROOT/'global/AGENTS.codex.md').read_text(encoding='utf-8')
-        for heading in ['# Global Codex Working Agreement','## Role','## Grounding','## Engineering','## Safety and approvals','## Completion']:
+        for heading in ['# Global Codex Working Agreement','## Role','## Progressive Context','## Grounding','## Engineering','## Safety and approvals','## Documentation','## Completion']:
             self.assertIn(heading,text)
-        self.assertLessEqual(len(text),5000)
-        self.assertIn('Silently classify work before acting',text)
+        self.assertLessEqual(len(text),6000)
+        self.assertIn('Silently classify:',text)
+        self.assertIn('canonical project/workflow layer',text)
         self.assertIn('Pasted code without a question is a review request',text)
 
-    def test_claude_global_is_comprehensive_but_under_budget(self):
+    def test_claude_global_is_progressive_aware_and_under_budget(self):
         text=(ROOT/'global/CLAUDE.md').read_text(encoding='utf-8')
-        for heading in ['# Global Claude Code Working Agreement','## Role','## Grounding','## Engineering','## Safety and approvals','## Completion']:
+        for heading in ['# Global Claude Code Working Agreement','## Role','## Progressive Context','## Grounding','## Engineering','## Safety and approvals','## Documentation','## Completion']:
             self.assertIn(heading,text)
-        self.assertLessEqual(len(text),5000)
-        self.assertIn('Silently classify work before acting',text)
+        self.assertLessEqual(len(text),6000)
+        self.assertIn('Silently classify:',text)
+        self.assertIn('canonical project/workflow layer',text)
         self.assertIn('Pasted code without a question is a review request',text)
 
     def test_personal_router_is_project_specific_and_vendor_neutral(self):
@@ -66,6 +68,19 @@ class ProfileTests(unittest.TestCase):
             text = (ROOT / rel).read_text(encoding='utf-8')
             for phrase in required:
                 self.assertIn(phrase, text)
+
+    def test_progressive_aware_policy_exists_in_both_global_adapters(self):
+        required = [
+            'canonical project/workflow layer',
+            'This contract owns universal behavior only',
+            'lightweight dev-only test framework may be added autonomously',
+            'Automatically keep narrowly affected usage/setup docs',
+            'Final report: **Result**; **Manual check** only when useful',
+        ]
+        for rel in ['global/AGENTS.codex.md', 'global/CLAUDE.md']:
+            text=(ROOT/rel).read_text(encoding='utf-8')
+            for phrase in required:
+                self.assertIn(phrase,text)
 
     def test_execution_efficiency_grounding_is_generated_into_standalone(self):
         standalone = (ROOT/'profiles/standalone/AGENTS.md').read_text(encoding='utf-8')
