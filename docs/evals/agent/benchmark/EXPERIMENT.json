@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "experiment_id": "execution-efficiency-v1",
+  "description": "Paired real-agent benchmark for Progressive Context execution-efficiency guarantees.",
+  "baseline_workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a",
+  "candidate_workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503",
+  "baseline_description": "Last main commit before Execution Efficiency rules were introduced.",
+  "candidate_description": "Completed Phase 6 workflow with execution-efficiency rules, static protection, and measurement foundation.",
+  "profile": "standalone",
+  "agent_target": "both",
+  "default_repetitions": 1,
+  "claim_repetitions_minimum": 5,
+  "quality_tolerance": 0.0,
+  "token_accounting_requirement": "Use the same provider-reported accounting in both arms; otherwise input_tokens + output_tokens consistently.",
+  "controlled_fields": [
+    "agent product",
+    "model version",
+    "reasoning/effort setting",
+    "task fixture snapshot",
+    "task wording",
+    "acceptance criteria",
+    "tool availability",
+    "permissions",
+    "environment"
+  ],
+  "primary_metrics": [
+    "total_tokens",
+    "turns",
+    "tool_calls",
+    "file_reads",
+    "wall_time_seconds"
+  ],
+  "optional_metrics": [
+    "input_tokens",
+    "output_tokens",
+    "cache_read_tokens",
+    "cost_usd",
+    "initial_context_tokens",
+    "peak_context_tokens"
+  ],
+  "notes": [
+    "Phase 7 benchmark files are Framework Source-only and must never enter Project Runtime.",
+    "One exploratory repetition is useful for smoke-testing the harness; use at least five paired repetitions per task before making stable median-efficiency claims.",
+    "The polling scenario is interpretable only when the agent harness can return control while a long-running command is still executing."
+  ]
+}
