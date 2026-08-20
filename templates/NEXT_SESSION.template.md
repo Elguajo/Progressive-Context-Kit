@@ -1,6 +1,6 @@
 # Next Session
 
-> Volatile hot context. Overwrite this file on each meaningful handoff. Durable completed-phase history belongs in `docs/completions/` (Runtime: `.progressive/completions/`) with only a compact bridge in the completed phase `Completion Record`.
+> Volatile hot context. Overwrite this file on each meaningful handoff. Durable completed-phase history belongs in `docs/completions/` with only a compact bridge in the completed phase `Completion Record`.
 
 Outcome: <IN PROGRESS | PHASE COMPLETE | PROJECT COMPLETE>
 

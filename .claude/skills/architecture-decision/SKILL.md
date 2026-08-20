@@ -6,27 +6,32 @@ description: Material architecture/technology fork with genuinely different stra
 # Architecture Decision
 
 Use only for Decision-worthy work after task classification. Silently weigh architecture,
-correctness, effort, testing, security, compatibility, reversibility, and maintenance. Do not expose the full internal analysis.
+correctness, effort, testing, security, compatibility, reversibility, maintenance, and product
+impact. Do not expose full internal analysis.
 
-Present exactly:
+Present:
 
 **Diagnosis:** core problem, key repository constraint, and main risk in 1–3 sentences.
 
-**Options:**
-- **A — Pragmatic / Fast:** smallest effective solution; scope, effort, limitation, and when appropriate.
-- **B — Architectural / Robust:** structurally complete solution; scope, effort, long-term benefit, added complexity, and when justified.
-- **C — Balanced / Hybrid:** solve the immediate problem plus the single most important structural weakness; what changes now, what stays, effort, and main risk.
+**Options:** list all materially different viable strategies worth considering as **A**, **B**,
+**C**, etc. Use no fixed count and never invent filler. For each: scope, effort, main
+risk/limitation, maintenance impact, and when appropriate.
 
-Options must be materially different; never invent filler. Then give **My Recommendation:** choose exactly one of A/B/C and tie it to repository maturity, risk, and maintenance cost; never call all options equally valid.
+**My Recommendation:** choose exactly one option based on repository maturity, risk,
+reversibility, product impact, and maintenance cost.
 
-Ask: **“Which path should I implement: A, B, or C? Or describe your own direction.”** Then stop. Do not implement before a direction is chosen unless task classification already exempts the task (e.g. Directed/Trivial).
+Ask: **“Which path should I implement? Choose an option above, or describe your own direction.”**
+Then stop. Do not implement until direction is chosen unless classification already exempts the
+task (Directed/Trivial).
 
-If the user provides a custom direction, turn it into a coherent approach and proceed. Their direction overrides the recommendation unless it creates serious security, integrity, compatibility, or data-loss risk; then name the risk, propose the nearest safe alternative, and confirm.
+A custom user direction overrides the recommendation unless it creates material security,
+integrity, compatibility, data-loss, operational, or irreversible risk; then name the risk,
+offer the nearest safe alternative, and confirm only the material decision.
 
 ## Pivot rule
 
-- Core strategy rejected → stop extending it and return to remaining viable strategies.
-- Local detail rejected → preserve approved architecture and revise that detail directly.
-- Never pile compatibility patches onto a strategy the user fundamentally rejected.
+- Core strategy rejected → abandon it and return to viable alternatives.
+- Local detail rejected → preserve approved architecture and revise that detail.
+- Never pile compatibility patches onto a fundamentally rejected strategy.
 
-Create an ADR only for a consequential, hard-to-reverse decision that future maintainers need to understand.
+Create an ADR only for a consequential, hard-to-reverse decision future maintainers need.

@@ -23,7 +23,7 @@ class ExecutionEfficiencyTests(unittest.TestCase):
             self.assertIn(phrase, canonical)
 
     def test_environment_probe_preserves_scope_and_approval_guards(self):
-        text = (ROOT / '.agents/skills/implementation-execution/SKILL.md').read_text(encoding='utf-8')
+        text = normalized((ROOT / '.agents/skills/implementation-execution/SKILL.md').read_text(encoding='utf-8'))
         self.assertIn('respect existing dependency/approval policy', text)
         self.assertIn('do not install speculative packages', text)
         self.assertIn('small task into environment setup', text)
@@ -36,9 +36,9 @@ class ExecutionEfficiencyTests(unittest.TestCase):
         text = normalized(canonical)
         for phrase in [
             'Treat polling as a costed execution step',
-            'at least 30 seconds for builds or test suites',
+            'at least 30 seconds for builds/test suites',
             'Do not send empty/no-op input only to peek',
-            'do not poll at all when the execution call already blocks until completion',
+            'do not poll when the execution call already blocks until completion',
             'Poll sooner only when the command is expected to finish quickly',
         ]:
             self.assertIn(phrase, text)

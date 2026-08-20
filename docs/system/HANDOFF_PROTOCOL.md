@@ -8,7 +8,7 @@ Roadmap stays canonical for phase status.
 When a phase satisfies its acceptance criteria:
 
 1. update Architecture/ADR/other canonical owners first when system shape or a consequential decision changed;
-2. write the durable phase report under `docs/completions/<phase-name>.md` using `templates/PHASE_COMPLETION.template.md`; Runtime uses `.progressive/completions/<phase-name>.md`;
+2. write the durable phase report under `docs/completions/<phase-name>.md` using `templates/PHASE_COMPLETION.template.md`;
 3. persist a compact `## Completion Record` in the completed phase **before moving the Roadmap marker**. It should point to the final report and keep only the small cross-phase bridge needed for progressive context;
 4. mark the completed phase `[x]` and exactly one next phase `[>]` when one exists;
 5. overwrite `NEXT_SESSION.md` in place with only the hot state needed to continue.
@@ -42,7 +42,7 @@ On project completion every phase is `[x]` and none is `[>]`.
 
 ## NEXT_SESSION semantics
 
-`NEXT_SESSION.md` is volatile hot navigation, not project history. Overwrite it on each meaningful handoff; do not create an accumulating chain of `NEXT_SESSION_001.md`, `NEXT_SESSION_002.md`, etc. It contains only current phase, completed work from the just-ended session, verification, blockers/uncertainty, next action, and a ready-to-copy prompt. Durable completed-phase detail belongs in `docs/completions/` (Runtime: `.progressive/completions/`); the phase keeps only its compact Completion Record; full source history remains in version control when available.
+`NEXT_SESSION.md` is volatile hot navigation, not project history. Overwrite it on each meaningful handoff; do not create an accumulating chain of `NEXT_SESSION_001.md`, `NEXT_SESSION_002.md`, etc. It contains only current phase, completed work from the just-ended session, verification, blockers/uncertainty, next action, and a ready-to-copy prompt. Durable completed-phase detail belongs in `docs/completions/`; the phase keeps only its compact Completion Record; full source history remains in version control when available.
 
 ### Single-focus continuation
 

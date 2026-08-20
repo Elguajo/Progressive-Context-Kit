@@ -9,7 +9,7 @@ Each durable rule/fact gets one canonical owner.
 - Roadmap → phase order/status/current pointer.
 - Current Phase → execution tasks/acceptance/verification plus compact task-completion notes when later work needs them.
 - Completed Phase `Completion Record` → compact cross-phase bridge and pointer to the final report; remains normal warm-up context.
-- Phase Completion Report (`docs/completions/`; Runtime: `.progressive/completions/`) → detailed durable human-readable result/evidence/implementation notes/debt for one completed phase; read on demand, not normal warm-up.
+- Phase Completion Report (`docs/completions/`) → detailed durable human-readable result/evidence/implementation notes/debt for one completed phase; read on demand, not normal warm-up.
 - `CONTEXT_MANIFEST.json` → optional non-obvious phase-specific context/Skill hints; never duplicate full docs.
 - ADR → one consequential decision rationale.
 - `TOOL_REGISTRY.json` → preferred branded capability mapping/install policy.

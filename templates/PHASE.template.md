@@ -30,4 +30,4 @@ For a completed non-trivial task, keep any durable task result directly under th
 - <commands/manual checks/evidence required>
 
 ## Completion Record
-<populate only when this phase becomes [x]. Keep this bridge compact: Status/Completed; Final report path when one exists; Outcome; Validation summary; Decisions/Technical Debt affecting the next phase; Handoff. Detailed durable phase history belongs in the phase completion report under docs/completions/ (Runtime: .progressive/completions/), not here. Legacy completed phases without a separate report remain valid.>
+<populate only when this phase becomes [x]. Keep this bridge compact: Status/Completed; Final report path when one exists; Outcome; Validation summary; Decisions/Technical Debt affecting the next phase; Handoff. Detailed durable phase history belongs in the phase completion report under docs/completions/, not here. Legacy completed phases without a separate report remain valid.>

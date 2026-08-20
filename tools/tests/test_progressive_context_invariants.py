@@ -105,15 +105,18 @@ class ProgressiveContextInvariantTests(unittest.TestCase):
         self.assertIn('Do not name or preload the next queued task/phase', agent_skill)
         self.assertEqual(agent_skill, claude_skill)
 
-    def test_always_loaded_hard_budgets_remain_pinned_to_v172_values(self):
+    def test_always_loaded_hard_budgets_remain_pinned_to_v25_values(self):
+        # Raised from the v1.7.2 baseline (5000/8500/8600/9000) per the documented
+        # Progressive-aware v2.5 migration (docs/migration/CODEX_CUSTOM_INSTRUCTIONS_V2_5.md),
+        # which commits to a 5,500-char global adapter ceiling.
         audit = (ROOT / 'tools/audit.py').read_text(encoding='utf-8')
         expected = [
-            "chars(g)>5000",
-            "chars(gc)>5000",
+            "chars(g)>5500",
+            "chars(gc)>5500",
             "chars(p)>3600",
-            "chars(g)+chars(p)>8500",
-            "chars(gc)+chars(p)>8600",
-            "chars(s)>9000",
+            "chars(g)+chars(p)>9100",
+            "chars(gc)+chars(p)>9100",
+            "chars(s)>9300",
         ]
         for anchor in expected:
             self.assertIn(anchor, audit, anchor)

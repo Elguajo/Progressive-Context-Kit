@@ -34,7 +34,7 @@ class BehaviorContractTests(unittest.TestCase):
     def test_architecture_decision_preserves_stop_rule(self):
         text=(ROOT/'.agents/skills/architecture-decision/SKILL.md').read_text(encoding='utf-8')
         self.assertIn('Then stop',text)
-        self.assertIn('Do not implement before a direction is chosen',text)
+        self.assertIn('Do not implement until direction is chosen',text)
 
     def test_review_preserves_top_findings_and_do_nothing(self):
         text=(ROOT/'.agents/skills/code-review/SKILL.md').read_text(encoding='utf-8')

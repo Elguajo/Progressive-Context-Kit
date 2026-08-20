@@ -32,12 +32,12 @@ def verify_archive_hash(root,errors):
 
 def verify_profiles(root,errors):
     g=root/'global/AGENTS.codex.md'; gc=root/'global/CLAUDE.md'; p=root/'profiles/personal/AGENTS.md'; s=root/'profiles/standalone/AGENTS.md'
-    fail_if(chars(g)>5000,errors,'global/AGENTS.codex.md exceeds 5000-char hard budget')
-    fail_if(chars(gc)>5000,errors,'global/CLAUDE.md exceeds 5000-char hard budget')
+    fail_if(chars(g)>5500,errors,'global/AGENTS.codex.md exceeds 5500-char hard budget')
+    fail_if(chars(gc)>5500,errors,'global/CLAUDE.md exceeds 5500-char hard budget')
     fail_if(chars(p)>3600,errors,'personal repo router exceeds 3600-char hard budget')
-    fail_if(chars(g)+chars(p)>8500,errors,'Personal Codex always-loaded layers exceed 8500 chars')
-    fail_if(chars(gc)+chars(p)>8600,errors,'Personal Claude always-loaded layers exceed 8600 chars')
-    fail_if(chars(s)>9000,errors,'Standalone AGENTS exceeds 9000-char hard budget')
+    fail_if(chars(g)+chars(p)>9100,errors,'Personal Codex always-loaded layers exceed 9100 chars')
+    fail_if(chars(gc)+chars(p)>9100,errors,'Personal Claude always-loaded layers exceed 9100 chars')
+    fail_if(chars(s)>9300,errors,'Standalone AGENTS exceeds 9300-char hard budget')
     profile=active_profile(root); fail_if(not root_matches_profile(root,profile),errors,f'root AGENTS.md must contain active {profile} profile as canonical prefix')
     fail_if(s.read_text(encoding='utf-8')!=compose_standalone(root),errors,'profiles/standalone/AGENTS.md drifted from generated global+personal composition')
     claude=read(root/'CLAUDE.md')

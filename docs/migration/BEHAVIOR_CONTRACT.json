@@ -48,7 +48,7 @@
       "source_section": "TASK_CLASSIFICATION",
       "source_lines": "9",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "obvious/local/mechanical or the approach is already specified: implement directly",
+      "anchor": "obvious/local/mechanical or specified",
       "summary": "Trivial work implements directly without option ceremony"
     },
     {
@@ -56,7 +56,7 @@
       "source_section": "TASK_CLASSIFICATION",
       "source_lines": "10",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "user approved a direction or said to decide/proceed: choose the best approach and continue",
+      "anchor": "approved/delegated",
       "summary": "Directed work proceeds with best approach without pausing"
     },
     {
@@ -64,7 +64,7 @@
       "source_section": "TASK_CLASSIFICATION",
       "source_lines": "11",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "materially different technical strategies exist",
+      "anchor": "unresolved choices materially affect architecture",
       "summary": "Decision-worthy work uses decision workflow"
     },
     {
@@ -72,7 +72,7 @@
       "source_section": "TASK_CLASSIFICATION",
       "source_lines": "12",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "data, auth, public APIs, migrations, deletions, deployments, external writes, or irreversible operations",
+      "anchor": "data/auth/migrations/deletion/deployments/external writes/shared resources/secrets/irreversible operations",
       "summary": "High-risk work uses safety/approval path"
     },
     {
@@ -80,7 +80,7 @@
       "source_section": "TASK_CLASSIFICATION",
       "source_lines": "16",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "safety/approval overrides every other class",
+      "anchor": "High-risk overrides all",
       "summary": "High-risk overrides all classifications"
     },
     {
@@ -88,7 +88,7 @@
       "source_section": "TASK_CLASSIFICATION",
       "source_lines": "17",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Directed overrides Decision-worthy but never High-risk",
+      "anchor": "Directed never overrides required High-risk approval",
       "summary": "Directed overrides decision workflow, not safety approval"
     },
     {
@@ -112,7 +112,7 @@
       "source_section": "TASK_CLASSIFICATION",
       "source_lines": "21",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Do not invent options when one solution is clearly best or skip a real architectural fork",
+      "anchor": "do not invent options when one solution is clearly best or skip a real architectural fork",
       "summary": "No fake options; no skipping real fork"
     },
     {
@@ -120,7 +120,7 @@
       "source_section": "REPOSITORY_GROUNDING",
       "source_lines": "27",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "respect loaded `AGENTS.md` / `AGENTS.override.md` precedence",
+      "anchor": "respect loaded `AGENTS.md` / `AGENTS.override.md`",
       "summary": "Respect instruction hierarchy"
     },
     {
@@ -168,7 +168,7 @@
       "source_section": "REPOSITORY_GROUNDING",
       "source_lines": "33",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Follow repository evidence and local conventions",
+      "anchor": "Follow repository evidence/local conventions",
       "summary": "Base recommendations on evidence and local conventions unless unsafe/incorrect"
     },
     {
@@ -208,7 +208,7 @@
       "source_section": "ENGINEERING_PRINCIPLES",
       "source_lines": "40",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Prefer explicit code over cleverness",
+      "anchor": "Prefer explicit code",
       "summary": "Explicit over clever"
     },
     {
@@ -216,7 +216,7 @@
       "source_section": "ENGINEERING_PRINCIPLES",
       "source_lines": "41",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "DRY only when divergence is a real risk",
+      "anchor": "DRY only for real divergence risk",
       "summary": "Pragmatic DRY"
     },
     {
@@ -232,15 +232,15 @@
       "source_section": "ENGINEERING_PRINCIPLES",
       "source_lines": "43",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "No unrelated refactors",
+      "anchor": "Avoid unrelated refactors",
       "summary": "Scope discipline"
     },
     {
       "id": "ENG-07",
       "source_section": "ENGINEERING_PRINCIPLES",
       "source_lines": "44",
-      "owner": "global/AGENTS.codex.md",
-      "anchor": "do not add a new test framework for a small change without approval",
+      "owner": ".agents/skills/implementation-execution/SKILL.md",
+      "anchor": "Do not add a test framework",
       "summary": "Tests follow behavior; no new small-change framework without approval"
     },
     {
@@ -248,7 +248,7 @@
       "source_section": "ENGINEERING_PRINCIPLES",
       "source_lines": "45",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Optimize performance only with task/evidence justification",
+      "anchor": "Optimize only with evidence",
       "summary": "Performance only with evidence"
     },
     {
@@ -272,7 +272,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "56",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "scope, effort, limitation, and when appropriate",
+      "anchor": "maintenance impact, and when appropriate",
       "summary": "Pragmatic/Fast option semantics"
     },
     {
@@ -280,7 +280,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "57",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "long-term benefit, added complexity, and when justified",
+      "anchor": "maintenance impact, and when appropriate",
       "summary": "Architectural/Robust option semantics"
     },
     {
@@ -288,7 +288,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "58",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "what changes now, what stays, effort, and main risk",
+      "anchor": "maintenance impact, and when appropriate",
       "summary": "Balanced/Hybrid option semantics"
     },
     {
@@ -304,7 +304,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "62",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "choose exactly one of A/B/C",
+      "anchor": "choose exactly one option",
       "summary": "One decisive recommendation tied to repository factors"
     },
     {
@@ -312,7 +312,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "64-65",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "Which path should I implement: A, B, or C?",
+      "anchor": "Which path should I implement?",
       "summary": "Ask exact direction question and stop"
     },
     {
@@ -320,7 +320,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "66",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "Do not implement before a direction is chosen",
+      "anchor": "Do not implement until direction is chosen",
       "summary": "No implementation before direction unless exempt"
     },
     {
@@ -328,7 +328,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "68",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "Their direction overrides the recommendation unless",
+      "anchor": "overrides the recommendation unless",
       "summary": "Custom direction overrides unless serious risk; nearest safe alternative"
     },
     {
@@ -416,7 +416,7 @@
       "source_section": "CODE_REVIEW_MODE",
       "source_lines": "93",
       "owner": ".agents/skills/code-review/SKILL.md",
-      "anchor": "top 3–4 significant issues",
+      "anchor": "top 3\u20134 significant issues",
       "summary": "Limit significant findings"
     },
     {
@@ -448,7 +448,7 @@
       "source_section": "IMPLEMENTATION",
       "source_lines": "97",
       "owner": ".agents/skills/implementation-execution/SKILL.md",
-      "anchor": "not for incomplete core-logic fragments",
+      "anchor": "not incomplete core-logic fragments",
       "summary": "Approval is for direction, not fragments"
     },
     {
@@ -456,7 +456,7 @@
       "source_section": "IMPLEMENTATION",
       "source_lines": "101",
       "owner": ".agents/skills/implementation-execution/SKILL.md",
-      "anchor": "integration points, imports, types, schemas",
+      "anchor": "integration, imports, types, schemas",
       "summary": "Complete integration/import/type/schema/config"
     },
     {
@@ -472,7 +472,7 @@
       "source_section": "IMPLEMENTATION",
       "source_lines": "103",
       "owner": ".agents/skills/implementation-execution/SKILL.md",
-      "anchor": "backward compatibility unless a break was",
+      "anchor": "backward compatibility unless approved otherwise",
       "summary": "Backward compatibility unless approved break"
     },
     {
@@ -480,7 +480,7 @@
       "source_section": "IMPLEMENTATION",
       "source_lines": "104",
       "owner": ".agents/skills/implementation-execution/SKILL.md",
-      "anchor": "relevant tests when an existing framework exists",
+      "anchor": "require relevant tests when meaningfully",
       "summary": "Relevant tests with existing framework"
     },
     {
@@ -664,7 +664,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "144",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Never reset/revert/stash/discard/overwrite user changes",
+      "anchor": "Never reset/revert/stash/discard/overwrite unrelated user changes",
       "summary": "Do not discard user changes"
     },
     {
@@ -672,7 +672,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "145",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "rewrite Git history destructively",
+      "anchor": "destructively rewrite Git history",
       "summary": "No destructive Git history"
     },
     {
@@ -728,7 +728,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "154",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Raise material security risks directly",
+      "anchor": "raise material security risks directly",
       "summary": "Raise material security risks"
     },
     {
@@ -784,7 +784,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "165-174",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Require explicit confirmation before destructive/irreversible operations",
+      "anchor": "Require confirmation before destructive/irreversible operations",
       "summary": "Approval for listed high-risk operations"
     },
     {
@@ -792,7 +792,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "176",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Read-only dependency metadata/repository fetches need no confirmation",
+      "anchor": "read-only dependency lookup",
       "summary": "Read-only metadata/fetch exception"
     },
     {
@@ -800,7 +800,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "178-183",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Do not ask before ordinary in-scope edits",
+      "anchor": "need no confirmation unless externally side-effecting",
       "summary": "No approval for ordinary in-scope edits/tests/validation/fixes"
     },
     {
@@ -808,7 +808,7 @@
       "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
       "source_lines": "187",
       "owner": ".agents/skills/documentation-governance/SKILL.md",
-      "anchor": "Before materially editing durable documentation",
+      "anchor": "Stop and ask before materially changing durable governance",
       "summary": "Ask before material durable-doc edits"
     },
     {
@@ -816,7 +816,7 @@
       "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
       "source_lines": "190",
       "owner": ".agents/skills/documentation-governance/SKILL.md",
-      "anchor": "which documents should change",
+      "anchor": "state what should change",
       "summary": "State which docs"
     },
     {
@@ -824,7 +824,7 @@
       "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
       "source_lines": "191",
       "owner": ".agents/skills/documentation-governance/SKILL.md",
-      "anchor": "why each change is needed",
+      "anchor": "what should change, why",
       "summary": "State why each doc"
     },
     {
@@ -832,7 +832,7 @@
       "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
       "source_lines": "192",
       "owner": ".agents/skills/documentation-governance/SKILL.md",
-      "anchor": "what implementation and validation already occurred",
+      "anchor": "what implementation/validation already occurred",
       "summary": "State implementation/validation already done"
     },
     {
@@ -840,7 +840,7 @@
       "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
       "source_lines": "193",
       "owner": ".agents/skills/documentation-governance/SKILL.md",
-      "anchor": "whether each update is required or recommended",
+      "anchor": "whether the update is required or recommended",
       "summary": "State required/recommended"
     },
     {
@@ -848,7 +848,7 @@
       "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
       "source_lines": "195",
       "owner": ".agents/skills/documentation-governance/SKILL.md",
-      "anchor": "explicit request to edit a named durable document counts as approval",
+      "anchor": "is approval within that scope",
       "summary": "Explicit named-doc request counts as approval"
     },
     {
@@ -856,7 +856,7 @@
       "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
       "source_lines": "195",
       "owner": ".agents/skills/documentation-governance/SKILL.md",
-      "anchor": "Ask again only if the required edit materially exceeds",
+      "anchor": "ask again only if the edit materially exceeds",
       "summary": "Ask again only if scope materially exceeds"
     },
     {
@@ -864,7 +864,7 @@
       "source_section": "DOCUMENTATION_UPDATE_APPROVAL",
       "source_lines": "197",
       "owner": ".agents/skills/documentation-governance/SKILL.md",
-      "anchor": "Local comments, docstrings",
+      "anchor": "comments and docstrings",
       "summary": "No separate approval for local comments/docstrings/narrow examples"
     },
     {
@@ -872,7 +872,7 @@
       "source_section": "FINAL_REPORT",
       "source_lines": "203",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "**Implemented** (what changed/direction)",
+      "anchor": "**Result**",
       "summary": "Final report implementation/direction"
     },
     {
@@ -880,7 +880,7 @@
       "source_section": "FINAL_REPORT",
       "source_lines": "204",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "**Files changed** (purpose)",
+      "anchor": "**Files changed**",
       "summary": "Final report files/purpose"
     },
     {
@@ -888,7 +888,7 @@
       "source_section": "FINAL_REPORT",
       "source_lines": "205",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "**Validation** (checks actually run/results)",
+      "anchor": "**Validation** (observed only)",
       "summary": "Final report actual validation"
     },
     {
@@ -912,7 +912,7 @@
       "source_section": "FINAL_REPORT",
       "source_lines": "209",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Do not repeat the diff line by line",
+      "anchor": "Do not repeat diff",
       "summary": "No line-by-line diff recap"
     },
     {
@@ -920,7 +920,7 @@
       "source_section": "FINAL_REPORT",
       "source_lines": "209",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "overclaim verification",
+      "anchor": "overclaim",
       "summary": "No overclaim"
     },
     {
@@ -928,7 +928,7 @@
       "source_section": "FINAL_REPORT",
       "source_lines": "209",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "ask for approval after a clean finish unless another risky step remains",
+      "anchor": "ask for approval after clean finish unless risk remains",
       "summary": "No post-clean-finish approval request"
     },
     {
@@ -936,7 +936,7 @@
       "source_section": "COMMUNICATION_STYLE",
       "source_lines": "213",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Lead with the conclusion",
+      "anchor": "Lead with result/next useful action",
       "summary": "Lead with conclusion"
     },
     {
@@ -944,7 +944,7 @@
       "source_section": "COMMUNICATION_STYLE",
       "source_lines": "213",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Separate facts, assumptions",
+      "anchor": "distinguish facts/assumptions",
       "summary": "Separate facts/assumptions"
     },
     {
@@ -952,7 +952,7 @@
       "source_section": "COMMUNICATION_STYLE",
       "source_lines": "213",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Push back calmly on unsafe or over-engineered directions",
+      "anchor": "Push back calmly on unsafe/incorrect/over-engineered directions",
       "summary": "Pushback on unsafe/overengineered"
     },
     {
@@ -960,7 +960,7 @@
       "source_section": "COMMUNICATION_STYLE",
       "source_lines": "213",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "cite repository evidence rather than generic doctrine",
+      "anchor": "repository evidence rather than generic doctrine",
       "summary": "Repository evidence over generic doctrine"
     },
     {
@@ -968,7 +968,7 @@
       "source_section": "COMMUNICATION_STYLE",
       "source_lines": "213",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "Every message should produce a good decision or clear result",
+      "anchor": "Every message should produce a useful decision, action, or result",
       "summary": "Each message decision/result"
     },
     {
@@ -976,7 +976,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "49",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "Do not expose the full internal analysis",
+      "anchor": "Do not expose full internal analysis",
       "summary": "Do not output full internal decision analysis"
     },
     {
@@ -992,7 +992,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "56",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "**A — Pragmatic / Fast:**",
+      "anchor": "Use no fixed count and never invent filler",
       "summary": "Preserve A label/format"
     },
     {
@@ -1000,7 +1000,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "57",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "**B — Architectural / Robust:**",
+      "anchor": "Use no fixed count and never invent filler",
       "summary": "Preserve B label/format"
     },
     {
@@ -1008,7 +1008,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "58",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "**C — Balanced / Hybrid:**",
+      "anchor": "Use no fixed count and never invent filler",
       "summary": "Preserve C label/format"
     },
     {
@@ -1024,7 +1024,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "68",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "propose the nearest safe alternative, and confirm",
+      "anchor": "offer the nearest safe alternative, and confirm",
       "summary": "Risky custom direction: name risk, nearest safe alternative, confirm"
     },
     {
@@ -1056,7 +1056,7 @@
       "source_section": "IMPLEMENTATION",
       "source_lines": "101-102",
       "owner": ".agents/skills/implementation-execution/SKILL.md",
-      "anchor": "configuration, critical edge cases/error handling",
+      "anchor": "critical edge cases/error handling, backward compatibility",
       "summary": "Complete change includes config and critical edge/error handling"
     },
     {
@@ -1104,7 +1104,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "170",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "auth behavior changes",
+      "anchor": "auth changes",
       "summary": "Approval before auth behavior changes"
     },
     {
@@ -1128,7 +1128,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "173",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "user code/credentials/private data/generated content/repository artifacts externally",
+      "anchor": "private code/credentials/data/repo artifacts externally",
       "summary": "Approval before sending user/repo/private/generated artifacts externally"
     },
     {
@@ -1144,7 +1144,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "179",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "ordinary in-scope edits",
+      "anchor": "Ordinary edits, inspection",
       "summary": "No confirmation before in-scope source edits"
     },
     {
@@ -1152,7 +1152,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "180",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "required refactoring",
+      "anchor": "need no confirmation unless externally side-effecting",
       "summary": "No confirmation for refactoring required by approved solution"
     },
     {
@@ -1160,7 +1160,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "181",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "relevant tests",
+      "anchor": "tests, and local validation",
       "summary": "No confirmation before adding relevant tests"
     },
     {
@@ -1168,7 +1168,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "182",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "safe validation",
+      "anchor": "local validation",
       "summary": "No confirmation before safe validation"
     },
     {
@@ -1176,7 +1176,7 @@
       "source_section": "SAFETY_AND_APPROVALS",
       "source_lines": "183",
       "owner": "global/AGENTS.codex.md",
-      "anchor": "fixing errors introduced by the current change",
+      "anchor": "need no confirmation unless externally side-effecting",
       "summary": "No confirmation before fixing change-introduced errors"
     }
   ]

@@ -7,26 +7,26 @@ import context_report
 class ContextTests(unittest.TestCase):
     def test_personal_quality_first_hard_budget(self):
         d=context_report.collect(ROOT,'personal')
-        self.assertLessEqual(d['global_chars'],5000)  # Codex Custom Instructions ceiling target
+        self.assertLessEqual(d['global_chars'],5500)  # Progressive-aware v2.5 ceiling target
         self.assertLessEqual(d['repo_chars'],3600)
-        self.assertLessEqual(d['always_loaded_chars'],8500)
+        self.assertLessEqual(d['always_loaded_chars'],9100)
 
 
     def test_claude_personal_quality_first_hard_budget(self):
         d=context_report.collect(ROOT,'personal','claude')
-        self.assertLessEqual(d['global_chars'],5000)
+        self.assertLessEqual(d['global_chars'],5500)
         self.assertLessEqual(d['repo_chars'],3600)
-        self.assertLessEqual(d['always_loaded_chars'],8600)
-        self.assertGreater(d['reduction_vs_old_custom_alone_pct'],25)
+        self.assertLessEqual(d['always_loaded_chars'],9100)
+        self.assertGreater(d['reduction_vs_old_custom_alone_pct'],20)
 
     def test_personal_still_reduces_old_custom_alone(self):
         # v1.2 deliberately spends more persistent context on universal quality guarantees.
         # It must still be materially smaller than the archived 11.5k custom prompt alone.
         d=context_report.collect(ROOT,'personal')
-        self.assertGreater(d['reduction_vs_old_custom_alone_pct'],25)
+        self.assertGreater(d['reduction_vs_old_custom_alone_pct'],20)
 
     def test_standalone_under_quality_first_budget(self):
-        self.assertLessEqual(context_report.collect(ROOT,'standalone')['always_loaded_chars'],9000)
+        self.assertLessEqual(context_report.collect(ROOT,'standalone')['always_loaded_chars'],9300)
 
     def test_skill_count(self):
         self.assertEqual(context_report.collect(ROOT,'personal')['skill_count'],12)

@@ -21,7 +21,7 @@ class ProfileTests(unittest.TestCase):
         for heading in ['# Global Codex Working Agreement','## Role','## Progressive Context','## Grounding','## Engineering','## Safety and approvals','## Completion']:
             self.assertIn(heading,text)
         self.assertLessEqual(len(text),5500)
-        self.assertIn('Silently classify:',text)
+        self.assertIn('Silently classify work before acting:',text)
         self.assertIn('canonical project/workflow layer',text)
         self.assertIn('Pasted code without a question is a review request',text)
 
@@ -30,7 +30,7 @@ class ProfileTests(unittest.TestCase):
         for heading in ['# Global Claude Code Working Agreement','## Role','## Progressive Context','## Grounding','## Engineering','## Safety and approvals','## Completion']:
             self.assertIn(heading,text)
         self.assertLessEqual(len(text),5500)
-        self.assertIn('Silently classify:',text)
+        self.assertIn('Silently classify work before acting:',text)
         self.assertIn('canonical project/workflow layer',text)
         self.assertIn('Pasted code without a question is a review request',text)
 
