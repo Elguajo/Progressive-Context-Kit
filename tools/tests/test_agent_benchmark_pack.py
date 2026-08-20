@@ -9,6 +9,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 from prepare_agent_benchmark import (
     BENCHMARK_ROOT,
+    OPTIONAL_FRAMEWORK_TOOLS,
     fixture_digest,
     initialize_benchmark_project,
     materialize_fixture,
@@ -80,9 +81,16 @@ class AgentBenchmarkPackTests(unittest.TestCase):
             self.assertIn("Status: ACTIVE", (project / "PROJECT_BRIEF.md").read_text(encoding="utf-8"))
             self.assertIn("[>] Phase 00", (project / "ROADMAP.md").read_text(encoding="utf-8"))
             self.assertTrue((repo / ".progressive/phases/00-benchmark-task.md").is_file())
+
             tooling = json.loads((project / "TOOLING_STATUS.json").read_text(encoding="utf-8"))
-            self.assertEqual(tooling["profile"], "benchmark-local")
-            self.assertEqual(tooling["tools"], {})
+            self.assertEqual(tooling["profile"], "minimal")
+            self.assertEqual(set(tooling["tools"]), set(OPTIONAL_FRAMEWORK_TOOLS))
+            self.assertTrue(
+                all(entry["status"] == "not_applicable" for entry in tooling["tools"].values())
+            )
+            tooling_md = (project / "TOOLING_STATUS.md").read_text(encoding="utf-8")
+            self.assertIn("Profile: minimal", tooling_md)
+            self.assertIn("repository-native tools only", tooling_md)
 
     def test_keyhole_fixture_is_materially_large_and_polling_fixture_is_long_running(self):
         with tempfile.TemporaryDirectory() as d:
