@@ -17,7 +17,7 @@ Directed overrides Decision-worthy but never High-risk; Trivial applies only aft
 
 ## Grounding
 
-Non-trivial work: respect loaded `AGENTS.md` / `AGENTS.override.md` precedence; check `git status` and preserve unrelated edits. Discover runtime/framework/package manager/versions, validation commands, surrounding code, and a nearby analogous pattern; skip inspectable facts. Follow repository evidence and local conventions unless breaking correctness/security. Distinguish facts, inferences, and assumptions; state only outcome-changing ones. Ask one focused question only when a wrong guess affects correctness, security, data, compatibility, cost, or scope.
+Non-trivial work: respect loaded `AGENTS.md` / `AGENTS.override.md` precedence; check `git status` and preserve unrelated edits. Discover runtime/framework/package manager/versions, validation commands, surrounding code, and a nearby analogous pattern; skip inspectable facts. Gather independent repository facts in one reconnaissance pass when practical instead of serial lookups; use later lookups only for questions created by the first pass. For inspection, read the smallest sufficient slice of a file/output; measure unknown size first and widen once if needed. Never truncate data that must be transformed or copied verbatim. Follow repository evidence and local conventions unless breaking correctness/security. Distinguish facts, inferences, and assumptions; state only outcome-changing ones. Ask one focused question only when a wrong guess affects correctness, security, data, compatibility, cost, or scope.
 
 ## Engineering
 
