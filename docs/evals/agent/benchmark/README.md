@@ -21,8 +21,9 @@ Project Runtime.
 5. repeated-failure hypothesis pivot;
 6. bounded polling for a long-running validation command.
 
-The task prompt does not name the mechanism under test. Mechanism metadata lives outside the
-prepared repo so the agent is not coached toward the desired behavior.
+Neither the task prompt nor its acceptance criteria name the mechanism under test. Mechanism
+metadata lives outside the prepared repo so the agent is not coached toward the desired
+behavior.
 
 ## Prepare the pack
 
@@ -42,7 +43,8 @@ python3 tools/prepare_agent_benchmark.py --repetitions 5
 
 The builder requires Git history containing both pinned refs. If the clone is shallow, fetch
 history first. It exports each pinned workflow with `git archive`, builds its Standalone
-Project Runtime, injects that Runtime into a copy of the same raw fixture, initializes a clean
+Project Runtime, injects that Runtime into a copy of the same raw fixture, replaces
+uninitialized Runtime seeds with identical minimal ACTIVE project state, initializes a clean
 Git repository, and writes `RUN_PLAN.json`.
 
 Prepared output defaults to:
@@ -60,8 +62,10 @@ tasks/<task-id>/
     └── candidate/repo/
 ```
 
-`prompt.md` and `acceptance.md` stay outside the agent repository. Pass the exact prompt text
-to the agent; do not copy benchmark mechanism metadata into the prompt.
+`prompt.md` and `acceptance.md` stay outside the agent repository. Give the agent the exact
+contents of **both files in one initial user message**, with prompt first and acceptance
+criteria second. Do not copy benchmark mechanism metadata or the `interpretation` field into
+the agent message.
 
 ## Run a pair
 
@@ -76,7 +80,8 @@ For each pair, keep constant:
 Only the prepared workflow arm may differ.
 
 Run the baseline repo and candidate repo as fresh sessions. Do not reuse conversation state
-between arms. Use the same task prompt. Capture the provider/agent trace and usage data.
+between arms. Use the same combined prompt + acceptance message. Capture the provider/agent
+trace and usage data.
 
 Do not compare Codex baseline to Claude candidate. Codex and Claude are separate experiments;
 each needs its own paired records.
@@ -87,9 +92,9 @@ Create one record per run following `../RUN_RECORD.schema.json`. Use the task fi
 from `RUN_PLAN.json` as `controls.repo_snapshot`; the arm-specific local Git commit is only a
 local integrity marker because workflow-owned files intentionally differ between arms.
 
-For `controls.task_sha256` and `controls.acceptance_sha256`, SHA-256 the exact `prompt.md` and
-`acceptance.md` used for both arms. Record identical control-profile strings in both records
-for tools, permissions, and environment.
+`RUN_PLAN.json` already contains the SHA-256 values for the exact `prompt.md` and
+`acceptance.md`; use them as `controls.task_sha256` and `controls.acceptance_sha256`. Record
+identical control-profile strings in both records for tools, permissions, and environment.
 
 Required measured metrics are:
 
