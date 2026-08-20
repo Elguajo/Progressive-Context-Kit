@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-framework",
-  "rule_count": 49,
+  "rule_count": 52,
   "rules": [
     {"id":"FW-001","owner":"profiles/personal/AGENTS.md","anchor":"docs/system/LINEAGE.md","summary":"LINEAGE excluded from normal warm-up"},
     {"id":"FW-002","owner":"integrations/TOOL_REGISTRY.json","anchor":"MinishLab/semble","summary":"Semble is preferred semantic discovery implementation"},
@@ -51,6 +51,9 @@
     {"id":"FW-046","owner":".agents/skills/systematic-debugging/SKILL.md","anchor":"same check fails twice","summary":"Repeated same-cause failure forces a hypothesis or corrective-path pivot"},
     {"id":"FW-047","owner":".agents/skills/implementation-execution/SKILL.md","anchor":"Treat polling as a costed execution step","summary":"Long-running execution uses bounded polling discipline instead of empty frequent checks"},
     {"id":"FW-048","owner":"docs/evals/agent/EXECUTION_EFFICIENCY_PROTOCOL.md","anchor":"median **paired** percentage deltas","summary":"Execution-efficiency evidence uses controlled paired measurement rather than unpaired aggregate comparison"},
-    {"id":"FW-049","owner":"docs/evals/agent/README.md","anchor":"Framework Source-only research infrastructure","summary":"Real-agent measurement infrastructure remains Framework Source-only and out of Project Runtime"}
+    {"id":"FW-049","owner":"docs/evals/agent/README.md","anchor":"Framework Source-only research infrastructure","summary":"Real-agent measurement infrastructure remains Framework Source-only and out of Project Runtime"},
+    {"id":"FW-050","owner":"docs/evals/agent/autoresearch/README.md","anchor":"one observation -> one hypothesis -> one primary candidate change","summary":"Autoresearch isolates one primary behavioral hypothesis per experiment"},
+    {"id":"FW-051","owner":"docs/evals/agent/autoresearch/README.md","anchor":"A `KEEP` decision is invalid when the paired analyzer quality gate is `FAIL`.","summary":"Autoresearch cannot keep an efficiency candidate that fails the paired quality gate"},
+    {"id":"FW-052","owner":"docs/evals/agent/autoresearch/README.md","anchor":"A decided experiment is terminal.","summary":"Autoresearch decisions are durable terminal records; modifications create linked new experiments"}
   ]
 }
