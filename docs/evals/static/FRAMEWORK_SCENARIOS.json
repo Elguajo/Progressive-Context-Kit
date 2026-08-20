@@ -36,8 +36,8 @@
     {
       "id":"autoresearch-optimization-loop",
       "description":"A discovery benchmark or trace reveals a repeatable waste pattern and maintainers test a behavioral optimization.",
-      "covers":["FW-050","FW-051","FW-052"],
-      "expected":"One experiment isolates one primary hypothesis/change, paired evidence must pass the quality gate before KEEP is allowed, and decided records are terminal; MODIFY creates a linked new experiment rather than rewriting prior evidence."
+      "covers":["FW-050","FW-051","FW-052","FW-053"],
+      "expected":"One experiment isolates one primary hypothesis/change, paired evidence must pass the quality gate before KEEP is allowed, decided records are terminal so MODIFY creates a linked new experiment, and release verification rejects inconsistent registry/lifecycle/evidence state."
     }
   ]
 }
