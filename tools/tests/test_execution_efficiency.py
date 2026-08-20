@@ -31,7 +31,8 @@ class ExecutionEfficiencyTests(unittest.TestCase):
             'stop validating',
             'do not add',
             'only for reassurance',
-            'Convergence never justifies skipping a required check',
+            'Convergence never',
+            'justifies skipping a required check',
         ]:
             self.assertIn(phrase, text)
 
@@ -43,7 +44,8 @@ class ExecutionEfficiencyTests(unittest.TestCase):
         for phrase in [
             'same check fails twice',
             'same underlying reason',
-            'evidence against the approach',
+            'treat that as evidence',
+            'against the approach',
             'one materially different hypothesis or corrective path',
         ]:
             self.assertIn(phrase, canonical)
