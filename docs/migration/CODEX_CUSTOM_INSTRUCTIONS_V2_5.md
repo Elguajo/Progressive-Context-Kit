@@ -6,8 +6,8 @@ canonical Codex universal contract remains `global/AGENTS.codex.md`.
 
 ## Goal
 
-Keep universal engineering behavior always loaded while moving task-specific procedures into
-Progressive routing, Skills, and protocols.
+Keep only universal engineering guarantees always loaded while moving task-specific procedures
+into Progressive routing, Skills, and protocols.
 
 > **Minimize always-loaded behavior, not available behavior.**
 
@@ -22,15 +22,18 @@ This is the behavior-side counterpart to:
 | Role / language / communication baseline | `global/AGENTS.codex.md` |
 | Task classification / autonomy threshold | `global/AGENTS.codex.md` |
 | Repository grounding | `global/AGENTS.codex.md` |
-| Engineering principles | `global/AGENTS.codex.md` |
-| Testing baseline | global baseline + `.agents/skills/implementation-execution/SKILL.md` |
+| Universal engineering invariants | `global/AGENTS.codex.md` |
+| Detailed testing policy | `.agents/skills/implementation-execution/SKILL.md` |
 | Material architecture decision workflow | `.agents/skills/architecture-decision/SKILL.md` |
 | Code review procedure | `.agents/skills/code-review/SKILL.md` |
 | Implementation / bug-fix execution | `.agents/skills/implementation-execution/SKILL.md` |
 | Validation loop | `docs/system/QUALITY_PROTOCOL.md` |
 | Security detail | global approval boundary + `.agents/skills/security-sensitive-change/SKILL.md` |
-| Documentation governance | global accuracy baseline + `.agents/skills/documentation-governance/SKILL.md` |
+| Detailed documentation governance | `.agents/skills/documentation-governance/SKILL.md` |
 | Final report / Action-First output | `global/AGENTS.codex.md` |
+
+The global layer keeps only short routing/invariant statements for testing and documentation;
+it does not duplicate their task-specific procedures.
 
 ## Adopted v2.4 improvements
 
@@ -43,6 +46,9 @@ This is the behavior-side counterpart to:
 - Completion reporting is result-first: `Result`, optional `Manual check`, `Files changed`,
   `Validation`, `Important decisions`, optional `Remaining risks`.
 
+The first three detailed procedures above live in Progressive Skills/protocols rather than the
+always-loaded global adapter.
+
 ## Preserved Progressive guarantees
 
 v2.5 retains the existing Execution Efficiency rules instead of replacing them with the older
@@ -53,20 +59,21 @@ project-state updates, or completion/handoff.
 
 ## Current context sizes
 
-Deterministic Unicode-character counts after migration:
+Deterministic Unicode-character counts after final cleanup:
 
-- Codex universal core: **5,756** characters;
-- Claude universal core: **5,808** characters;
+- Codex universal core: **5,176** characters;
+- Claude universal core: **5,228** characters;
 - Personal repository router: **3,552** characters;
-- Codex Personal always-loaded composition: **9,308** characters;
-- Claude Personal always-loaded composition: **9,360** characters;
-- Standalone generated composition: **9,489** characters.
+- Codex Personal always-loaded composition: **8,728** characters;
+- Claude Personal always-loaded composition: **8,780** characters;
+- Standalone generated composition: **8,909** characters.
 
-Global adapter regression budgets are **6,000 characters** each. Task Skills and cold protocols
+Global adapter regression budgets are **5,500 characters** each. Task Skills and cold protocols
 remain conditional rather than part of normal warm-up.
 
 ## Protection
 
 Framework rules `FW-054`–`FW-060`, static scenario `progressive-aware-universal-v2-5`, profile
-tests, and `test_progressive_aware_v25.py` protect the split. Historical Behavior Contract
-evidence is not rewritten; v2.5 is a new Progressive-aware architecture layer.
+tests, and `test_progressive_aware_v25.py` protect the split. Profile tests explicitly reject
+reintroduction of detailed Testing/Documentation procedures into the global adapters. Historical
+Behavior Contract evidence is not rewritten; v2.5 is a new Progressive-aware architecture layer.
