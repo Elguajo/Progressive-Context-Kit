@@ -20,8 +20,8 @@ combined result to one rule.
 ### 1. Observe
 
 Start from real evidence: benchmark traces, paired outliers, repeated production-task traces, or
-another auditable run source. Record the concrete pattern and evidence references. Do not start
-from a preference for a rule.
+another auditable run source. Record the concrete pattern and at least one evidence reference.
+Do not start from a preference for a rule.
 
 ### 2. Hypothesize
 
@@ -31,8 +31,9 @@ primary metric or behavior that should change and what would count as no effect 
 ### 3. Change
 
 Create the smallest candidate change that can test the hypothesis. Keep unrelated framework
-behavior fixed. If multiple files must change to express one behavior, that can still be one
-primary change; multiple independent behavioral ideas cannot.
+behavior fixed and record at least one changed file/surface. If multiple files must change to
+express one behavior, that can still be one primary change; multiple independent behavioral
+ideas cannot.
 
 ### 4. Paired eval
 
@@ -73,15 +74,17 @@ that links back through `parent_experiment_id`; it does not reopen the old exper
 
 ## Tooling
 
-Create a planned experiment:
+Create a planned experiment from observed evidence:
 
 ```bash
 python3 tools/autoresearch.py new \
   --observation "Candidate repeatedly rereads the same large file" \
+  --evidence-ref "trace://execution-efficiency-v1/keyhole-read/r01" \
   --hypothesis "A locate-then-slice instruction will reduce read volume" \
   --change "Make bounded inspection operational: locate, slice, widen only if unresolved" \
-  --baseline-ref <immutable-ref> \
-  --candidate-ref <immutable-ref> \
+  --file global/AGENTS.codex.md \
+  --baseline-ref <40-char-git-sha> \
+  --candidate-ref <40-char-git-sha> \
   --task-set execution-efficiency-v1/keyhole-read
 ```
 
@@ -91,17 +94,24 @@ Validate the registry and records:
 python3 tools/autoresearch.py validate
 ```
 
-Attach analyzer evidence and decide:
+Attach the paired analyzer summary:
+
+```bash
+python3 tools/autoresearch.py evaluate EXP-0001 \
+  --summary path/to/summary.json
+```
+
+Then record the evidence-based decision:
 
 ```bash
 python3 tools/autoresearch.py decide EXP-0001 \
-  --summary path/to/summary.json \
   --decision KEEP \
   --reason "Lower paired file reads/tokens with quality gate PASS"
 ```
 
 `tools/autoresearch.py` validates lifecycle transitions and rejects `KEEP` when the analyzer
-quality gate is not `PASS`.
+quality gate is not `PASS`. `EXPERIMENT_RECORD.schema.json` additionally requires at least one
+observation evidence reference and one changed file/surface for every experiment.
 
 ## Claim discipline
 
