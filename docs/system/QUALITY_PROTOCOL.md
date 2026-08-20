@@ -12,12 +12,21 @@ Validate from narrowest to broadest, skipping only checks irrelevant to the chan
 5. broader suites when shared code or public interfaces changed;
 6. e2e/manual/runtime verification when required by the behavior.
 
+## Convergence
+
+Required evidence is the applicable validation above plus the current acceptance criteria.
+Once those checks pass and no new material uncertainty remains, stop validating: do not add
+redundant re-runs, extra harnesses, or broader checks only for reassurance. Convergence never
+justifies skipping a required check, acceptance criterion, security gate, or relevant
+regression test.
+
 ## On failure
 
 Classify each relevant failure as **caused by the change**, **pre-existing**, or
 **environmental**. Fix what the change broke, re-run the relevant checks, and do not stop at
 the first failure when a safe diagnosable fix is in scope. Do not silently "fix" unrelated
-pre-existing failures.
+pre-existing failures. When repeated failure indicates the current hypothesis or approach is
+wrong, route to `systematic-debugging` rather than continuing symptom patches.
 
 ## If validation cannot run
 
