@@ -26,6 +26,12 @@
       "description":"A non-trivial coding task requires repository grounding, environment setup, implementation, validation, debugging, or waiting on a long-running command.",
       "covers":["FW-042","FW-043","FW-044","FW-045","FW-046","FW-047"],
       "expected":"Codex and Claude batch independent reconnaissance and bound inspection reads; implementation probes knowable prerequisites together; validation stops after required evidence is sufficient; repeated same-cause failures pivot the hypothesis/approach; long-running commands avoid frequent empty polling. None of these rules weakens correctness, acceptance criteria, security gates, or required tests."
+    },
+    {
+      "id":"execution-efficiency-measurement",
+      "description":"Framework maintainers compare an execution-efficiency candidate against a baseline using real agent runs.",
+      "covers":["FW-048","FW-049"],
+      "expected":"Baseline and candidate runs are paired under controlled conditions, efficiency claims use paired deltas with quality gates, and the measurement protocol/schema/analyzer remain Framework Source-only rather than becoming Project Runtime dependencies."
     }
   ]
 }
