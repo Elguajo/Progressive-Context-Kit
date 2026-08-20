@@ -18,18 +18,18 @@ class ProfileTests(unittest.TestCase):
 
     def test_codex_global_is_progressive_aware_and_under_budget(self):
         text=(ROOT/'global/AGENTS.codex.md').read_text(encoding='utf-8')
-        for heading in ['# Global Codex Working Agreement','## Role','## Progressive Context','## Grounding','## Engineering','## Safety and approvals','## Documentation','## Completion']:
+        for heading in ['# Global Codex Working Agreement','## Role','## Progressive Context','## Grounding','## Engineering','## Safety and approvals','## Completion']:
             self.assertIn(heading,text)
-        self.assertLessEqual(len(text),6000)
+        self.assertLessEqual(len(text),5500)
         self.assertIn('Silently classify:',text)
         self.assertIn('canonical project/workflow layer',text)
         self.assertIn('Pasted code without a question is a review request',text)
 
     def test_claude_global_is_progressive_aware_and_under_budget(self):
         text=(ROOT/'global/CLAUDE.md').read_text(encoding='utf-8')
-        for heading in ['# Global Claude Code Working Agreement','## Role','## Progressive Context','## Grounding','## Engineering','## Safety and approvals','## Documentation','## Completion']:
+        for heading in ['# Global Claude Code Working Agreement','## Role','## Progressive Context','## Grounding','## Engineering','## Safety and approvals','## Completion']:
             self.assertIn(heading,text)
-        self.assertLessEqual(len(text),6000)
+        self.assertLessEqual(len(text),5500)
         self.assertIn('Silently classify:',text)
         self.assertIn('canonical project/workflow layer',text)
         self.assertIn('Pasted code without a question is a review request',text)
@@ -69,18 +69,16 @@ class ProfileTests(unittest.TestCase):
             for phrase in required:
                 self.assertIn(phrase, text)
 
-    def test_progressive_aware_policy_exists_in_both_global_adapters(self):
-        required = [
-            'canonical project/workflow layer',
-            'This contract owns universal behavior only',
-            'lightweight dev-only test framework may be added autonomously',
-            'Automatically keep narrowly affected usage/setup docs',
-            'Final report: **Result**; **Manual check** only when useful',
-        ]
+    def test_progressive_aware_globals_delegate_conditional_policy(self):
         for rel in ['global/AGENTS.codex.md', 'global/CLAUDE.md']:
             text=(ROOT/rel).read_text(encoding='utf-8')
-            for phrase in required:
-                self.assertIn(phrase,text)
+            self.assertIn('canonical project/workflow layer',text)
+            self.assertIn('This contract owns universal behavior only',text)
+            self.assertIn('use repository implementation/testing/quality procedures when available',text)
+            self.assertIn('use repository governance for durable policy/decision docs',text)
+            self.assertIn('Final report: **Result**; **Manual check** only when useful',text)
+            self.assertNotIn('lightweight dev-only test framework may be added autonomously',text)
+            self.assertNotIn('Automatically keep narrowly affected usage/setup docs',text)
 
     def test_execution_efficiency_grounding_is_generated_into_standalone(self):
         standalone = (ROOT/'profiles/standalone/AGENTS.md').read_text(encoding='utf-8')
