@@ -23,5 +23,6 @@
 - <observable/measurable outcome>
 
 ## Classification
+- Planning depth: DIRECT / FOCUSED / FULL
 - Complexity: S / M / L
 - Risk: Low / Medium / High
