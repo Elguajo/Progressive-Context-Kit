@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-framework",
-  "rule_count": 53,
+  "rule_count": 60,
   "rules": [
     {"id":"FW-001","owner":"profiles/personal/AGENTS.md","anchor":"docs/system/LINEAGE.md","summary":"LINEAGE excluded from normal warm-up"},
     {"id":"FW-002","owner":"integrations/TOOL_REGISTRY.json","anchor":"MinishLab/semble","summary":"Semble is preferred semantic discovery implementation"},
@@ -55,6 +55,13 @@
     {"id":"FW-050","owner":"docs/evals/agent/autoresearch/README.md","anchor":"one observation -> one hypothesis -> one primary candidate change","summary":"Autoresearch isolates one primary behavioral hypothesis per experiment"},
     {"id":"FW-051","owner":"docs/evals/agent/autoresearch/README.md","anchor":"A `KEEP` decision is invalid when the paired analyzer quality gate is `FAIL`.","summary":"Autoresearch cannot keep an efficiency candidate that fails the paired quality gate"},
     {"id":"FW-052","owner":"docs/evals/agent/autoresearch/README.md","anchor":"A decided experiment is terminal.","summary":"Autoresearch decisions are durable terminal records; modifications create linked new experiments"},
-    {"id":"FW-053","owner":"tools/build_release.py","anchor":"tools/autoresearch.py validate","summary":"Release validation rejects inconsistent Autoresearch registry, lifecycle, or evidence records"}
+    {"id":"FW-053","owner":"tools/build_release.py","anchor":"tools/autoresearch.py validate","summary":"Release validation rejects inconsistent Autoresearch registry, lifecycle, or evidence records"},
+    {"id":"FW-054","owner":"global/AGENTS.codex.md","anchor":"When Progressive Context Kit is present, it is the canonical project/workflow layer.","summary":"Codex universal layer delegates project-specific context and procedures to Progressive"},
+    {"id":"FW-055","owner":"global/CLAUDE.md","anchor":"When Progressive Context Kit is present, it is the canonical project/workflow layer.","summary":"Claude universal layer delegates project-specific context and procedures to Progressive"},
+    {"id":"FW-056","owner":".agents/skills/architecture-decision/SKILL.md","anchor":"Use no fixed count and never invent filler.","summary":"Architecture decisions present only materially different viable strategies rather than fixed filler options"},
+    {"id":"FW-057","owner":".agents/skills/implementation-execution/SKILL.md","anchor":"a lightweight development-only framework may be added autonomously","summary":"Substantial testable work may add a lightweight dev-only test framework within bounded scope"},
+    {"id":"FW-058","owner":".agents/skills/documentation-governance/SKILL.md","anchor":"Update automatically when required by the approved implementation:","summary":"Implementation-coupled documentation accuracy is automatic while governance changes remain gated"},
+    {"id":"FW-059","owner":"global/AGENTS.codex.md","anchor":"Final report: **Result**; **Manual check** only when useful","summary":"Codex completion report is result-first with optional manual verification"},
+    {"id":"FW-060","owner":"global/CLAUDE.md","anchor":"Final report: **Result**; **Manual check** only when useful","summary":"Claude completion report is result-first with optional manual verification"}
   ]
 }
