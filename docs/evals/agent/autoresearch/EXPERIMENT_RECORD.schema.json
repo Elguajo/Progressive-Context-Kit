@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Elguajo/Progressive-Context-Kit/docs/evals/agent/autoresearch/EXPERIMENT_RECORD.schema.json",
+  "title": "Progressive Context Autoresearch Experiment Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "experiment_id",
+    "status",
+    "created_at",
+    "parent_experiment_id",
+    "observation",
+    "hypothesis",
+    "candidate_change",
+    "comparison",
+    "evaluation",
+    "decision"
+  ],
+  "properties": {
+    "schema": {"const": 1},
+    "experiment_id": {"type": "string", "pattern": "^EXP-[0-9]{4}$"},
+    "status": {"enum": ["PLANNED", "EVALUATED", "DECIDED"]},
+    "created_at": {"type": "string", "minLength": 1},
+    "parent_experiment_id": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^EXP-[0-9]{4}$"}
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "evidence_refs"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1},
+        "evidence_refs": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "hypothesis": {"type": "string", "minLength": 1},
+    "candidate_change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "files"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 1},
+        "files": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline_workflow_ref", "candidate_workflow_ref", "task_set"],
+      "properties": {
+        "baseline_workflow_ref": {"type": "string", "minLength": 1},
+        "candidate_workflow_ref": {"type": "string", "minLength": 1},
+        "task_set": {"type": "string", "minLength": 1}
+      }
+    },
+    "evaluation": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "summary_path",
+            "summary_sha256",
+            "pair_count",
+            "quality_gate",
+            "quality_gate_reason",
+            "median_paired_percent_delta",
+            "median_paired_quality_delta"
+          ],
+          "properties": {
+            "summary_path": {"type": "string", "minLength": 1},
+            "summary_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "pair_count": {"type": "integer", "minimum": 1},
+            "quality_gate": {"enum": ["PASS", "FAIL", "INCONCLUSIVE"]},
+            "quality_gate_reason": {"type": "string", "minLength": 1},
+            "median_paired_percent_delta": {"type": "object"},
+            "median_paired_quality_delta": {"type": ["number", "null"]}
+          }
+        }
+      ]
+    },
+    "decision": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["outcome", "reason", "decided_at"],
+          "properties": {
+            "outcome": {"enum": ["KEEP", "MODIFY", "REMOVE"]},
+            "reason": {"type": "string", "minLength": 1},
+            "decided_at": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    }
+  }
+}
