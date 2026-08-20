@@ -38,6 +38,10 @@ Include tasks that can exercise the execution-efficiency guarantees:
 5. unclear bug where the same check can fail repeatedly;
 6. long-running build/test command where polling is possible.
 
+The canonical fixed pack for these six mechanisms is `benchmark/EXPERIMENT.json` plus
+`benchmark/TASKS.json`; materialize it with `tools/prepare_agent_benchmark.py` rather than
+silently changing task wording between experiments.
+
 Also keep the broader quality scenarios from `MODEL_EVAL_PROTOCOL.md` when making a release
 quality claim.
 
