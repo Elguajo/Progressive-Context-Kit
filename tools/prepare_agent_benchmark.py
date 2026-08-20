@@ -24,6 +24,15 @@ from agent_benchmark_fixtures import fixture_digest, materialize_fixture
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCHMARK_ROOT = ROOT / "docs/evals/agent/benchmark"
+OPTIONAL_FRAMEWORK_TOOLS = (
+    "semble",
+    "serena",
+    "rtk",
+    "superpowers",
+    "gstack",
+    "context7",
+    "github_spec_kit",
+)
 
 
 def load_json(path: Path) -> dict:
@@ -146,6 +155,24 @@ def copy_runtime(source: Path, repo: Path) -> None:
             shutil.copy2(path, target)
 
 
+def benchmark_tooling_state() -> dict:
+    return {
+        "schema": 1,
+        "profile": "minimal",
+        "last_bootstrap": None,
+        "tools": {
+            key: {
+                "status": "not_applicable",
+                "checked_at": None,
+                "version": None,
+                "evidence": "optional framework tool intentionally excluded from controlled benchmark",
+                "notes": None,
+            }
+            for key in OPTIONAL_FRAMEWORK_TOOLS
+        },
+    }
+
+
 def initialize_benchmark_project(repo: Path, task_id: str) -> None:
     """Replace uninitialized Runtime seeds with identical minimal active state in both arms."""
     project = repo / ".progressive/project"
@@ -203,23 +230,17 @@ def initialize_benchmark_project(repo: Path, task_id: str) -> None:
     tooling_json = project / "TOOLING_STATUS.json"
     if tooling_json.exists():
         tooling_json.write_text(
-            json.dumps(
-                {
-                    "schema": 1,
-                    "profile": "benchmark-local",
-                    "last_bootstrap": None,
-                    "tools": {},
-                },
-                indent=2,
-            )
-            + "\n",
+            json.dumps(benchmark_tooling_state(), indent=2) + "\n",
             encoding="utf-8",
         )
     tooling_md = project / "TOOLING_STATUS.md"
     if tooling_md.exists():
         tooling_md.write_text(
-            "# Tooling Status\n\nStatus: READY\n\n"
-            "No optional framework tooling is required for this local benchmark fixture.\n",
+            "# Tooling Status\n\n"
+            "Profile: minimal\n\n"
+            "Status: READY\n\n"
+            "Optional framework tooling is intentionally not applicable to this controlled "
+            "benchmark. Use repository-native tools only.\n",
             encoding="utf-8",
         )
 
