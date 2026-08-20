@@ -12,7 +12,7 @@ class FrameworkContractTests(unittest.TestCase):
         s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
         self.assertEqual({r['id'] for r in c['rules']},{rid for sc in s['scenarios'] for rid in sc['covers']})
     def test_framework_rule_count(self):
-        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text()); self.assertGreaterEqual(c['rule_count'],47); self.assertEqual(c['rule_count'],len(c['rules']))
+        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text()); self.assertGreaterEqual(c['rule_count'],49); self.assertEqual(c['rule_count'],len(c['rules']))
     def test_execution_efficiency_rules_are_pinned_and_scenario_covered(self):
         c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text())
         s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
@@ -27,6 +27,15 @@ class FrameworkContractTests(unittest.TestCase):
         self.assertEqual(rules['FW-045']['owner'],'docs/system/QUALITY_PROTOCOL.md')
         self.assertEqual(rules['FW-046']['owner'],'.agents/skills/systematic-debugging/SKILL.md')
         self.assertEqual(rules['FW-047']['owner'],'.agents/skills/implementation-execution/SKILL.md')
+    def test_execution_efficiency_measurement_is_paired_and_source_only(self):
+        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text())
+        s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
+        rules={r['id']:r for r in c['rules']}
+        expected={'FW-048','FW-049'}
+        scenario=next(sc for sc in s['scenarios'] if sc['id']=='execution-efficiency-measurement')
+        self.assertEqual(expected,set(scenario['covers']))
+        self.assertEqual(rules['FW-048']['owner'],'docs/evals/agent/EXECUTION_EFFICIENCY_PROTOCOL.md')
+        self.assertEqual(rules['FW-049']['owner'],'docs/evals/agent/README.md')
     def test_anchor_loss_fails(self):
         with tempfile.TemporaryDirectory() as d:
             dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
