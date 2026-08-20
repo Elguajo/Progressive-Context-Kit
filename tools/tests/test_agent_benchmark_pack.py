@@ -1,6 +1,4 @@
-import hashlib
 import json
-import re
 import sys
 import tempfile
 import unittest
@@ -43,7 +41,7 @@ class AgentBenchmarkPackTests(unittest.TestCase):
             self.assertGreaterEqual(len(task["acceptance"]), 3)
             self.assertNotIn(task["mechanism"], task["prompt"])
 
-    def test_all_raw_fixtures_materialize_deterministically_without_framework_runtime(self):
+    def test_all_raw_fixtures_materialize_deterministically_and_compile(self):
         tasks = json.loads((BENCHMARK_ROOT / "TASKS.json").read_text(encoding="utf-8"))["tasks"]
         for task in tasks:
             with self.subTest(task=task["id"]), tempfile.TemporaryDirectory() as a, tempfile.TemporaryDirectory() as b:
@@ -55,6 +53,8 @@ class AgentBenchmarkPackTests(unittest.TestCase):
                 self.assertFalse((first / "AGENTS.md").exists())
                 self.assertFalse((first / "CLAUDE.md").exists())
                 self.assertFalse((first / ".progressive").exists())
+                for source in first.rglob("*.py"):
+                    compile(source.read_text(encoding="utf-8"), str(source), "exec")
 
     def test_keyhole_fixture_is_materially_large_and_polling_fixture_is_long_running(self):
         with tempfile.TemporaryDirectory() as d:
@@ -83,7 +83,12 @@ class AgentBenchmarkPackTests(unittest.TestCase):
             for path in (ROOT / "docs/evals/agent/benchmark").rglob("*")
             if path.is_file()
         }
-        benchmark_sources.add((ROOT / "tools/prepare_agent_benchmark.py").resolve())
+        benchmark_sources.update(
+            {
+                (ROOT / "tools/prepare_agent_benchmark.py").resolve(),
+                (ROOT / "tools/agent_benchmark_fixtures.py").resolve(),
+            }
+        )
         self.assertTrue(benchmark_sources.isdisjoint(runtime_sources))
 
 
