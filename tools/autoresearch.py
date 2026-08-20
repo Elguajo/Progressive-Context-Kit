@@ -70,12 +70,8 @@ def experiment_path(experiment_id: str) -> Path:
     return EXPERIMENTS_DIR / f"{experiment_id}.json"
 
 
-def _string(value, label: str) -> None:
-    if not isinstance(value, str) or not value.strip():
-        raise AutoresearchError(f"{label} must be a non-empty string")
-
-
-def validate_record(record: dict, *, root: Path = ROOT) -> list[str]:
+def validate_record(record: dict, *, root: Path | None = None) -> list[str]:
+    root = ROOT if root is None else root
     errors: list[str] = []
     rid = record.get("experiment_id")
     if not isinstance(rid, str) or not ID_RE.fullmatch(rid):
@@ -186,7 +182,8 @@ def validate_record(record: dict, *, root: Path = ROOT) -> list[str]:
     return errors
 
 
-def validate_repository(root: Path = ROOT) -> list[str]:
+def validate_repository(root: Path | None = None) -> list[str]:
+    root = ROOT if root is None else root
     registry_path = root / "docs/evals/agent/autoresearch/REGISTRY.json"
     experiments_dir = root / "docs/evals/agent/autoresearch/experiments"
     registry = load_json(registry_path)
