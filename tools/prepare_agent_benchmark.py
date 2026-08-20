@@ -146,6 +146,84 @@ def copy_runtime(source: Path, repo: Path) -> None:
             shutil.copy2(path, target)
 
 
+def initialize_benchmark_project(repo: Path, task_id: str) -> None:
+    """Replace uninitialized Runtime seeds with identical minimal active state in both arms."""
+    project = repo / ".progressive/project"
+    phases = repo / ".progressive/phases"
+    project.mkdir(parents=True, exist_ok=True)
+    phases.mkdir(parents=True, exist_ok=True)
+
+    (project / "PROJECT_BRIEF.md").write_text(
+        "# Project Brief\n\n"
+        "Status: ACTIVE\n\n"
+        "Project: Real-agent benchmark fixture\n\n"
+        "Goal: Complete the current user-provided local coding task correctly and with the "
+        "smallest complete change.\n\n"
+        "Scope: The current repository and current task only. Do not expand product scope.\n",
+        encoding="utf-8",
+    )
+    (project / "ARCHITECTURE.md").write_text(
+        "# Architecture\n\n"
+        "Status: ACTIVE\n\n"
+        "Runtime: Python 3.11+ standard library.\n\n"
+        "Layout: application code under `src/`, unittest-based tests under `tests/`, and local "
+        "helper commands under `tools/` when present.\n\n"
+        "Constraint: Preserve repository-local conventions; add no third-party dependency unless "
+        "the user task explicitly requires one.\n",
+        encoding="utf-8",
+    )
+    (project / "ROADMAP.md").write_text(
+        "# Roadmap — Benchmark Fixture\n\n"
+        "Legend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n"
+        "- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\n"
+        "Project complete when the current user task and its supplied acceptance criteria are "
+        "verified.\n",
+        encoding="utf-8",
+    )
+    (project / "NEXT_SESSION.md").write_text(
+        "# Next Session\n\n"
+        "> Volatile hot context for this disposable benchmark fixture.\n\n"
+        "Status: READY\n\n"
+        f"Current focus: Execute benchmark task `{task_id}` exactly as supplied by the user.\n\n"
+        "Next action: Ground in the repository, implement the task, and produce required "
+        "validation evidence.\n",
+        encoding="utf-8",
+    )
+    (phases / "00-benchmark-task.md").write_text(
+        "# Phase 00 — Current Coding Task\n\n"
+        "Status: IN PROGRESS\n\n"
+        "## Goal\n\n"
+        "Complete the exact current user-provided task without unrelated scope.\n\n"
+        "## Acceptance\n\n"
+        "Use the acceptance criteria supplied with the user task and the repository's required "
+        "validation evidence.\n",
+        encoding="utf-8",
+    )
+
+    tooling_json = project / "TOOLING_STATUS.json"
+    if tooling_json.exists():
+        tooling_json.write_text(
+            json.dumps(
+                {
+                    "schema": 1,
+                    "profile": "benchmark-local",
+                    "last_bootstrap": None,
+                    "tools": {},
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+    tooling_md = project / "TOOLING_STATUS.md"
+    if tooling_md.exists():
+        tooling_md.write_text(
+            "# Tooling Status\n\nStatus: READY\n\n"
+            "No optional framework tooling is required for this local benchmark fixture.\n",
+            encoding="utf-8",
+        )
+
+
 def write_task_material(task_dir: Path, task: dict) -> tuple[Path, Path]:
     prompt = task_dir / "prompt.md"
     acceptance = task_dir / "acceptance.md"
@@ -230,6 +308,7 @@ def prepare_pack(
                         repo_dir = task_dir / f"r{repetition:02d}" / arm / "repo"
                         shutil.copytree(raw, repo_dir)
                         copy_runtime(runtime_cache[arm], repo_dir)
+                        initialize_benchmark_project(repo_dir, task["id"])
                         pair["arms"][arm] = {
                             "workflow_ref": experiment[f"{arm}_workflow_ref"],
                             "repo": str(repo_dir.relative_to(output)),
