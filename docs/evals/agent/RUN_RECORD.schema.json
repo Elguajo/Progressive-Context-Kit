@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Elguajo/Progressive-Context-Kit/docs/evals/agent/RUN_RECORD.schema.json",
+  "title": "Progressive Context Kit Agent Eval Run Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "experiment_id",
+    "pair_id",
+    "arm",
+    "task_id",
+    "task_class",
+    "agent",
+    "model",
+    "reasoning",
+    "workflow_ref",
+    "controls",
+    "outcome",
+    "metrics"
+  ],
+  "properties": {
+    "schema": {"const": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "pair_id": {"type": "string", "minLength": 1},
+    "arm": {"enum": ["baseline", "candidate"]},
+    "task_id": {"type": "string", "minLength": 1},
+    "task_class": {"type": "string", "minLength": 1},
+    "agent": {"type": "string", "minLength": 1},
+    "model": {"type": "string", "minLength": 1},
+    "reasoning": {"type": "string", "minLength": 1},
+    "workflow_ref": {"type": "string", "minLength": 1},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo_snapshot",
+        "task_sha256",
+        "acceptance_sha256",
+        "tools_profile",
+        "permissions_profile",
+        "environment_profile"
+      ],
+      "properties": {
+        "repo_snapshot": {"type": "string", "minLength": 1},
+        "task_sha256": {"type": "string", "minLength": 1},
+        "acceptance_sha256": {"type": "string", "minLength": 1},
+        "tools_profile": {"type": "string", "minLength": 1},
+        "permissions_profile": {"type": "string", "minLength": 1},
+        "environment_profile": {"type": "string", "minLength": 1}
+      }
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hard_pass", "hard_failures", "quality"],
+      "properties": {
+        "hard_pass": {"type": "boolean"},
+        "hard_failures": {"type": "array", "items": {"type": "string"}},
+        "quality": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "task_correctness",
+            "repository_grounding",
+            "instruction_adherence",
+            "validation_truthfulness",
+            "regression_safety",
+            "security_approval",
+            "decision_quality",
+            "question_efficiency",
+            "rework_avoidance",
+            "context_tool_efficiency"
+          ],
+          "properties": {
+            "task_correctness": {"type": "integer", "minimum": 0, "maximum": 3},
+            "repository_grounding": {"type": "integer", "minimum": 0, "maximum": 3},
+            "instruction_adherence": {"type": "integer", "minimum": 0, "maximum": 3},
+            "validation_truthfulness": {"type": "integer", "minimum": 0, "maximum": 3},
+            "regression_safety": {"type": "integer", "minimum": 0, "maximum": 3},
+            "security_approval": {"type": "integer", "minimum": 0, "maximum": 3},
+            "decision_quality": {"type": "integer", "minimum": 0, "maximum": 3},
+            "question_efficiency": {"type": "integer", "minimum": 0, "maximum": 3},
+            "rework_avoidance": {"type": "integer", "minimum": 0, "maximum": 3},
+            "context_tool_efficiency": {"type": "integer", "minimum": 0, "maximum": 3}
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total_tokens",
+        "turns",
+        "tool_calls",
+        "file_reads",
+        "wall_time_seconds",
+        "token_accounting"
+      ],
+      "properties": {
+        "total_tokens": {"type": "number", "minimum": 0},
+        "input_tokens": {"type": ["number", "null"], "minimum": 0},
+        "output_tokens": {"type": ["number", "null"], "minimum": 0},
+        "cache_read_tokens": {"type": ["number", "null"], "minimum": 0},
+        "cost_usd": {"type": ["number", "null"], "minimum": 0},
+        "turns": {"type": "integer", "minimum": 0},
+        "tool_calls": {"type": "integer", "minimum": 0},
+        "file_reads": {"type": "integer", "minimum": 0},
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "initial_context_tokens": {"type": ["number", "null"], "minimum": 0},
+        "peak_context_tokens": {"type": ["number", "null"], "minimum": 0},
+        "token_accounting": {"type": "string", "minLength": 1}
+      }
+    },
+    "notes": {"type": "string"}
+  }
+}
