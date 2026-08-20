@@ -21,6 +21,13 @@ respect existing dependency/approval policy; do not install speculative packages
 small task into environment setup. A later probe is justified only by new evidence from the
 first execution.
 
+Treat polling as a costed execution step. If a command is still running and the harness
+returns control, wait in coarse intervals appropriate to the expected duration — normally at
+least 30 seconds for builds or test suites — instead of repeatedly checking with short polls.
+Do not send empty/no-op input only to peek, and do not poll at all when the execution call
+already blocks until completion. Poll sooner only when the command is expected to finish
+quickly or new evidence makes an earlier check useful.
+
 For bug fixes: root cause → reproduce when practical → smallest complete fix → regression
 test when supported → adjacent-behavior verification. Use `systematic-debugging` when the
 cause is unclear rather than guessing.
