@@ -12,7 +12,21 @@ class FrameworkContractTests(unittest.TestCase):
         s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
         self.assertEqual({r['id'] for r in c['rules']},{rid for sc in s['scenarios'] for rid in sc['covers']})
     def test_framework_rule_count(self):
-        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text()); self.assertGreaterEqual(c['rule_count'],26); self.assertEqual(c['rule_count'],len(c['rules']))
+        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text()); self.assertGreaterEqual(c['rule_count'],47); self.assertEqual(c['rule_count'],len(c['rules']))
+    def test_execution_efficiency_rules_are_pinned_and_scenario_covered(self):
+        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text())
+        s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
+        rules={r['id']:r for r in c['rules']}
+        expected={f'FW-{n:03d}' for n in range(42,48)}
+        self.assertTrue(expected.issubset(rules))
+        scenario=next(sc for sc in s['scenarios'] if sc['id']=='execution-efficiency')
+        self.assertEqual(expected,set(scenario['covers']))
+        self.assertEqual(rules['FW-042']['owner'],'global/AGENTS.codex.md')
+        self.assertEqual(rules['FW-043']['owner'],'global/CLAUDE.md')
+        self.assertEqual(rules['FW-044']['owner'],'.agents/skills/implementation-execution/SKILL.md')
+        self.assertEqual(rules['FW-045']['owner'],'docs/system/QUALITY_PROTOCOL.md')
+        self.assertEqual(rules['FW-046']['owner'],'.agents/skills/systematic-debugging/SKILL.md')
+        self.assertEqual(rules['FW-047']['owner'],'.agents/skills/implementation-execution/SKILL.md')
     def test_anchor_loss_fails(self):
         with tempfile.TemporaryDirectory() as d:
             dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
