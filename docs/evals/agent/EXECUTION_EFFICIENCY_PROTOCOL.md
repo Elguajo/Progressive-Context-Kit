@@ -104,15 +104,23 @@ A lower efficiency metric is better. A positive quality delta is better.
 
 ## Autoresearch loop
 
+The fixed benchmark may be used as a discovery pass. Once traces reveal one concrete,
+repeatable waste pattern, move to `autoresearch/README.md` and create a persistent one-hypothesis
+experiment with `tools/autoresearch.py`.
+
+The loop is:
 1. collect traces from representative tasks;
 2. identify one concrete waste pattern;
-3. change one rule/routing behavior when possible;
-4. run paired baseline/candidate evaluations;
-5. inspect hard regressions and outlier pairs, not only aggregate medians;
-6. keep the change only when the quality gate passes and the measured tradeoff is useful;
-7. record the accepted/rejected hypothesis and its evidence before testing the next change.
+3. state one falsifiable hypothesis;
+4. make one primary candidate behavioral change when possible;
+5. run paired baseline/candidate evaluations;
+6. inspect hard regressions and outlier pairs, not only aggregate medians;
+7. attach the analyzer summary to the experiment record;
+8. decide `KEEP`, `MODIFY`, or `REMOVE`;
+9. if `MODIFY`, create a new linked experiment instead of rewriting the decided record.
 
 Do not stack multiple unmeasured optimizations and attribute the combined result to one rule.
+A `KEEP` decision is forbidden when the paired analyzer quality gate is `FAIL`.
 
 ## Claim discipline
 
