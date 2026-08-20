@@ -62,8 +62,8 @@
       "additionalProperties": false,
       "required": ["baseline_workflow_ref", "candidate_workflow_ref", "task_set"],
       "properties": {
-        "baseline_workflow_ref": {"type": "string", "minLength": 1},
-        "candidate_workflow_ref": {"type": "string", "minLength": 1},
+        "baseline_workflow_ref": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "candidate_workflow_ref": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "task_set": {"type": "string", "minLength": 1}
       }
     },
