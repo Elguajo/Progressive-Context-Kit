@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-framework",
-  "rule_count": 52,
+  "rule_count": 53,
   "rules": [
     {"id":"FW-001","owner":"profiles/personal/AGENTS.md","anchor":"docs/system/LINEAGE.md","summary":"LINEAGE excluded from normal warm-up"},
     {"id":"FW-002","owner":"integrations/TOOL_REGISTRY.json","anchor":"MinishLab/semble","summary":"Semble is preferred semantic discovery implementation"},
@@ -54,6 +54,7 @@
     {"id":"FW-049","owner":"docs/evals/agent/README.md","anchor":"Framework Source-only research infrastructure","summary":"Real-agent measurement infrastructure remains Framework Source-only and out of Project Runtime"},
     {"id":"FW-050","owner":"docs/evals/agent/autoresearch/README.md","anchor":"one observation -> one hypothesis -> one primary candidate change","summary":"Autoresearch isolates one primary behavioral hypothesis per experiment"},
     {"id":"FW-051","owner":"docs/evals/agent/autoresearch/README.md","anchor":"A `KEEP` decision is invalid when the paired analyzer quality gate is `FAIL`.","summary":"Autoresearch cannot keep an efficiency candidate that fails the paired quality gate"},
-    {"id":"FW-052","owner":"docs/evals/agent/autoresearch/README.md","anchor":"A decided experiment is terminal.","summary":"Autoresearch decisions are durable terminal records; modifications create linked new experiments"}
+    {"id":"FW-052","owner":"docs/evals/agent/autoresearch/README.md","anchor":"A decided experiment is terminal.","summary":"Autoresearch decisions are durable terminal records; modifications create linked new experiments"},
+    {"id":"FW-053","owner":"tools/build_release.py","anchor":"tools/autoresearch.py validate","summary":"Release validation rejects inconsistent Autoresearch registry, lifecycle, or evidence records"}
   ]
 }
