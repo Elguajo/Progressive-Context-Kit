@@ -55,10 +55,11 @@ def verify_source(root: Path, run_unit_tests: bool) -> None:
         "tools/sync_skills.py",
         "tools/behavior_contract.py",
         "tools/framework_contract.py",
+        "tools/autoresearch.py validate",
         "tools/duplication_audit.py",
         "tools/audit.py",
     ]:
-        run(root, script)
+        run(root, *script.split())
 
     if run_unit_tests:
         print("+", sys.executable, "-m unittest discover -s tools/tests -v")
@@ -111,6 +112,7 @@ def write_release_metadata(root: Path, artifact: Path, profile: str, agent: str)
         "size_bytes": artifact.stat().st_size,
         "validation": {
             "source_contracts": True,
+            "autoresearch_records": True,
             "source_audit": True,
             "runtime_audit": True,
             "runtime_context_compile": True,
