@@ -12,7 +12,7 @@ class FrameworkContractTests(unittest.TestCase):
         s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
         self.assertEqual({r['id'] for r in c['rules']},{rid for sc in s['scenarios'] for rid in sc['covers']})
     def test_framework_rule_count(self):
-        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text()); self.assertGreaterEqual(c['rule_count'],53); self.assertEqual(c['rule_count'],len(c['rules']))
+        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text()); self.assertGreaterEqual(c['rule_count'],60); self.assertEqual(c['rule_count'],len(c['rules']))
     def test_execution_efficiency_rules_are_pinned_and_scenario_covered(self):
         c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text())
         s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
@@ -46,6 +46,20 @@ class FrameworkContractTests(unittest.TestCase):
         for rid in {'FW-050','FW-051','FW-052'}:
             self.assertEqual(rules[rid]['owner'],'docs/evals/agent/autoresearch/README.md')
         self.assertEqual(rules['FW-053']['owner'],'tools/build_release.py')
+    def test_progressive_aware_v25_rules_are_owned_and_covered(self):
+        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text())
+        s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
+        rules={r['id']:r for r in c['rules']}
+        expected={f'FW-{n:03d}' for n in range(54,61)}
+        scenario=next(sc for sc in s['scenarios'] if sc['id']=='progressive-aware-universal-v2-5')
+        self.assertEqual(expected,set(scenario['covers']))
+        self.assertEqual(rules['FW-054']['owner'],'global/AGENTS.codex.md')
+        self.assertEqual(rules['FW-055']['owner'],'global/CLAUDE.md')
+        self.assertEqual(rules['FW-056']['owner'],'.agents/skills/architecture-decision/SKILL.md')
+        self.assertEqual(rules['FW-057']['owner'],'.agents/skills/implementation-execution/SKILL.md')
+        self.assertEqual(rules['FW-058']['owner'],'.agents/skills/documentation-governance/SKILL.md')
+        self.assertEqual(rules['FW-059']['owner'],'global/AGENTS.codex.md')
+        self.assertEqual(rules['FW-060']['owner'],'global/CLAUDE.md')
     def test_anchor_loss_fails(self):
         with tempfile.TemporaryDirectory() as d:
             dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
