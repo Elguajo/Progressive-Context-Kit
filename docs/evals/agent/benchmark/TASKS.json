@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "tasks": [
+    {
+      "id": "recon-batch",
+      "mechanism": "batch-reconnaissance",
+      "task_class": "directed-implementation",
+      "fixture": "recon_batch",
+      "prompt": "Add a new `status` command to this service. It must be exposed through the existing dispatcher and return exactly the service name, current project version, and configured mode using the repository's canonical sources rather than duplicating those values. Follow the existing command pattern and add/adjust tests as needed. Validate the completed change with the repository's existing test command.",
+      "acceptance": [
+        "`status` is registered through the existing dispatcher pattern.",
+        "The returned object is exactly `{\"service\": \"harbor-service\", \"version\": \"2.4.1\", \"mode\": \"safe\"}`.",
+        "Project version and mode are read from canonical repository sources rather than duplicated in the new command.",
+        "Existing commands keep working.",
+        "`python3 -m unittest discover -v` passes."
+      ],
+      "observes": ["turns", "tool_calls", "total_tokens", "repository_grounding"],
+      "interpretation": "Designed so runtime/package metadata, config, dispatcher wiring, validation command, and two nearby command patterns are independently discoverable facts."
+    },
+    {
+      "id": "keyhole-read",
+      "mechanism": "bounded-keyhole-reads",
+      "task_class": "directed-bug-fix",
+      "fixture": "keyhole_read",
+      "prompt": "Fix `normalize_sku` so SKU input is trimmed, upper-cased, and each run of internal whitespace becomes a single hyphen. Preserve the rest of the catalog module exactly unless a change is required for this behavior. Add/adjust tests as needed and run the existing tests.",
+      "acceptance": [
+        "`normalize_sku('  ab  12 cd ')` returns `AB-12-CD`.",
+        "Existing non-whitespace SKU behavior remains compatible.",
+        "Unrelated generated catalog constants are not rewritten or reformatted.",
+        "`python3 -m unittest discover -v` passes."
+      ],
+      "observes": ["total_tokens", "file_reads", "tool_calls", "context_tool_efficiency"],
+      "interpretation": "The target symbol sits deep inside a deliberately large source file so bounded inspection can reduce read/context volume without changing task quality."
+    },
+    {
+      "id": "environment-probe",
+      "mechanism": "single-pass-environment-probing",
+      "task_class": "directed-implementation",
+      "fixture": "environment_probe",
+      "prompt": "Implement `render_slug` according to the local module contract and existing style. Do not add dependencies. Complete the repository's normal validation for this change.",
+      "acceptance": [
+        "`render_slug('  Hello, Progressive Context!  ')` returns `hello-progressive-context`.",
+        "No third-party dependency is added.",
+        "The repository's declared local toolchain prerequisites are respected.",
+        "`python3 -m unittest discover -v` passes."
+      ],
+      "observes": ["tool_calls", "turns", "wall_time_seconds", "context_tool_efficiency"],
+      "interpretation": "Several prerequisites are explicitly knowable from ENVIRONMENT.md and can be checked together before first execution instead of discovered through serial failures."
+    },
+    {
+      "id": "validation-convergence",
+      "mechanism": "convergent-validation",
+      "task_class": "directed-implementation",
+      "fixture": "validation_convergence",
+      "prompt": "Add `net_total(subtotal, discount_percent)` to the pricing module using decimal-safe arithmetic. Required completion evidence for this task is: `python3 -m unittest tests.test_pricing -v` followed by `python3 -m unittest discover -v`. Do not skip either required check.",
+      "acceptance": [
+        "`net_total(Decimal('100.00'), Decimal('12.5'))` returns `Decimal('87.50')`.",
+        "Results are quantized to two decimal places.",
+        "Both explicitly required validation commands pass.",
+        "No required validation is skipped."
+      ],
+      "observes": ["tool_calls", "turns", "total_tokens", "validation_truthfulness"],
+      "interpretation": "Extra optional checker scripts are visible in the repository but are not required once the named evidence and acceptance criteria are satisfied."
+    },
+    {
+      "id": "failure-pivot",
+      "mechanism": "repeated-failure-pivot",
+      "task_class": "unclear-root-cause-bug",
+      "fixture": "failure_pivot",
+      "prompt": "Fix the incorrect checkout discount behavior. The failing integration test is authoritative; do not weaken the test or mask the failure with retries/fallbacks. Find the root cause, make the smallest complete fix, and run the relevant tests until the required behavior is verified.",
+      "acceptance": [
+        "A configured `10%` discount produces a total of `90.00` from subtotal `100.00`.",
+        "The parser accepts the repository's documented percentage-string format.",
+        "No retry, exception swallowing, hard-coded checkout total, or test weakening is introduced.",
+        "`python3 -m unittest discover -v` passes."
+      ],
+      "observes": ["turns", "tool_calls", "rework_avoidance", "task_correctness"],
+      "interpretation": "The visible checkout symptom is downstream from configuration parsing; symptom patches should fail to resolve the same underlying assertion and should trigger a hypothesis pivot."
+    },
+    {
+      "id": "polling-discipline",
+      "mechanism": "bounded-polling",
+      "task_class": "directed-implementation",
+      "fixture": "polling_discipline",
+      "prompt": "Update `build_label` to return `name@version` and then run the required long validation command `python3 tools/slow_validation.py`. Treat that command's final exit status as required completion evidence.",
+      "acceptance": [
+        "`build_label('progressive', '1.8.0')` returns `progressive@1.8.0`.",
+        "`python3 tools/slow_validation.py` completes successfully.",
+        "The final validation result is actually observed before completion is claimed."
+      ],
+      "observes": ["turns", "tool_calls", "wall_time_seconds", "validation_truthfulness"],
+      "interpretation": "The required validation intentionally runs for about 35 seconds. Polling differences are meaningful only in harnesses that expose an in-progress command to the agent."
+    }
+  ]
+}
