@@ -88,7 +88,7 @@ flowchart LR
 
 Для нового проекта скачай последний стабильный release asset из **GitHub Releases**:
 
-**`Progressive-Context-Project-Runtime-v1.8.0.zip`**
+**`Progressive-Context-Project-Runtime-v1.9.0.zip`**
 
 https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 
@@ -169,8 +169,8 @@ python3 tools/build_release.py
 Для текущего стабильного release результат:
 
 ```text
-dist/Progressive-Context-Project-Runtime-v1.8.0.zip
-dist/Progressive-Context-Project-Runtime-v1.8.0.manifest.json
+dist/Progressive-Context-Project-Runtime-v1.9.0.zip
+dist/Progressive-Context-Project-Runtime-v1.9.0.manifest.json
 dist/SHA256SUMS.txt
 ```
 

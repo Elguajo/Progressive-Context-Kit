@@ -11,6 +11,10 @@ from context_compile import completion_bridge, completion_record
 EXPECTED_FALLBACK={'ROLE','TASK_CLASSIFICATION','REPOSITORY_GROUNDING','ENGINEERING_PRINCIPLES','DECISION_WORKFLOW','CODE_REVIEW_MODE','IMPLEMENTATION','VALIDATION_LOOP','SAFETY_AND_APPROVALS','DOCUMENTATION_UPDATE_APPROVAL','FINAL_REPORT','COMMUNICATION_STYLE'}
 EXPECTED_SKILLS={'architecture-decision','code-review','documentation-governance','project-bootstrap','existing-project-adoption','tooling-bootstrap','project-doctor','security-sensitive-change','session-handoff','systematic-debugging','workflow-audit','implementation-execution'}
 EXPECTED_TOOLS={'semble','serena','rtk','superpowers','gstack','context7','github_spec_kit'}
+# Mirrors the literal figures hardcoded in verify_profiles (kept literal there since a
+# Behavior Contract anchor pins that exact substring); used here to check docs don't drift.
+BUDGET_GLOBAL=5500; BUDGET_ROUTER=3600; BUDGET_COMBINED=9100; BUDGET_STANDALONE=9300
+RELEASE_VERSION_DOCS=['README.md','README_RU.md','docs/human/GETTING_STARTED.md','docs/human/GETTING_STARTED.ru.md']
 REQUIRED=[
 'AGENTS.md','CLAUDE.md','global/AGENTS.codex.md','global/CLAUDE.md','profiles/personal/AGENTS.md','profiles/standalone/AGENTS.md',
 'docs/system/LAYER_OWNERSHIP.md','docs/system/LINEAGE.md','docs/system/TOOL_ROUTING.md',
@@ -83,6 +87,20 @@ def verify_tooling(root,errors):
     for brand in ['Semble','Serena','RTK','Superpowers','gstack','Context7','GitHub Spec Kit']:
         if brand not in profiles: errors.append('PROFILES missing preferred brand: '+brand)
 
+def verify_token_budgets_doc(root,errors):
+    doc=read(root/'docs/TOKEN_BUDGETS.md')
+    for n in {BUDGET_GLOBAL,BUDGET_ROUTER,BUDGET_COMBINED,BUDGET_STANDALONE}:
+        fail_if(f'{n:,} characters' not in doc,errors,f'docs/TOKEN_BUDGETS.md missing/stale {n:,}-char budget figure')
+
+def verify_release_version_refs(root,errors):
+    vfile=root/'VERSION'
+    if not vfile.is_file(): return
+    version=vfile.read_text(encoding='utf-8').strip()
+    pat=re.compile(r'Progressive-Context-Project-Runtime-v(\d+\.\d+\.\d+)')
+    for rel in RELEASE_VERSION_DOCS:
+        for found in set(pat.findall(read(root/rel))):
+            fail_if(found!=version,errors,f'{rel} references stale runtime v{found} (VERSION is {version})')
+
 def verify_context_manifest(root,errors):
     try:
         data=json.loads(read(root/'docs/project/CONTEXT_MANIFEST.json'))
@@ -138,5 +156,6 @@ def main():
     e,w=validate_behavior_contract(root); errors+=e; warns+=w
     e,w=validate_framework_contract(root); errors+=e; warns+=w
     errors+=validate_duplication(root)
-    verify_skills(root,errors); verify_tooling(root,errors); verify_context_manifest(root,errors); verify_project_state(root,errors,warns); finish(errors,warns)
+    verify_skills(root,errors); verify_tooling(root,errors); verify_context_manifest(root,errors); verify_project_state(root,errors,warns)
+    verify_token_budgets_doc(root,errors); verify_release_version_refs(root,errors); finish(errors,warns)
 if __name__=='__main__': main()

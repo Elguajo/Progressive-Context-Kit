@@ -272,7 +272,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "56",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "maintenance impact, and when appropriate",
+      "anchor": "maintenance impact, and compatibility when appropriate",
       "summary": "Pragmatic/Fast option semantics"
     },
     {
@@ -280,7 +280,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "57",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "maintenance impact, and when appropriate",
+      "anchor": "maintenance impact, and compatibility when appropriate",
       "summary": "Architectural/Robust option semantics"
     },
     {
@@ -288,7 +288,7 @@
       "source_section": "DECISION_WORKFLOW",
       "source_lines": "58",
       "owner": ".agents/skills/architecture-decision/SKILL.md",
-      "anchor": "maintenance impact, and when appropriate",
+      "anchor": "maintenance impact, and compatibility when appropriate",
       "summary": "Balanced/Hybrid option semantics"
     },
     {
