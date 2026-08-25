@@ -69,6 +69,34 @@ A single `AGENTS.md` can be enough for a small, stable repository. Progressive C
 
 **What is stored in `.progressive/`?** Runtime tools and prompts plus project memory, phases, completion history, and consequential decisions. Project-owned state is preserved during framework updates.
 
+## How it works
+
+**A Runtime, not another pile of files.** Your product receives a small, self-contained agent workspace. The larger Framework Source stays separate, so framework development material does not become project clutter.
+
+**Project memory, not a longer chat.** The agent records the product goal, current architecture, roadmap, progress, and handoff in durable project state. A new session can continue from that state instead of reconstructing the work from conversation history.
+
+**Planning proportional to the decision.** A clear local change gets a direct path; normal product work gets focused planning; risky or far-reaching work receives deeper preparation. Every path still requires the appropriate validation.
+
+**Quality evidence over optimistic claims.** Required tests, acceptance criteria, safety checks, and project-state updates take priority over saving tokens or steps.
+
+## From idea to the next session
+
+```mermaid
+flowchart LR
+    I[Your idea] --> S[Shared project direction]
+    S --> W[Focused work]
+    W --> V[Validation evidence]
+    V --> N[Clear next session]
+```
+
+1. **Describe the outcome.** Explain the product, its users, real constraints, and non-goals. You do not need to preselect every framework or directory.
+2. **Establish a shared direction.** The agent turns the relevant product decisions into a small, durable plan instead of leaving them scattered across chat messages.
+3. **Work in focused slices.** It loads the instructions and project knowledge appropriate to the current task, then implements and checks the result.
+4. **Keep evidence with the work.** Validation results, material decisions, and completed outcomes remain available when they matter later.
+5. **Resume without re-explaining.** The next session starts from an explicit handoff and current project state rather than from an empty prompt.
+
+You own the desired outcome, constraints, and material product decisions. The agent owns routine context routing, project-state maintenance, implementation, validation, and a useful handoff. It should pause for your direction when a decision is high-risk or materially changes the product, compatibility, architecture, or operational cost.
+
 ## Learn more
 
 - [`Getting started`](docs/human/GETTING_STARTED.md) — installation, adoption, and first-session guidance.
