@@ -4,6 +4,7 @@ import argparse, json, re
 from common import chars, current_phase, project_file, read, resolve_path, template_file
 from context_compile import completion_bridge, completion_record
 from routing_integrity import validate as validate_routing_integrity
+from tool_adapter_protocol import validate as validate_tool_adapters
 
 EXPECTED_SKILLS = {'architecture-decision','code-review','documentation-governance','project-bootstrap','existing-project-adoption','tooling-bootstrap','project-doctor','security-sensitive-change','session-handoff','systematic-debugging','workflow-audit','implementation-execution'}
 ALLOWED_SKILL_ACTIVATION = {'automatic','explicit','both'}
@@ -12,8 +13,8 @@ REQUIRED = [
     'AGENTS.md','CLAUDE.md','.progressive/VERSION','.progressive/PROFILE','.progressive/AGENT_TARGET','.progressive/ADOPTION_STATE',
     '.progressive/project/PROJECT_BRIEF.md','.progressive/project/ARCHITECTURE.md','.progressive/project/ROADMAP.md','.progressive/project/NEXT_SESSION.md','.progressive/project/CONTEXT_MANIFEST.json','.progressive/project/TOOLING_STATUS.json',
     '.progressive/system/CONTEXT_PROTOCOL.md','.progressive/system/HANDOFF_PROTOCOL.md','.progressive/system/LAYER_OWNERSHIP.md','.progressive/system/QUALITY_PROTOCOL.md','.progressive/system/TOOL_ROUTING.md',
-    '.progressive/integrations/TOOL_REGISTRY.json','.progressive/integrations/PROFILES.md',
-    '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/routing_integrity.py','.progressive/tools/audit.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
+    '.progressive/integrations/TOOL_ADAPTER_PROTOCOL.md','.progressive/integrations/TOOL_REGISTRY.json','.progressive/integrations/PROFILES.md',
+    '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/routing_integrity.py','.progressive/tools/audit.py','.progressive/tools/tool_adapter_protocol.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
 ]
 # Real products may legitimately own root directories named docs/, tools/, templates/,
 # integrations/, profiles/, or prompts/. Detect legacy Framework Source leakage by
@@ -90,6 +91,7 @@ def main():
     if (root/'.progressive/AGENT_TARGET').is_file(): fail_if(read(root/'.progressive/AGENT_TARGET').strip() not in {'codex','claude','both'},errors,'invalid AGENT_TARGET')
     verify_skills(root,errors); verify_tooling(root,errors); verify_project_state(root,errors,warns)
     routing_errors,_ = validate_routing_integrity(root); errors += routing_errors
+    adapter_errors,adapter_warns = validate_tool_adapters(root); errors += adapter_errors; warns += adapter_warns
     for x in errors: print('ERROR:',x)
     for x in warns: print('WARN:',x)
     if errors:

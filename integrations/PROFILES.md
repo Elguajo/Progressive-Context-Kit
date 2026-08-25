@@ -1,6 +1,6 @@
 # Tooling Profiles
 
-Progressive Context Spec Kit is the canonical project workflow. Branded tools are **preferred implementations** behind stable capabilities: keep the concrete advantage of strong tools without making project truth depend on them.
+Progressive Context Spec Kit is the canonical project workflow. Branded tools are **preferred implementations** behind stable capabilities: keep the concrete advantage of strong tools without making project truth depend on them. Adapter requirements, route boundaries, fallbacks, approval constraints, and replacement rules are canonical in `integrations/TOOL_ADAPTER_PROTOCOL.md` + `integrations/TOOL_REGISTRY.json`.
 
 ## Minimal
 

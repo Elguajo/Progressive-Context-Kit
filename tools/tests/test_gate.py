@@ -22,6 +22,7 @@ class ProgressiveGateTests(unittest.TestCase):
                 "skill-mirrors",
                 "behavior-contract",
                 "framework-contract",
+                "tool-adapter-protocol",
                 "routing-integrity",
                 "autoresearch-records",
                 "duplication-audit",

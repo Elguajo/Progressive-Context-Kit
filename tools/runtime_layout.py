@@ -31,6 +31,7 @@ RUNTIME_TOOLS = {
     'context_report.py': 'context_report.py',
     'routing_integrity.py': 'routing_integrity.py',
     'runtime_audit.py': 'audit.py',
+    'tool_adapter_protocol.py': 'tool_adapter_protocol.py',
     'tooling_status.py': 'tooling_status.py',
     'tooling_bootstrap.py': 'tooling_bootstrap.py',
 }

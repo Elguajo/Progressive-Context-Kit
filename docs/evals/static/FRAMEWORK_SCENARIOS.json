@@ -62,6 +62,12 @@
       "description":"Framework maintainers or release automation need one complete static/integrity verification entrypoint without duplicating the check sequence across CI, release, and Skills.",
       "covers":["FW-067"],
       "expected":"tools/gate.py is the single Framework Source verification orchestrator; CI, release, and workflow-audit delegate to it, child validators remain independently executable, Project Runtime keeps its separate local audit surface, and a gate PASS is not presented as empirical model-quality evidence."
+    },
+    {
+      "id":"tool-adapter-protocol",
+      "description":"A preferred branded tool is selected, unavailable, replaced, or a new implementation is added for an existing development capability.",
+      "covers":["FW-068"],
+      "expected":"Tool selection routes by stable capability and task evidence before brand; every adapter declares preferred/avoid conditions, official source, safe fallback, profiles, and extra approval constraints; common on-demand/approval policy stays centralized; Source Gate and Project Runtime audit reject registry drift without making adapter detail always-loaded context."
     }
   ]
 }

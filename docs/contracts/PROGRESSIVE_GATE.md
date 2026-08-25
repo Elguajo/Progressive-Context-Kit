@@ -10,12 +10,13 @@ The default gate runs, in order:
 2. Skill mirror integrity;
 3. inherited Behavior Contract;
 4. Progressive Framework Contract and protected invariants;
-5. Routing Integrity;
-6. Autoresearch record integrity;
-7. duplication audit;
-8. Framework Source audit;
-9. context-budget report;
-10. framework unit/regression tests.
+5. Tool Adapter Protocol integrity;
+6. Routing Integrity;
+7. Autoresearch record integrity;
+8. duplication audit;
+9. Framework Source audit;
+10. context-budget report;
+11. framework unit/regression tests.
 
 The gate is fail-fast. A child failure is reported with the failed check id and the gate exits non-zero.
 

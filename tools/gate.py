@@ -28,6 +28,7 @@ def source_checks(run_unit_tests: bool = True) -> tuple[Check, ...]:
         Check("skill-mirrors", "Skill mirrors", ("tools/sync_skills.py",)),
         Check("behavior-contract", "Behavior Contract", ("tools/behavior_contract.py",)),
         Check("framework-contract", "Framework Contract + invariants", ("tools/framework_contract.py",)),
+        Check("tool-adapter-protocol", "Tool Adapter Protocol", ("tools/tool_adapter_protocol.py",)),
         Check("routing-integrity", "Routing Integrity", ("tools/routing_integrity.py",)),
         Check("autoresearch-records", "Autoresearch record integrity", ("tools/autoresearch.py", "validate")),
         Check("duplication-audit", "Duplication audit", ("tools/duplication_audit.py",)),
