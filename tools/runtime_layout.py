@@ -29,6 +29,7 @@ RUNTIME_TOOLS = {
     'common.py': 'common.py',
     'context_compile.py': 'context_compile.py',
     'context_report.py': 'context_report.py',
+    'routing_integrity.py': 'routing_integrity.py',
     'runtime_audit.py': 'audit.py',
     'tooling_status.py': 'tooling_status.py',
     'tooling_bootstrap.py': 'tooling_bootstrap.py',

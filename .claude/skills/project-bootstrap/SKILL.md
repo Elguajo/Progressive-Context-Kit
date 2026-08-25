@@ -2,6 +2,8 @@
 name: project-bootstrap
 description: Initialize Progressive Context Spec Kit for a new/greenfield product.
 activation: automatic
+requires: ["prompts/START_NEW_PROJECT.md", "docs/system/PLANNING_DEPTH.md"]
+may_delegate: ["existing-project-adoption"]
 ---
 
 # Project Bootstrap

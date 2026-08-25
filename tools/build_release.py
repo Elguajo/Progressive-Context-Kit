@@ -55,6 +55,7 @@ def verify_source(root: Path, run_unit_tests: bool) -> None:
         "tools/sync_skills.py",
         "tools/behavior_contract.py",
         "tools/framework_contract.py",
+        "tools/routing_integrity.py",
         "tools/autoresearch.py validate",
         "tools/duplication_audit.py",
         "tools/audit.py",
@@ -112,6 +113,7 @@ def write_release_metadata(root: Path, artifact: Path, profile: str, agent: str)
         "size_bytes": artifact.stat().st_size,
         "validation": {
             "source_contracts": True,
+            "routing_integrity": True,
             "autoresearch_records": True,
             "source_audit": True,
             "runtime_audit": True,

@@ -3,6 +3,7 @@ from pathlib import Path
 import argparse, json, re
 from common import chars, current_phase, project_file, read, resolve_path, template_file
 from context_compile import completion_bridge, completion_record
+from routing_integrity import validate as validate_routing_integrity
 
 EXPECTED_SKILLS = {'architecture-decision','code-review','documentation-governance','project-bootstrap','existing-project-adoption','tooling-bootstrap','project-doctor','security-sensitive-change','session-handoff','systematic-debugging','workflow-audit','implementation-execution'}
 ALLOWED_SKILL_ACTIVATION = {'automatic','explicit','both'}
@@ -12,7 +13,7 @@ REQUIRED = [
     '.progressive/project/PROJECT_BRIEF.md','.progressive/project/ARCHITECTURE.md','.progressive/project/ROADMAP.md','.progressive/project/NEXT_SESSION.md','.progressive/project/CONTEXT_MANIFEST.json','.progressive/project/TOOLING_STATUS.json',
     '.progressive/system/CONTEXT_PROTOCOL.md','.progressive/system/HANDOFF_PROTOCOL.md','.progressive/system/LAYER_OWNERSHIP.md','.progressive/system/QUALITY_PROTOCOL.md','.progressive/system/TOOL_ROUTING.md',
     '.progressive/integrations/TOOL_REGISTRY.json','.progressive/integrations/PROFILES.md',
-    '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/audit.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
+    '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/routing_integrity.py','.progressive/tools/audit.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
 ]
 # Real products may legitimately own root directories named docs/, tools/, templates/,
 # integrations/, profiles/, or prompts/. Detect legacy Framework Source leakage by
@@ -88,6 +89,7 @@ def main():
     if (root/'.progressive/ADOPTION_STATE').is_file(): fail_if(read(root/'.progressive/ADOPTION_STATE').strip() == 'pending',errors,'existing-project adoption is pending; reconcile conflicts and finalize adoption')
     if (root/'.progressive/AGENT_TARGET').is_file(): fail_if(read(root/'.progressive/AGENT_TARGET').strip() not in {'codex','claude','both'},errors,'invalid AGENT_TARGET')
     verify_skills(root,errors); verify_tooling(root,errors); verify_project_state(root,errors,warns)
+    routing_errors,_ = validate_routing_integrity(root); errors += routing_errors
     for x in errors: print('ERROR:',x)
     for x in warns: print('WARN:',x)
     if errors:

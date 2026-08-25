@@ -2,6 +2,8 @@
 name: implementation-execution
 description: Non-trivial implementation after direction is clear, including feature work and complete bug-fix execution.
 activation: automatic
+requires: ["docs/system/QUALITY_PROTOCOL.md"]
+may_delegate: ["systematic-debugging"]
 ---
 
 # Implementation Execution

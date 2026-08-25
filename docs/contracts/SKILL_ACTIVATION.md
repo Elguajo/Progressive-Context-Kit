@@ -16,4 +16,4 @@ Current policy keeps existing routing semantics unchanged: router-driven product
 
 Canonical metadata lives only in `.agents/skills/`; `.claude/skills/` is a generated mirror. Adding an activation field must not move detailed Skill procedures into always-loaded instructions or increase the normal project context budget.
 
-This contract defines activation semantics only. Router reachability, dangling routes, Skill dependencies, and orphan detection belong to the separate routing-integrity layer.
+Router reachability, dangling routes, Skill dependencies, and orphan detection are enforced by the separate `docs/contracts/ROUTING_INTEGRITY.md` contract and `tools/routing_integrity.py` validator.

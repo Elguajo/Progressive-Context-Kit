@@ -9,6 +9,7 @@ jobs:
         with: {python-version: '3.12'}
       - run: python3 tools/behavior_contract.py
       - run: python3 tools/framework_contract.py
+      - run: python3 tools/routing_integrity.py
       - run: python3 tools/duplication_audit.py
       - run: python3 tools/audit.py
       - run: python3 tools/context_report.py --profile personal --baseline-chars 11540
