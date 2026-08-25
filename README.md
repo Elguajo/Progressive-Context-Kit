@@ -88,7 +88,7 @@ This repository is the **Framework Source** used to develop, test, measure, docu
 
 For a new project, download the latest stable release asset from **GitHub Releases**:
 
-**`Progressive-Context-Project-Runtime-v1.9.0.zip`**
+**`Progressive-Context-Project-Runtime-v2.0.0.zip`**
 
 https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
 
@@ -169,8 +169,8 @@ python3 tools/build_release.py
 For the current stable release, output is:
 
 ```text
-dist/Progressive-Context-Project-Runtime-v1.9.0.zip
-dist/Progressive-Context-Project-Runtime-v1.9.0.manifest.json
+dist/Progressive-Context-Project-Runtime-v2.0.0.zip
+dist/Progressive-Context-Project-Runtime-v2.0.0.manifest.json
 dist/SHA256SUMS.txt
 ```
 
