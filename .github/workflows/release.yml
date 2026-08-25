@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*'
+    branches:
+      - 'release/v*'
   workflow_dispatch:
 
 permissions:
@@ -20,6 +22,40 @@ jobs:
         with:
           python-version: '3.12'
 
+      # The connected release path can start from release/vX.Y.Z without requiring
+      # a separate API call to create a Git tag. The branch name is the requested
+      # version; the helper updates every release-version owner and CHANGELOG,
+      # then the full Progressive Gate verifies the exact commit before tagging.
+      - name: Prepare immutable release branch
+        if: startsWith(github.ref, 'refs/heads/release/v')
+        shell: bash
+        run: |
+          VERSION_FROM_BRANCH="${GITHUB_REF_NAME#release/v}"
+          NOTES="docs/releases/v${VERSION_FROM_BRANCH}.md"
+          python3 tools/prepare_release.py --version "$VERSION_FROM_BRANCH" --notes-file "$NOTES"
+          python3 tools/gate.py
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add VERSION CHANGELOG.md README.md README_RU.md \
+            docs/human/GETTING_STARTED.md docs/human/GETTING_STARTED.ru.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Release v${VERSION_FROM_BRANCH}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+          RELEASE_SHA="$(git rev-parse HEAD)"
+          TAG="v${VERSION_FROM_BRANCH}"
+          EXISTING_SHA="$(git ls-remote --refs origin "refs/tags/${TAG}" | awk '{print $1}')"
+          if [[ -n "$EXISTING_SHA" && "$EXISTING_SHA" != "$RELEASE_SHA" ]]; then
+            echo "Tag $TAG already points at $EXISTING_SHA, not prepared commit $RELEASE_SHA." >&2
+            exit 1
+          fi
+          if [[ -z "$EXISTING_SHA" ]]; then
+            git tag "$TAG" "$RELEASE_SHA"
+            git push origin "refs/tags/${TAG}"
+          fi
+
       - name: Verify tag matches VERSION
         if: startsWith(github.ref, 'refs/tags/')
         shell: bash
@@ -33,42 +69,46 @@ jobs:
       - name: Build verified Project Runtime from Framework Source
         run: python3 tools/build_release.py
 
-      # A GitHub Release must stay pinned to the commit its tag points at. Only
-      # a tag ref (tag push, or workflow_dispatch explicitly run against a tag)
-      # is allowed to publish/update a Release; a workflow_dispatch run against
-      # a branch builds and verifies the artifact but stops short of publishing,
-      # since there is no tag commit for the Release to be immutable against.
+      # A published Release is always pinned to the commit its tag points at.
+      # Tag-triggered runs publish directly. release/vX.Y.Z runs prepare and push
+      # that immutable tag first, then publish the same verified HEAD. A normal
+      # workflow_dispatch against a branch remains build-only.
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') || startsWith(github.ref, 'refs/heads/release/v')
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
         shell: bash
         run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            TAG="$GITHUB_REF_NAME"
+          else
+            TAG="v$(cat VERSION)"
+          fi
+          RELEASE_SHA="$(git rev-parse HEAD)"
           ASSET="$(ls dist/Progressive-Context-Project-Runtime-v*.zip | head -n 1)"
           MANIFEST="${ASSET%.zip}.manifest.json"
           CHECKSUMS="dist/SHA256SUMS.txt"
+          TAG_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG}" --jq .object.sha)"
+          if [[ "$TAG_SHA" != "$RELEASE_SHA" ]]; then
+            echo "Tag $TAG points at $TAG_SHA, not this run's verified commit ($RELEASE_SHA)." >&2
+            exit 1
+          fi
           if gh release view "$TAG" >/dev/null 2>&1; then
-            EXISTING_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG}" --jq .object.sha)"
-            if [[ "$EXISTING_SHA" != "$GITHUB_SHA" ]]; then
-              echo "Release $TAG already exists and its tag points at $EXISTING_SHA, not this run's commit ($GITHUB_SHA)." >&2
-              echo "Refusing to overwrite an immutable release with artifacts from a different commit. Cut a new version instead." >&2
-              exit 1
-            fi
             gh release upload "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" --clobber
           else
             gh release create "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" \
-              --target "$GITHUB_SHA" \
+              --target "$RELEASE_SHA" \
               --title "Progressive Context Kit $TAG" \
               --generate-notes
           fi
 
-      - name: Build-only verification (no tag, no publish)
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+      - name: Build-only verification (no release ref, no publish)
+        if: ${{ !startsWith(github.ref, 'refs/tags/') && !startsWith(github.ref, 'refs/heads/release/v') }}
         env:
           BUILD_REF: ${{ github.ref }}
         shell: bash
         run: |
           echo "Built and verified Project Runtime from ref '$BUILD_REF'."
-          echo "Not publishing a GitHub Release: this run is not against a tag."
-          echo "Push a vX.Y.Z tag matching VERSION, or dispatch this workflow against that tag, to publish."
+          echo "Not publishing a GitHub Release: this run is neither a tag nor a release/vX.Y.Z branch."
+          echo "Push a release/vX.Y.Z branch with matching release notes, push a vX.Y.Z tag matching VERSION,"
+          echo "or dispatch this workflow against an existing tag to publish."
