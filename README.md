@@ -8,6 +8,27 @@
 
 > 🇷🇺 Русская версия: [`README_RU.md`](README_RU.md) · detailed guide: [`docs/human/GETTING_STARTED.md`](docs/human/GETTING_STARTED.md)
 
+## Contents
+
+- [Start in 2 minutes](#start-in-2-minutes)
+- [Core model](#core-model)
+- [Runtime layout](#runtime-layout)
+- [One framework, two surfaces](#one-framework-two-surfaces)
+- [Understand the model](#understand-the-model)
+- [Framework Source](#framework-source)
+- [Build the Project Runtime](#build-the-project-runtime)
+- [Personal profile — optional advanced setup](#personal-profile--optional-advanced-setup)
+- [Runtime context model](#runtime-context-model)
+- [Adaptive planning depth](#adaptive-planning-depth)
+- [Execution efficiency](#execution-efficiency)
+- [Measurement and Autoresearch](#measurement-and-autoresearch)
+- [Preferred tooling](#preferred-tooling)
+- [Verify Framework Source](#verify-framework-source)
+- [Verify a Project Runtime](#verify-a-project-runtime)
+- [License](#license)
+- [Contributing](#contributing)
+  
+
 A token-efficient, quality-first, Spec-Driven development framework for AI coding agents. Progressive Context minimizes active context and execution waste while preserving project knowledge, engineering rigor, continuity, and verifiable correctness.
 
 > **Minimize active context, not available knowledge.**
@@ -45,26 +66,6 @@ Current stable asset: `Progressive-Context-Project-Runtime-v2.0.0.zip`.
 For an existing product repository, do not extract a Runtime ZIP over project-owned files. Use the [adoption path](docs/human/GETTING_STARTED.md#10-existing-projects) from a trusted Framework Source checkout instead.
 
 Developing Progressive Context Kit itself? Continue with [Framework Source](#framework-source), not the Runtime download.
-
-## Contents
-
-- [Start in 2 minutes](#start-in-2-minutes)
-- [Core model](#core-model)
-- [Runtime layout](#runtime-layout)
-- [One framework, two surfaces](#one-framework-two-surfaces)
-- [Understand the model](#understand-the-model)
-- [Framework Source](#framework-source)
-- [Build the Project Runtime](#build-the-project-runtime)
-- [Personal profile — optional advanced setup](#personal-profile--optional-advanced-setup)
-- [Runtime context model](#runtime-context-model)
-- [Adaptive planning depth](#adaptive-planning-depth)
-- [Execution efficiency](#execution-efficiency)
-- [Measurement and Autoresearch](#measurement-and-autoresearch)
-- [Preferred tooling](#preferred-tooling)
-- [Verify Framework Source](#verify-framework-source)
-- [Verify a Project Runtime](#verify-a-project-runtime)
-- [License](#license)
-- [Contributing](#contributing)
 
 ## Core model
 
