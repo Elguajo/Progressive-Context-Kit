@@ -78,6 +78,58 @@ class UbiquitousLanguageTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn('repeats canonical terms: capture', result.stdout)
 
+    def test_runtime_audit_counts_commonmark_indented_entries(self):
+        with tempfile.TemporaryDirectory() as d:
+            runtime = Path(d) / 'runtime'
+            write_runtime(ROOT, runtime)
+            terms = '\n'.join(f'   - Term{i} — Meaning {i}.' for i in range(1, 14))
+            brief = runtime / '.progressive/project/PROJECT_BRIEF.md'
+            brief.write_text('# Project Brief\n\n## Ubiquitous Language\n' + terms + '\n', encoding='utf-8')
+            result = subprocess.run(
+                [sys.executable, str(runtime / '.progressive/tools/audit.py'), '--root', str(runtime)],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn('exceeds 12-term guidance: 13 terms', result.stdout)
+
+    def test_runtime_audit_normalizes_markdown_term_formatting_for_duplicates(self):
+        with tempfile.TemporaryDirectory() as d:
+            runtime = Path(d) / 'runtime'
+            write_runtime(ROOT, runtime)
+            brief = runtime / '.progressive/project/PROJECT_BRIEF.md'
+            brief.write_text(
+                '# Project Brief\n\n## Ubiquitous Language\n'
+                '- Capture — Charge an authorized payment.\n'
+                '- **Capture** — Finalize the transaction.\n',
+                encoding='utf-8',
+            )
+            result = subprocess.run(
+                [sys.executable, str(runtime / '.progressive/tools/audit.py'), '--root', str(runtime)],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn('repeats canonical terms: capture', result.stdout)
+
+    def test_runtime_audit_warns_on_malformed_vocabulary_entry(self):
+        with tempfile.TemporaryDirectory() as d:
+            runtime = Path(d) / 'runtime'
+            write_runtime(ROOT, runtime)
+            brief = runtime / '.progressive/project/PROJECT_BRIEF.md'
+            brief.write_text(
+                '# Project Brief\n\n## Ubiquitous Language\n'
+                '- Capture\n',
+                encoding='utf-8',
+            )
+            result = subprocess.run(
+                [sys.executable, str(runtime / '.progressive/tools/audit.py'), '--root', str(runtime)],
+                capture_output=True,
+                text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn('has malformed entries: Capture', result.stdout)
+
 
 if __name__ == '__main__':
     unittest.main()

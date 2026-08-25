@@ -35,6 +35,7 @@ New to terms such as `PC-012`, ADR, Default Read Set, Completion Record, or `NEX
 - [Build the Project Runtime](#build-the-project-runtime)
 - [Personal profile — optional advanced setup](#personal-profile--optional-advanced-setup)
 - [Runtime context model](#runtime-context-model)
+- [Adaptive planning depth](#adaptive-planning-depth)
 - [Execution efficiency](#execution-efficiency)
 - [Measurement and Autoresearch](#measurement-and-autoresearch)
 - [Preferred tooling](#preferred-tooling)
@@ -120,6 +121,8 @@ My idea:
 ```
 
 Visual onboarding: [`docs/visuals/user-onboarding.md`](docs/visuals/user-onboarding.md).
+
+For an existing product repository, do not unpack a Runtime ZIP over project-owned files. Use the adoption path in [`docs/human/GETTING_STARTED.md`](docs/human/GETTING_STARTED.md#10-existing-projects) from a trusted Framework Source checkout instead.
 
 ## One framework, two surfaces
 
@@ -226,6 +229,16 @@ Repository Behavior
 
 not the whole framework, whole project history, every Skill, every decision, and every available document on every turn.
 
+## Adaptive planning depth
+
+Progressive chooses the smallest planning depth that protects the work:
+
+- **DIRECT** for clear, local, low-risk, reversible changes;
+- **FOCUSED** for normal multi-file product work;
+- **FULL** when uncertainty, architecture, high-risk boundaries, or public contracts make deeper planning worthwhile.
+
+Planning depth controls only how much durable specification is created before implementation. It never relaxes correctness, safety, acceptance criteria, validation, or project-state integrity. See [`docs/system/PLANNING_DEPTH.md`](docs/system/PLANNING_DEPTH.md) for the selection rules.
+
 ## Execution efficiency
 
 Progressive Context also optimizes **how the agent works after context is loaded**. Current Framework Source protects execution-efficiency behavior for:
@@ -281,13 +294,21 @@ Visual routing explanation: [`docs/visuals/tool-routing.md`](docs/visuals/tool-r
 
 ## Verify Framework Source
 
-The canonical release path runs the required Source checks:
+The canonical local verification path is:
+
+```bash
+python3 tools/gate.py
+```
+
+It runs profile and Skill mirror checks, contracts and invariants, tool-routing checks, Autoresearch record validation, source audits, the context-budget report, and the regression suite. A successful gate verifies Framework Source integrity; it is not empirical proof of model quality.
+
+The canonical release path runs the same gate before packaging:
 
 ```bash
 python3 tools/build_release.py
 ```
 
-For focused local verification:
+Run individual validators only to diagnose a failed gate or while deliberately working on one validation surface:
 
 ```bash
 python3 tools/behavior_contract.py

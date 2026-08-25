@@ -35,6 +35,7 @@ Correctness, safety, security, acceptance criteria и обязательная v
 - [Сборка Project Runtime](#сборка-project-runtime)
 - [Personal profile — опционально](#personal-profile--опционально)
 - [Runtime context](#runtime-context)
+- [Адаптивная глубина планирования](#адаптивная-глубина-планирования)
 - [Execution Efficiency](#execution-efficiency)
 - [Measurement и Autoresearch](#measurement-и-autoresearch)
 - [Preferred tooling](#preferred-tooling)
@@ -120,6 +121,8 @@ My idea:
 ```
 
 Визуальный onboarding: [`docs/visuals/user-onboarding.md`](docs/visuals/user-onboarding.md).
+
+Если продуктовый репозиторий уже существует, не распаковывай Runtime ZIP поверх project-owned файлов. Вместо этого используй путь adoption из [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md#10-existing-projects) в доверенном checkout Framework Source.
 
 ## Один framework — две поверхности
 
@@ -226,6 +229,16 @@ Repository Behavior
 
 а не весь framework, вся история проекта, каждый Skill, каждое решение и каждый доступный документ на каждом turn.
 
+## Адаптивная глубина планирования
+
+Progressive выбирает минимальную глубину планирования, достаточную для безопасной работы:
+
+- **DIRECT** — для ясных, локальных, низкорисковых и обратимых изменений;
+- **FOCUSED** — для обычной продуктовой работы в нескольких файлах;
+- **FULL** — когда глубокое планирование оправдано неопределённостью, архитектурой, high-risk границами или публичными контрактами.
+
+Глубина планирования определяет только объём durable specification до реализации. Она никогда не ослабляет correctness, safety, acceptance criteria, validation или целостность project state. Правила выбора: [`docs/system/PLANNING_DEPTH.md`](docs/system/PLANNING_DEPTH.md).
+
 ## Execution Efficiency
 
 Progressive Context оптимизирует не только **что загружается**, но и **как агент работает после загрузки контекста**. Текущий Framework Source защищает поведение для:
@@ -281,13 +294,21 @@ Framework Source сохраняет **Semble, Serena, RTK, Superpowers, gstack, 
 
 ## Проверка Framework Source
 
-Канонический release path запускает необходимые Source checks:
+Канонический локальный путь проверки:
+
+```bash
+python3 tools/gate.py
+```
+
+Он запускает проверки зеркал profiles и Skills, contracts и invariants, tool routing, записи Autoresearch, Source audit, context-budget report и regression suite. Успешный gate подтверждает целостность Framework Source, но не служит эмпирическим доказательством качества модели.
+
+Канонический release path запускает тот же gate перед упаковкой:
 
 ```bash
 python3 tools/build_release.py
 ```
 
-Для focused local verification:
+Отдельные validators запускай только для диагностики упавшего gate или при целенаправленной работе над одной поверхностью проверки:
 
 ```bash
 python3 tools/behavior_contract.py

@@ -63,17 +63,31 @@ def verify_ubiquitous_language(root, warns):
     if not match:
         return
     section = match.group(1)
-    entries = [line for line in section.splitlines() if re.match(r'^-\s+\S', line)]
+    entries = [line for line in section.splitlines() if re.match(r'^ {0,3}-\s+\S', line)]
     if len(entries) > 12:
         warns.append(f'Project Brief Ubiquitous Language exceeds 12-term guidance: {len(entries)} terms')
     if len(section) > 1800:
         warns.append(f'Project Brief Ubiquitous Language is large for default context: {len(section)} chars')
     terms = []
+    malformed = []
     for line in entries:
-        body = re.sub(r'^-\s+', '', line).strip()
-        term = re.split(r'\s+[—-]\s+', body, maxsplit=1)[0].strip().casefold()
+        body = re.sub(r'^ {0,3}-\s+', '', line).strip()
+        parts = re.split(r'\s+[—-]\s+', body, maxsplit=1)
+        if len(parts) != 2 or not all(part.strip() for part in parts):
+            malformed.append(body)
+            continue
+        term = parts[0].strip()
+        for marker in ('**', '__', '`', '*', '_'):
+            if term.startswith(marker) and term.endswith(marker) and len(term) > 2 * len(marker):
+                term = term[len(marker):-len(marker)].strip()
+                break
+        term = re.sub(r'\s+', ' ', term).casefold()
         if term:
             terms.append(term)
+    if malformed:
+        sample = ', '.join(value[:80] for value in malformed[:3])
+        suffix = f' (+{len(malformed) - 3} more)' if len(malformed) > 3 else ''
+        warns.append('Project Brief Ubiquitous Language has malformed entries: '+sample+suffix)
     duplicates = sorted({term for term in terms if terms.count(term) > 1})
     if duplicates:
         warns.append('Project Brief Ubiquitous Language repeats canonical terms: '+', '.join(duplicates))
