@@ -28,7 +28,7 @@
 - [License](#license)
 - [Contributing](#contributing)
   
-
+# About
 A token-efficient, quality-first, Spec-Driven development framework for AI coding agents. Progressive Context minimizes active context and execution waste while preserving project knowledge, engineering rigor, continuity, and verifiable correctness.
 
 > **Minimize active context, not available knowledge.**
