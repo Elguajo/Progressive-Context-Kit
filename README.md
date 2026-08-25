@@ -1,4 +1,5 @@
 <div align="center">
+
 # Progressive Context Kit
 
 **Token-Efficient · Quality-First · Spec-Driven**
