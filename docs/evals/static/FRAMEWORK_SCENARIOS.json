@@ -56,6 +56,12 @@
       "description":"Framework maintainers add or change a Skill without changing ordinary routing behavior.",
       "covers":["FW-066"],
       "expected":"Every canonical Skill declares automatic, explicit, or both activation in frontmatter; the metadata remains in the task-triggered Skill layer rather than expanding always-loaded instructions."
+    },
+    {
+      "id":"unified-progressive-gate",
+      "description":"Framework maintainers or release automation need one complete static/integrity verification entrypoint without duplicating the check sequence across CI, release, and Skills.",
+      "covers":["FW-067"],
+      "expected":"tools/gate.py is the single Framework Source verification orchestrator; CI, release, and workflow-audit delegate to it, child validators remain independently executable, Project Runtime keeps its separate local audit surface, and a gate PASS is not presented as empirical model-quality evidence."
     }
   ]
 }

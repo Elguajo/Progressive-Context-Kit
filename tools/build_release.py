@@ -48,28 +48,12 @@ def git_commit(root: Path) -> str | None:
 
 
 def verify_source(root: Path, run_unit_tests: bool) -> None:
-    # Generated mirrors must already be synchronized. Release builds fail on
-    # drift rather than mutating canonical Source silently.
-    for script in [
-        "tools/sync_profiles.py",
-        "tools/sync_skills.py",
-        "tools/behavior_contract.py",
-        "tools/framework_contract.py",
-        "tools/routing_integrity.py",
-        "tools/autoresearch.py validate",
-        "tools/duplication_audit.py",
-        "tools/audit.py",
-    ]:
-        run(root, *script.split())
-
-    if run_unit_tests:
-        print("+", sys.executable, "-m unittest discover -s tools/tests -v")
-        result = subprocess.run(
-            [sys.executable, "-m", "unittest", "discover", "-s", "tools/tests", "-v"],
-            cwd=root,
-        )
-        if result.returncode:
-            raise SystemExit(result.returncode)
+    # tools/gate.py is the single Framework Source verification orchestrator and owns
+    # "tools/autoresearch.py validate" plus the other static/integrity checks.
+    args = ["tools/gate.py"]
+    if not run_unit_tests:
+        args.append("--skip-unit-tests")
+    run(root, *args)
 
 
 def build_runtime(root: Path, profile: str, agent: str) -> Path:
@@ -112,6 +96,7 @@ def write_release_metadata(root: Path, artifact: Path, profile: str, agent: str)
         "sha256": digest,
         "size_bytes": artifact.stat().st_size,
         "validation": {
+            "source_gate": True,
             "source_contracts": True,
             "routing_integrity": True,
             "autoresearch_records": True,
