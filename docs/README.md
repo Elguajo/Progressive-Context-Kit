@@ -20,7 +20,7 @@ Normal coding sessions must **not** recursively read this directory.
 - `evals/agent/` — controlled real-agent evaluation protocol.
 - `integrations/` — branded preferred tool registry/adapters; read only for selection/setup/routing.
 
-## Human-only onboarding
-`human/GETTING_STARTED.md` is for people installing/using the framework. It is not normal agent warm-up context and is intentionally excluded from the Project Runtime build.
+## Human-only documentation
+`human/GETTING_STARTED.md` is for people installing/using the framework, and `human/TECHNICAL_REFERENCE.md` is for integration and maintenance details. They are not normal agent warm-up context and are intentionally excluded from the Project Runtime build.
 
 `DESIGN_RATIONALE.md`, `TOKEN_BUDGETS.md`, `BASELINE_COMPARISON.md`, and `COMPATIBILITY.md` are also framework/reference docs, not normal task warm-up context.
