@@ -5,6 +5,7 @@
 **Token-Efficient · Quality-First · Spec-Driven**
 
 [![Release](https://img.shields.io/github/v/release/Elguajo/Progressive-Context-Kit?label=release)](https://github.com/Elguajo/Progressive-Context-Kit/releases/latest)
+[![CI](https://github.com/Elguajo/Progressive-Context-Kit/actions/workflows/audit.yml/badge.svg)](https://github.com/Elguajo/Progressive-Context-Kit/actions/workflows/audit.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Contributing](https://img.shields.io/badge/contributions-guide-informational.svg)](CONTRIBUTING.md)
 
@@ -78,6 +79,10 @@ Progressive Context Kit — quality-first framework для AI coding-агент�
 ## Вклад в проект
 
 Этот репозиторий предназначен для разработки самого Progressive Context Kit. Правила вкладов и канонический путь проверки: [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Безопасность
+
+Политика безопасности проекта: [`SECURITY.md`](SECURITY.md).
 
 ## Лицензия
 

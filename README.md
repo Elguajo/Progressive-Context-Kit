@@ -5,6 +5,7 @@
 **Token-Efficient · Quality-First · Spec-Driven**
 
 [![Release](https://img.shields.io/github/v/release/Elguajo/Progressive-Context-Kit?label=release)](https://github.com/Elguajo/Progressive-Context-Kit/releases/latest)
+[![CI](https://github.com/Elguajo/Progressive-Context-Kit/actions/workflows/audit.yml/badge.svg)](https://github.com/Elguajo/Progressive-Context-Kit/actions/workflows/audit.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Contributing](https://img.shields.io/badge/contributions-guide-informational.svg)](CONTRIBUTING.md)
 
@@ -78,6 +79,10 @@ A single `AGENTS.md` can be enough for a small, stable repository. Progressive C
 ## Contributing
 
 Use this repository to develop Progressive Context Kit itself. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the canonical verification path and contribution rules.
+
+## Security
+
+See [`SECURITY.md`](SECURITY.md) for the project's security policy.
 
 ## License
 
