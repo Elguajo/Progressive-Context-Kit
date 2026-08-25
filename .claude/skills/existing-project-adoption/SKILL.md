@@ -1,6 +1,7 @@
 ---
 name: existing-project-adoption
 description: Safely adopt Progressive Context Spec Kit into an existing repository and reconstruct canonical project state from evidence.
+activation: automatic
 ---
 
 # Existing Project Adoption

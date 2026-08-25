@@ -1,6 +1,7 @@
 ---
 name: security-sensitive-change
 description: Auth, payments, permissions, secrets, private data, untrusted input, webhooks, migrations, destructive actions, redirects, CSRF, SQL construction, or trust-boundary changes.
+activation: automatic
 ---
 
 # Security-Sensitive Change

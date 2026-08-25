@@ -10,6 +10,7 @@ from context_compile import completion_bridge, completion_record
 
 EXPECTED_FALLBACK={'ROLE','TASK_CLASSIFICATION','REPOSITORY_GROUNDING','ENGINEERING_PRINCIPLES','DECISION_WORKFLOW','CODE_REVIEW_MODE','IMPLEMENTATION','VALIDATION_LOOP','SAFETY_AND_APPROVALS','DOCUMENTATION_UPDATE_APPROVAL','FINAL_REPORT','COMMUNICATION_STYLE'}
 EXPECTED_SKILLS={'architecture-decision','code-review','documentation-governance','project-bootstrap','existing-project-adoption','tooling-bootstrap','project-doctor','security-sensitive-change','session-handoff','systematic-debugging','workflow-audit','implementation-execution'}
+ALLOWED_SKILL_ACTIVATION={'automatic','explicit','both'}
 EXPECTED_TOOLS={'semble','serena','rtk','superpowers','gstack','context7','github_spec_kit'}
 # Mirrors the literal figures hardcoded in verify_profiles (kept literal there since a
 # Behavior Contract anchor pins that exact substring); used here to check docs don't drift.
@@ -21,7 +22,7 @@ REQUIRED=[
 'integrations/TOOL_REGISTRY.json','integrations/PROFILES.md',
 'docs/project/TOOLING_STATUS.json','docs/project/CONTEXT_MANIFEST.json',
 'docs/migration/COVERAGE_MATRIX.json','docs/migration/BEHAVIOR_CONTRACT.json','docs/migration/BEHAVIOR_IDS.sha256','docs/migration/ORIGINAL_CUSTOM_INSTRUCTIONS.txt','docs/migration/ORIGINAL_CUSTOM_INSTRUCTIONS.sha256',
-'docs/contracts/FRAMEWORK_CONTRACT.json','docs/contracts/FRAMEWORK_IDS.sha256',
+'docs/contracts/FRAMEWORK_CONTRACT.json','docs/contracts/FRAMEWORK_IDS.sha256','docs/contracts/SKILL_ACTIVATION.md',
 'docs/evals/static/BEHAVIOR_SCENARIOS.json','docs/evals/static/FRAMEWORK_SCENARIOS.json','docs/evals/agent/MODEL_EVAL_PROTOCOL.md',
 'templates/PHASE.template.md','templates/CONTEXT_MANIFEST.template.json',
 'tools/context_report.py','tools/context_compile.py','tools/runtime_layout.py','tools/runtime_audit.py','tools/build_runtime.py','tools/build_release.py','tools/behavior_contract.py','tools/framework_contract.py','tools/duplication_audit.py','tools/sync_profiles.py','tools/sync_skills.py','tools/tooling_status.py','tools/tooling_bootstrap.py','tools/init_project.py']
@@ -69,9 +70,13 @@ def verify_skills(root,errors):
     if set(src)!=set(dst): errors.append('Codex/Claude Skill sets differ')
     for name in set(src)&set(dst):
         if src[name].read_bytes()!=dst[name].read_bytes(): errors.append('Skill mirror drift: '+name)
-        text=read(src[name]); mn=re.search(r'^name:\s*(.+)$',text,re.M); md=re.search(r'^description:\s*(.+)$',text,re.M)
+        text=read(src[name]); mn=re.search(r'^name:\s*(.+)$',text,re.M); md=re.search(r'^description:\s*(.+)$',text,re.M); ma=re.search(r'^activation:\s*(.+)$',text,re.M)
         if not mn or mn.group(1).strip()!=name: errors.append('Skill frontmatter name mismatch: '+name)
         if not md or not md.group(1).strip(): errors.append('Skill description missing: '+name)
+        if not ma or not ma.group(1).strip():
+            errors.append('Skill activation missing: '+name)
+        elif ma.group(1).strip() not in ALLOWED_SKILL_ACTIVATION:
+            errors.append('Skill activation invalid: '+name+'='+ma.group(1).strip())
 
 def verify_tooling(root,errors):
     try:

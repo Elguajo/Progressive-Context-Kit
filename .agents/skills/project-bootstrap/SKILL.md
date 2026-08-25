@@ -1,6 +1,7 @@
 ---
 name: project-bootstrap
 description: Initialize Progressive Context Spec Kit for a new/greenfield product.
+activation: automatic
 ---
 
 # Project Bootstrap

@@ -1,6 +1,7 @@
 ---
 name: documentation-governance
 description: Material edits to durable governance, architecture, ownership, project-policy, or decision documentation.
+activation: automatic
 ---
 
 # Documentation Governance

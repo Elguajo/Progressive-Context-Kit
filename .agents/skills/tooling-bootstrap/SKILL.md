@@ -1,6 +1,7 @@
 ---
 name: tooling-bootstrap
 description: Select, check, request approval for, install/configure, verify, and persist preferred branded development tools when materially useful.
+activation: automatic
 ---
 
 # Tooling Bootstrap

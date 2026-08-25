@@ -1,6 +1,7 @@
 ---
 name: workflow-audit
 description: Verify Progressive Context integrity at the appropriate layer without loading framework maintenance evidence into normal product work.
+activation: explicit
 ---
 
 # Workflow Audit

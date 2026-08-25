@@ -1,6 +1,7 @@
 ---
 name: code-review
 description: Review code, a diff, pull request, or pasted implementation.
+activation: automatic
 ---
 
 # Code Review

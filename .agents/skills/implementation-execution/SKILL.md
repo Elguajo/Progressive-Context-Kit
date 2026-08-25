@@ -1,6 +1,7 @@
 ---
 name: implementation-execution
 description: Non-trivial implementation after direction is clear, including feature work and complete bug-fix execution.
+activation: automatic
 ---
 
 # Implementation Execution

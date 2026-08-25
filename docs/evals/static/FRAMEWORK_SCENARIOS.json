@@ -50,6 +50,12 @@
       "description":"A new project or change request needs enough planning for correctness without generating unnecessary specification work.",
       "covers":["FW-061","FW-062","FW-063","FW-064","FW-065"],
       "expected":"The agent selects the smallest sufficient DIRECT/FOCUSED/FULL depth from uncertainty, architectural reach, risk, reversibility, and contract impact rather than size alone; new projects persist the selected depth, later changes re-evaluate it independently, and the protocol is available in Project Runtime. Lower planning depth never bypasses required engineering, safety, acceptance, or validation work."
+    },
+    {
+      "id":"skill-activation-metadata",
+      "description":"Framework maintainers add or change a Skill without changing ordinary routing behavior.",
+      "covers":["FW-066"],
+      "expected":"Every canonical Skill declares automatic, explicit, or both activation in frontmatter; the metadata remains in the task-triggered Skill layer rather than expanding always-loaded instructions."
     }
   ]
 }

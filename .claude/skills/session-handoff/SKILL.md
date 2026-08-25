@@ -1,6 +1,7 @@
 ---
 name: session-handoff
 description: End of a meaningful implementation/review session or phase transition.
+activation: automatic
 ---
 
 # Session Handoff

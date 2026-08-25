@@ -1,6 +1,7 @@
 ---
 name: project-doctor
 description: Project status, routing, stale docs, blockers, or next action is unclear.
+activation: automatic
 ---
 
 # Project Doctor

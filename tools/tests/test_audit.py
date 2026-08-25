@@ -40,6 +40,26 @@ class AuditTests(unittest.TestCase):
             p=next((dst/'.claude/skills').glob('*/SKILL.md')); p.write_text('drift')
             self.assertNotEqual(self.run_audit(dst).returncode,0)
 
+    def test_missing_skill_activation_fails(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            name='implementation-execution'
+            p=dst/'.agents/skills'/name/'SKILL.md'; text=p.read_text().replace('activation: automatic\n','')
+            p.write_text(text); (dst/'.claude/skills'/name/'SKILL.md').write_text(text)
+            result=self.run_audit(dst)
+            self.assertNotEqual(result.returncode,0)
+            self.assertIn('Skill activation missing: '+name,result.stdout)
+
+    def test_invalid_skill_activation_fails(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            name='implementation-execution'
+            p=dst/'.agents/skills'/name/'SKILL.md'; text=p.read_text().replace('activation: automatic','activation: dynamic')
+            p.write_text(text); (dst/'.claude/skills'/name/'SKILL.md').write_text(text)
+            result=self.run_audit(dst)
+            self.assertNotEqual(result.returncode,0)
+            self.assertIn('Skill activation invalid: '+name+'=dynamic',result.stdout)
+
     def test_archive_hash_mutation_fails(self):
         with tempfile.TemporaryDirectory() as d:
             dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))

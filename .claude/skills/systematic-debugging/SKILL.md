@@ -1,6 +1,7 @@
 ---
 name: systematic-debugging
 description: Bug or failure whose root cause is unclear, intermittent, stateful, or cross-boundary.
+activation: automatic
 ---
 
 # Systematic Debugging

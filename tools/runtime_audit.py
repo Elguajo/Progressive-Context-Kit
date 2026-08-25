@@ -5,6 +5,7 @@ from common import chars, current_phase, project_file, read, resolve_path, templ
 from context_compile import completion_bridge, completion_record
 
 EXPECTED_SKILLS = {'architecture-decision','code-review','documentation-governance','project-bootstrap','existing-project-adoption','tooling-bootstrap','project-doctor','security-sensitive-change','session-handoff','systematic-debugging','workflow-audit','implementation-execution'}
+ALLOWED_SKILL_ACTIVATION = {'automatic','explicit','both'}
 EXPECTED_TOOLS = {'semble','serena','rtk','superpowers','gstack','context7','github_spec_kit'}
 REQUIRED = [
     'AGENTS.md','CLAUDE.md','.progressive/VERSION','.progressive/PROFILE','.progressive/AGENT_TARGET','.progressive/ADOPTION_STATE',
@@ -37,6 +38,12 @@ def verify_skills(root, errors):
     if set(a) != set(c): errors.append('Codex/Claude Skill sets differ')
     for name in set(a) & set(c):
         if a[name].read_bytes() != c[name].read_bytes(): errors.append('Skill mirror drift: '+name)
+        text = read(a[name])
+        ma = re.search(r'^activation:\s*(.+)$', text, re.M)
+        if not ma or not ma.group(1).strip():
+            errors.append('Skill activation missing: '+name)
+        elif ma.group(1).strip() not in ALLOWED_SKILL_ACTIVATION:
+            errors.append('Skill activation invalid: '+name+'='+ma.group(1).strip())
 
 def verify_tooling(root, errors):
     try:

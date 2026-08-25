@@ -1,6 +1,7 @@
 ---
 name: architecture-decision
 description: Material architecture/technology fork with genuinely different strategies.
+activation: automatic
 ---
 
 # Architecture Decision
