@@ -25,10 +25,32 @@ Correctness, safety, security, acceptance criteria и обязательная v
 
 Если непонятны термины вроде `PC-012`, ADR, Default Read Set, Completion Record или `NEXT_SESSION`, смотри human-only [`Глоссарий`](docs/human/GLOSSARY.ru.md).
 
+## Запуск за 2 минуты
+
+Для нового продукта:
+
+1. [Скачай последний Project Runtime](https://github.com/Elguajo/Progressive-Context-Kit/releases/latest) и распакуй его в каталог будущего проекта.
+2. Открой этот каталог в Codex или Claude Code. Runtime самодостаточен по умолчанию: глобальная настройка не требуется.
+3. Отправь первый prompt:
+
+   ```text
+   Use .progressive/prompts/START_NEW_PROJECT.md.
+
+   My idea:
+   <опиши продукт, пользователей, реальные ограничения и явные non-goals>
+   ```
+
+Текущий стабильный asset: `Progressive-Context-Project-Runtime-v2.0.0.zip`.
+
+Если продуктовый репозиторий уже существует, не распаковывай Runtime ZIP поверх project-owned файлов. Вместо этого используй [путь adoption](docs/human/GETTING_STARTED.ru.md#10-existing-projects) в доверенном checkout Framework Source.
+
+Разрабатываешь сам Progressive Context Kit? Переходи к разделу [Framework Source](#когда-нужен-framework-source), а не к Runtime download.
+
 ## Содержание
 
+- [Запуск за 2 минуты](#запуск-за-2-минуты)
 - [Основная модель](#основная-модель)
-- [С чего начать — для большинства пользователей](#с-чего-начать--для-большинства-пользователей)
+- [Структура Runtime](#структура-runtime)
 - [Один framework — две поверхности](#один-framework--две-поверхности)
 - [Понять модель](#понять-модель)
 - [Когда нужен Framework Source](#когда-нужен-framework-source)
@@ -81,19 +103,7 @@ flowchart LR
     COLD -. читать только при необходимости .-> W
 ```
 
-## С чего начать — для большинства пользователей
-
-**Не копируй весь этот GitHub-репозиторий в свой проект.**
-
-Этот репозиторий — **Framework Source**: исходники для разработки, тестирования, измерения, документации и выпуска Progressive Context Kit.
-
-Для нового проекта скачай последний стабильный release asset из **GitHub Releases**:
-
-**`Progressive-Context-Project-Runtime-v2.0.0.zip`**
-
-https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
-
-Ветка `main` может содержать ещё не выпущенные framework-development, evaluation, benchmark и Autoresearch изменения. Release asset — стабильный пользовательский Project Runtime.
+## Структура Runtime
 
 Project Runtime специально собран так, чтобы framework почти не был виден внутри реального проекта:
 
@@ -109,20 +119,9 @@ my-project/
 
 В корне проекта не появляются видимые framework-папки `global/`, `integrations/`, `profiles/`, `prompts/`, `templates/`, `tools` и `docs/`.
 
-Project Runtime по умолчанию использует **Standalone profile**. Поэтому новый пользователь может распаковать архив и сразу открыть Claude Code или Codex без предварительной настройки home-level global instructions.
-
-Первый prompt:
-
-```text
-Use .progressive/prompts/START_NEW_PROJECT.md.
-
-My idea:
-<опиши продукт, пользователей, реальные ограничения и явные non-goals>
-```
+Project Runtime по умолчанию использует **Standalone profile**. Поэтому новый пользователь может сразу открыть Codex или Claude Code без предварительной настройки home-level global instructions. Ветка `main` может содержать ещё не выпущенные framework-development, evaluation, benchmark и Autoresearch изменения; для стабильного пользовательского Runtime используй asset из GitHub Release.
 
 Визуальный onboarding: [`docs/visuals/user-onboarding.md`](docs/visuals/user-onboarding.md).
-
-Если продуктовый репозиторий уже существует, не распаковывай Runtime ZIP поверх project-owned файлов. Вместо этого используй путь adoption из [`docs/human/GETTING_STARTED.ru.md`](docs/human/GETTING_STARTED.ru.md#10-existing-projects) в доверенном checkout Framework Source.
 
 ## Один framework — две поверхности
 

@@ -25,10 +25,32 @@ Correctness, safety, security, acceptance criteria, and required validation alwa
 
 New to terms such as `PC-012`, ADR, Default Read Set, Completion Record, or `NEXT_SESSION`? See the human-only [`Glossary`](docs/human/GLOSSARY.md).
 
+## Start in 2 minutes
+
+For a new product:
+
+1. [Download the latest Project Runtime](https://github.com/Elguajo/Progressive-Context-Kit/releases/latest) and extract it into the directory that will contain your project.
+2. Open that directory in Codex or Claude Code. The default Runtime is self-contained: no global setup is required.
+3. Send this first prompt:
+
+   ```text
+   Use .progressive/prompts/START_NEW_PROJECT.md.
+
+   My idea:
+   <describe the desired product, users, real constraints, and explicit non-goals>
+   ```
+
+Current stable asset: `Progressive-Context-Project-Runtime-v2.0.0.zip`.
+
+For an existing product repository, do not extract a Runtime ZIP over project-owned files. Use the [adoption path](docs/human/GETTING_STARTED.md#10-existing-projects) from a trusted Framework Source checkout instead.
+
+Developing Progressive Context Kit itself? Continue with [Framework Source](#framework-source), not the Runtime download.
+
 ## Contents
 
+- [Start in 2 minutes](#start-in-2-minutes)
 - [Core model](#core-model)
-- [Start here — most users](#start-here--most-users)
+- [Runtime layout](#runtime-layout)
 - [One framework, two surfaces](#one-framework-two-surfaces)
 - [Understand the model](#understand-the-model)
 - [Framework Source](#framework-source)
@@ -81,21 +103,9 @@ flowchart LR
     COLD -. read only when evidence requires it .-> W
 ```
 
-## Start here — most users
+## Runtime layout
 
-Do **not** copy this whole repository into your product.
-
-This repository is the **Framework Source** used to develop, test, measure, document, and release Progressive Context Kit itself.
-
-For a new project, download the latest stable release asset from **GitHub Releases**:
-
-**`Progressive-Context-Project-Runtime-v2.0.0.zip`**
-
-https://github.com/Elguajo/Progressive-Context-Kit/releases/latest
-
-The `main` branch may contain unreleased framework-development, evaluation, benchmark, and Autoresearch changes. The release asset is the stable user-facing Project Runtime.
-
-The Project Runtime is intentionally small and self-contained. After extraction, Progressive occupies only standard agent entrypoints plus hidden framework directories:
+The Project Runtime is intentionally small and self-contained. After extraction, it contains only standard agent entrypoints plus hidden framework directories:
 
 ```text
 my-project/
@@ -109,20 +119,9 @@ my-project/
 
 You will **not** get visible framework folders such as `global/`, `integrations/`, `profiles/`, `prompts/`, `templates/`, `tools`, or `docs/` in the product root.
 
-The default Project Runtime uses the **Standalone profile**, so a new user can extract it and start Claude Code or Codex without first configuring home-level global instructions.
-
-Start a new project with:
-
-```text
-Use .progressive/prompts/START_NEW_PROJECT.md.
-
-My idea:
-<describe the desired product, users, real constraints, and explicit non-goals>
-```
+The default Runtime uses the **Standalone profile**, so a new user can start Codex or Claude Code without configuring home-level global instructions. The `main` branch may contain unreleased framework-development, evaluation, benchmark, and Autoresearch changes; use the GitHub Release asset for the stable user-facing Runtime.
 
 Visual onboarding: [`docs/visuals/user-onboarding.md`](docs/visuals/user-onboarding.md).
-
-For an existing product repository, do not unpack a Runtime ZIP over project-owned files. Use the adoption path in [`docs/human/GETTING_STARTED.md`](docs/human/GETTING_STARTED.md#10-existing-projects) from a trusted Framework Source checkout instead.
 
 ## One framework, two surfaces
 
