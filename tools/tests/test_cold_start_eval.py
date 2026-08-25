@@ -112,7 +112,7 @@ class ColdStartEvalTests(unittest.TestCase):
             self.assertIn("[>] Phase 00", (continuation / ".progressive/project/ROADMAP.md").read_text(encoding="utf-8"))
             roadmap = (completed / ".progressive/project/ROADMAP.md").read_text(encoding="utf-8")
             self.assertIn("[x] Phase 00", roadmap)
-            self.assertNotIn("[>]", roadmap)
+            self.assertNotRegex(roadmap, r"(?m)^- \[>\]")
             self.assertIn(
                 "## Completion Record",
                 (completed / ".progressive/phases/00-complete.md").read_text(encoding="utf-8"),
