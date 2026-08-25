@@ -1,4 +1,4 @@
-<div aling=center>
+<div aling="center">
 # Progressive Context Kit
 
 **Token-Efficient · Quality-First · Spec-Driven**
