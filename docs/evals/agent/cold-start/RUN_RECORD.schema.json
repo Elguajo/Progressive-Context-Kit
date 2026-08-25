@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Elguajo/Progressive-Context-Kit/docs/evals/agent/cold-start/RUN_RECORD.schema.json",
+  "title": "Progressive Context Kit Cold-Start Transfer Run Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "suite_id",
+    "suite_run_id",
+    "scenario_id",
+    "agent",
+    "model",
+    "reasoning",
+    "workflow_ref",
+    "controls",
+    "observation"
+  ],
+  "properties": {
+    "schema": {"const": 1},
+    "suite_id": {"const": "cold-start-runtime-transfer-v1"},
+    "suite_run_id": {"type": "string", "minLength": 1},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "agent": {"type": "string", "minLength": 1},
+    "model": {"type": "string", "minLength": 1},
+    "reasoning": {"type": "string", "minLength": 1},
+    "workflow_ref": {"type": "string", "minLength": 1},
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repo_snapshot",
+        "prompt_sha256",
+        "tools_profile",
+        "permissions_profile",
+        "environment_profile",
+        "fresh_session"
+      ],
+      "properties": {
+        "repo_snapshot": {"type": "string", "minLength": 1},
+        "prompt_sha256": {"type": "string", "minLength": 1},
+        "tools_profile": {"type": "string", "minLength": 1},
+        "permissions_profile": {"type": "string", "minLength": 1},
+        "environment_profile": {"type": "string", "minLength": 1},
+        "fresh_session": {"type": "boolean"}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rescue_turns",
+        "routed_skills",
+        "planning_depth",
+        "stopped_for_user_direction",
+        "state_checks",
+        "hard_failures"
+      ],
+      "properties": {
+        "rescue_turns": {"type": "integer", "minimum": 0},
+        "routed_skills": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "planning_depth": {
+          "type": ["string", "null"],
+          "enum": ["DIRECT", "FOCUSED", "FULL", null]
+        },
+        "stopped_for_user_direction": {"type": "boolean"},
+        "state_checks": {
+          "type": "object",
+          "additionalProperties": {"type": "boolean"}
+        },
+        "hard_failures": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "total_tokens": {"type": ["number", "null"], "minimum": 0},
+        "turns": {"type": ["integer", "null"], "minimum": 0},
+        "tool_calls": {"type": ["integer", "null"], "minimum": 0},
+        "file_reads": {"type": ["integer", "null"], "minimum": 0},
+        "wall_time_seconds": {"type": ["number", "null"], "minimum": 0},
+        "token_accounting": {"type": ["string", "null"]}
+      }
+    },
+    "notes": {"type": "string"}
+  }
+}

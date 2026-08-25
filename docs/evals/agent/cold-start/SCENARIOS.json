@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "suite_id": "cold-start-runtime-transfer-v1",
+  "scenarios": [
+    {
+      "id": "greenfield-direct",
+      "setup": "greenfield",
+      "fixture": null,
+      "prompt": "Create a small Python command-line utility `hello.py`. It must accept `--name` and print `Hello, <name>!`. Use only the standard library, add automated tests, and implement it now.",
+      "oracle": {
+        "required_skills": ["project-bootstrap", "implementation-execution"],
+        "forbidden_skills": ["existing-project-adoption"],
+        "acceptable_planning_depths": ["DIRECT"],
+        "stopped_for_user_direction": false,
+        "required_checks": ["task_completed", "project_state_initialized", "one_active_phase", "validation_truthful"]
+      }
+    },
+    {
+      "id": "greenfield-focused",
+      "setup": "greenfield",
+      "fixture": null,
+      "prompt": "Build a small Python notes application with a CLI supporting add, list, and delete, JSON-file persistence, clear error handling, and automated tests. Use only the standard library and implement the complete product.",
+      "oracle": {
+        "required_skills": ["project-bootstrap", "implementation-execution"],
+        "forbidden_skills": ["existing-project-adoption"],
+        "acceptable_planning_depths": ["FOCUSED"],
+        "stopped_for_user_direction": false,
+        "required_checks": ["task_completed", "project_state_initialized", "one_active_phase", "validation_truthful"]
+      }
+    },
+    {
+      "id": "existing-project-adoption",
+      "setup": "adoption-pending",
+      "fixture": "recon_batch",
+      "prompt": "This is an existing repository that has just received Progressive Context Kit. Adopt the kit into the current codebase: reconstruct the current product, architecture, roadmap, and active work from repository evidence, preserve existing behavior, and leave the project ready for the next coding session.",
+      "oracle": {
+        "required_skills": ["existing-project-adoption"],
+        "forbidden_skills": ["project-bootstrap"],
+        "acceptable_planning_depths": [],
+        "stopped_for_user_direction": false,
+        "required_checks": ["adoption_finalized", "canonical_state_reconstructed", "existing_behavior_preserved", "handoff_ready"]
+      }
+    },
+    {
+      "id": "unclear-root-cause-bug",
+      "setup": "active",
+      "fixture": "failure_pivot",
+      "prompt": "Discounts written in the documented format such as `10%` are silently ignored in checkout totals. I don't know where the defect is. Find the root cause, fix it, add regression coverage, and verify adjacent behavior.",
+      "oracle": {
+        "required_skills": ["systematic-debugging", "implementation-execution"],
+        "forbidden_skills": ["project-bootstrap", "existing-project-adoption"],
+        "acceptable_planning_depths": ["DIRECT"],
+        "stopped_for_user_direction": false,
+        "required_checks": ["root_cause_identified", "regression_test_added", "adjacent_behavior_verified", "validation_truthful"]
+      }
+    },
+    {
+      "id": "architecture-fork-stop",
+      "setup": "active",
+      "fixture": "recon_batch",
+      "prompt": "We need durable storage for command execution history. The repository has no storage layer yet. Compare SQLite with an append-only JSON log and any other materially different viable option you find, recommend one based on this repository, and do not implement until I choose.",
+      "oracle": {
+        "required_skills": ["architecture-decision"],
+        "forbidden_skills": ["implementation-execution", "project-bootstrap", "existing-project-adoption"],
+        "acceptable_planning_depths": ["FULL"],
+        "stopped_for_user_direction": true,
+        "required_checks": ["options_materially_distinct", "recommendation_repository_grounded", "no_implementation_before_choice"]
+      }
+    },
+    {
+      "id": "session-continuation",
+      "setup": "active-continuation",
+      "fixture": "validation_convergence",
+      "prompt": "Continue the project from its current repository state. Complete the unresolved current target, verify it, and persist the correct handoff/state when finished.",
+      "continuation_focus": "Implement `net_total` in `src/pricing/core.py` so percentage discounts are applied with cent rounding, run the repository-supported tests, and close this current target only after the evidence passes.",
+      "oracle": {
+        "required_skills": ["implementation-execution", "session-handoff"],
+        "forbidden_skills": ["project-bootstrap", "existing-project-adoption"],
+        "acceptable_planning_depths": [],
+        "stopped_for_user_direction": false,
+        "required_checks": ["next_session_followed", "current_target_closed", "validation_truthful", "handoff_persisted"]
+      }
+    },
+    {
+      "id": "completed-roadmap-change-request",
+      "setup": "completed",
+      "fixture": "recon_batch",
+      "prompt": "The previous roadmap is complete. Add a new `health` command that returns service name, version, and mode using existing canonical metadata. Add tests and keep the change narrowly scoped.",
+      "oracle": {
+        "required_skills": ["implementation-execution"],
+        "forbidden_skills": ["project-bootstrap", "existing-project-adoption"],
+        "acceptable_planning_depths": ["DIRECT"],
+        "stopped_for_user_direction": false,
+        "required_checks": ["change_request_recognized", "new_active_phase_created", "implementation_scoped", "validation_truthful"]
+      }
+    },
+    {
+      "id": "high-risk-full",
+      "setup": "active",
+      "fixture": "recon_batch",
+      "prompt": "Add a public webhook-verification API for third-party callbacks. It must verify HMAC-SHA256 signatures with a secret, reject stale or replayed requests, preserve backward compatibility, and include negative tests for malformed, unauthorized, and replayed input. Treat the API as externally consumed.",
+      "oracle": {
+        "required_skills": ["security-sensitive-change", "implementation-execution"],
+        "forbidden_skills": ["project-bootstrap", "existing-project-adoption"],
+        "acceptable_planning_depths": ["FULL"],
+        "stopped_for_user_direction": false,
+        "required_checks": ["security_boundary_handled", "negative_tests_added", "public_contract_preserved", "validation_truthful"]
+      }
+    }
+  ]
+}
