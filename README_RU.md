@@ -46,11 +46,20 @@ Correctness, safety, security, acceptance criteria и обязательная v
 
 Разрабатываешь сам Progressive Context Kit? Переходи к разделу [Framework Source](#когда-нужен-framework-source), а не к Runtime download.
 
+## Кому подходит
+
+Используй Progressive Context, когда AI coding-агенты помогают разрабатывать или поддерживать реальный программный проект и нужно, чтобы решения, прогресс и evidence валидации сохранялись за пределами одного чата. Он рассчитан на проекты, которым полезны явные границы scope, task-routed инструкции и компактная durable-память о проекте.
+
+Это не замена CI/CD, таск-трекера, контроля версий, security review или командной документации. Framework добавляет agent-facing слой выполнения и continuity рядом с этими системами.
+
 ## Содержание
 
 - [Запуск за 2 минуты](#запуск-за-2-минуты)
+- [Кому подходит](#кому-подходит)
 - [Основная модель](#основная-модель)
+- [Сравнение с одним `AGENTS.md`](#сравнение-с-одним-agentsmd)
 - [Структура Runtime](#структура-runtime)
+- [FAQ](#faq)
 - [Один framework — две поверхности](#один-framework--две-поверхности)
 - [Понять модель](#понять-модель)
 - [Когда нужен Framework Source](#когда-нужен-framework-source)
@@ -103,6 +112,17 @@ flowchart LR
     COLD -. читать только при необходимости .-> W
 ```
 
+## Сравнение с одним `AGENTS.md`
+
+Одного `AGENTS.md` достаточно для маленького стабильного репозитория. Progressive Context сохраняет привычный entrypoint, но упрощает возобновление и проверку более крупной или длительной работы.
+
+| Задача | Один большой `AGENTS.md` | Progressive Context |
+| --- | --- | --- |
+| Активные инструкции | Один документ содержит универсальные и условные правила. | Router остаётся компактным; нужные Skills и protocols загружаются только для подходящей задачи. |
+| Continuity проекта | В основном опирается на текущий чат и историю репозитория. | Brief, Architecture, Roadmap, phases и `NEXT_SESSION` дают явное durable-состояние. |
+| Планирование изменений | Обычно определяется заново в prompt. | Глубина DIRECT, FOCUSED или FULL выбирается по риску, неопределённости и scope. |
+| Проверка | Ожидания существуют в prose. | Contracts, audits и task-relevant validation создают проверяемое evidence. |
+
 ## Структура Runtime
 
 Project Runtime специально собран так, чтобы framework почти не был виден внутри реального проекта:
@@ -122,6 +142,16 @@ my-project/
 Project Runtime по умолчанию использует **Standalone profile**. Поэтому новый пользователь может сразу открыть Codex или Claude Code без предварительной настройки home-level global instructions. Ветка `main` может содержать ещё не выпущенные framework-development, evaluation, benchmark и Autoresearch изменения; для стабильного пользовательского Runtime используй asset из GitHub Release.
 
 Визуальный onboarding: [`docs/visuals/user-onboarding.md`](docs/visuals/user-onboarding.md).
+
+## FAQ
+
+**Нужен ли Git?** Нет. Runtime можно распаковать и начать работу без него. Но для реального продукта Git настоятельно рекомендуется: он сохраняет историю изменений и поддерживает совместную работу.
+
+**Нужна ли глобальная настройка?** Нет. Standalone Runtime по умолчанию содержит нужные repository-level инструкции и Skills. Personal deployment — опциональный режим для тех, кто сознательно использует один глобальный engineering layer в нескольких репозиториях.
+
+**Можно ли добавить его в существующий проект?** Да: используй `tools/init_project.py --adopt-existing` из доверенного checkout Framework Source. Сначала запусти его с `--dry-run`; не распаковывай Runtime archive поверх существующего проекта.
+
+**Что хранится в `.progressive/`?** Runtime tools и prompts, project memory (`PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `ROADMAP.md` и `NEXT_SESSION.md`), phases, completion history и consequential decisions. Project-owned state сохраняется при обновлении framework.
 
 ## Один framework — две поверхности
 

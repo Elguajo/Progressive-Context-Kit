@@ -14,8 +14,11 @@
 ## Contents
 
 - [Start in 2 minutes](#start-in-2-minutes)
+- [Who it is for](#who-it-is-for)
 - [Core model](#core-model)
+- [Compared with a single `AGENTS.md`](#compared-with-a-single-agentsmd)
 - [Runtime layout](#runtime-layout)
+- [FAQ](#faq)
 - [One framework, two surfaces](#one-framework-two-surfaces)
 - [Understand the model](#understand-the-model)
 - [Framework Source](#framework-source)
@@ -70,6 +73,11 @@ For an existing product repository, do not extract a Runtime ZIP over project-ow
 
 Developing Progressive Context Kit itself? Continue with [Framework Source](#framework-source), not the Runtime download.
 
+## Who it is for
+
+Use Progressive Context when AI coding agents help build or maintain a real software project and you want its decisions, progress, and validation evidence to survive beyond one chat session. It is designed for projects that benefit from explicit scope, task-routed instructions, and a compact durable project memory.
+
+It is not a replacement for your CI/CD pipeline, issue tracker, source control, security review, or team documentation. It adds an agent-facing execution and continuity layer alongside those systems.
 ## Core model
 
 ```mermaid
@@ -107,6 +115,17 @@ flowchart LR
     COLD -. read only when evidence requires it .-> W
 ```
 
+## Compared with a single `AGENTS.md`
+
+A single `AGENTS.md` can be enough for a small, stable repository. Progressive Context keeps the familiar entrypoint while making larger or longer-running work easier to resume and verify.
+
+| Concern | Single long `AGENTS.md` | Progressive Context |
+| --- | --- | --- |
+| Active instructions | One document carries universal and conditional guidance. | The router stays small; task-specific Skills and protocols load only when needed. |
+| Project continuity | Relies mainly on the current chat and repository history. | Brief, Architecture, Roadmap, phases, and `NEXT_SESSION` provide explicit durable state. |
+| Change planning | Usually decided in the prompt each time. | DIRECT, FOCUSED, or FULL depth is selected from risk, uncertainty, and scope. |
+| Verification | Expectations live in prose. | Contracts, audits, and task-relevant validation provide checkable evidence. |
+
 ## Runtime layout
 
 The Project Runtime is intentionally small and self-contained. After extraction, it contains only standard agent entrypoints plus hidden framework directories:
@@ -126,6 +145,16 @@ You will **not** get visible framework folders such as `global/`, `integrations/
 The default Runtime uses the **Standalone profile**, so a new user can start Codex or Claude Code without configuring home-level global instructions. The `main` branch may contain unreleased framework-development, evaluation, benchmark, and Autoresearch changes; use the GitHub Release asset for the stable user-facing Runtime.
 
 Visual onboarding: [`docs/visuals/user-onboarding.md`](docs/visuals/user-onboarding.md).
+
+## FAQ
+
+**Do I need Git?** No. You can extract the Runtime and begin without it. Git remains strongly recommended for a real product because it preserves change history and supports collaboration.
+
+**Do I need global setup?** No. The default Standalone Runtime includes the repository-level instructions and Skills it needs. Personal deployment is optional for users who intentionally share one global engineering layer across repositories.
+
+**Can I add it to an existing project?** Yes, using `tools/init_project.py --adopt-existing` from a trusted Framework Source checkout. Run it with `--dry-run` first; do not extract the Runtime archive over an existing project.
+
+**What is stored in `.progressive/`?** Runtime tools and prompts, project memory (`PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and `NEXT_SESSION.md`), phases, completion history, and consequential decisions. Project-owned state is preserved during framework updates.
 
 ## One framework, two surfaces
 
