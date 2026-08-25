@@ -4,7 +4,7 @@ Each durable rule/fact gets one canonical owner.
 
 - Global agent contract → universal engineering behavior, classification, grounding, safety, completion.
 - Personal repo router → project context/workflow/tool routing.
-- Brief → product outcome/users/scope/constraints/success.
+- Brief → product outcome/users/scope/constraints/success. Compact project-domain Ubiquitous Language also lives here when materially useful.
 - Architecture → current stack/system shape/trust boundaries/operational assumptions.
 - Roadmap → phase order/status/current pointer.
 - Current Phase → execution tasks/acceptance/verification plus compact task-completion notes when later work needs them.
@@ -17,6 +17,8 @@ Each durable rule/fact gets one canonical owner.
 - Skill/protocol → conditional detailed procedure.
 - NEXT_SESSION → volatile continuation navigation, overwritten in place.
 - LINEAGE → framework-maintenance evidence only, never normal task warm-up.
+
+Project-domain vocabulary must not become a parallel glossary layer: current meaning stays in the Brief, while deeper Architecture/ADR/schema/public-contract sources may be referenced rather than copied.
 
 References/routing are allowed; copying the same long policy into multiple always-loaded layers is not.
 

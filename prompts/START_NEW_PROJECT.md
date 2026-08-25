@@ -6,7 +6,7 @@ Before creating or expanding project specifications, use the smallest sufficient
 
 Then:
 
-1. frame durable product outcome/users/scope/constraints/success in Project Brief at the selected depth;
+1. frame durable product outcome/users/scope/constraints/success in Project Brief at the selected depth; when project-specific domain terms are materially ambiguous or repeatedly needed, use `docs/system/UBIQUITOUS_LANGUAGE.md` and keep a compact optional `## Ubiquitous Language` section in the Brief;
 2. verify current primary docs only for architecture choices whose freshness matters;
 3. choose one pragmatic architecture and record only material decisions/boundaries; in `DIRECT`, do not invent architecture work when repository/default conventions are sufficient;
 4. create a Roadmap with exactly one `[>]` phase and only as many phases as the selected depth and actual work require;

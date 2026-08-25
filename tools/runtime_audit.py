@@ -12,7 +12,7 @@ EXPECTED_TOOLS = {'semble','serena','rtk','superpowers','gstack','context7','git
 REQUIRED = [
     'AGENTS.md','CLAUDE.md','.progressive/VERSION','.progressive/PROFILE','.progressive/AGENT_TARGET','.progressive/ADOPTION_STATE',
     '.progressive/project/PROJECT_BRIEF.md','.progressive/project/ARCHITECTURE.md','.progressive/project/ROADMAP.md','.progressive/project/NEXT_SESSION.md','.progressive/project/CONTEXT_MANIFEST.json','.progressive/project/TOOLING_STATUS.json',
-    '.progressive/system/CONTEXT_PROTOCOL.md','.progressive/system/HANDOFF_PROTOCOL.md','.progressive/system/LAYER_OWNERSHIP.md','.progressive/system/QUALITY_PROTOCOL.md','.progressive/system/TOOL_ROUTING.md',
+    '.progressive/system/CONTEXT_PROTOCOL.md','.progressive/system/HANDOFF_PROTOCOL.md','.progressive/system/LAYER_OWNERSHIP.md','.progressive/system/PLANNING_DEPTH.md','.progressive/system/QUALITY_PROTOCOL.md','.progressive/system/TOOL_ROUTING.md','.progressive/system/UBIQUITOUS_LANGUAGE.md',
     '.progressive/integrations/TOOL_ADAPTER_PROTOCOL.md','.progressive/integrations/TOOL_REGISTRY.json','.progressive/integrations/PROFILES.md',
     '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/routing_integrity.py','.progressive/tools/audit.py','.progressive/tools/tool_adapter_protocol.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
 ]
@@ -57,6 +57,27 @@ def verify_tooling(root, errors):
     for key in EXPECTED_TOOLS:
         if key not in status.get('tools',{}): errors.append('tooling status missing tool: '+key)
 
+def verify_ubiquitous_language(root, warns):
+    brief = read(project_file(root,'PROJECT_BRIEF.md'))
+    match = re.search(r'^## Ubiquitous Language\s*$\n(.*?)(?=^## |\Z)', brief, re.M | re.S)
+    if not match:
+        return
+    section = match.group(1)
+    entries = [line for line in section.splitlines() if re.match(r'^-\s+\S', line)]
+    if len(entries) > 12:
+        warns.append(f'Project Brief Ubiquitous Language exceeds 12-term guidance: {len(entries)} terms')
+    if len(section) > 1800:
+        warns.append(f'Project Brief Ubiquitous Language is large for default context: {len(section)} chars')
+    terms = []
+    for line in entries:
+        body = re.sub(r'^-\s+', '', line).strip()
+        term = re.split(r'\s+[—-]\s+', body, maxsplit=1)[0].strip().casefold()
+        if term:
+            terms.append(term)
+    duplicates = sorted({term for term in terms if terms.count(term) > 1})
+    if duplicates:
+        warns.append('Project Brief Ubiquitous Language repeats canonical terms: '+', '.join(duplicates))
+
 def verify_project_state(root, errors, warns):
     road = read(project_file(root,'ROADMAP.md'))
     markers = re.findall(r'^- \[([ >x])\].*?`((?:docs|\.progressive)/phases/[^`]+\.md)`', road, re.M)
@@ -73,6 +94,7 @@ def verify_project_state(root, errors, warns):
                 continue
             if marker == 'x' and p.is_file() and not completion_record(p):
                 warns.append('completed phase lacks Completion Record: '+rel)
+    verify_ubiquitous_language(root, warns)
     phase = current_phase(root) or template_file(root,'PHASE.template.md')
     project_chars = sum(chars(project_file(root,n)) for n in ['PROJECT_BRIEF.md','ARCHITECTURE.md','ROADMAP.md']) + chars(phase)
     if current_phase(root):

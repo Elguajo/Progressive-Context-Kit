@@ -6,7 +6,7 @@ Adopt Progressive Context Spec Kit into an existing repository **without treatin
 2. Inventory runtime/framework/package manager/dependencies, source layout, tests/CI, DB/schema/migrations, auth/permissions, integrations, deployment/config, existing docs/instructions, and observable product capabilities.
 3. Run the framework installer in `--adopt-existing --dry-run` mode from a trusted Framework Source checkout. Review collisions before writing.
 4. Install/adopt without deleting existing project files. Preserve pre-existing `AGENTS.md`/`CLAUDE.md` instructions as project-specific material and reconcile conflicts instead of blindly stacking duplicate universal rules.
-5. Reconstruct `PROJECT_BRIEF.md` from observed product behavior and reliable existing docs. Mark uncertainty explicitly.
+5. Reconstruct `PROJECT_BRIEF.md` from observed product behavior and reliable existing docs. Mark uncertainty explicitly. When project-specific terminology is materially ambiguous or repeatedly used, apply `docs/system/UBIQUITOUS_LANGUAGE.md`: infer only evidence-backed meanings and keep them in the Brief rather than inventing a separate glossary.
 6. Document current architecture from repository evidence; keep desired future architecture separate.
 7. Reconstruct Roadmap: distinguish already-completed capabilities from remaining work; create exactly one `[>]` phase for the next meaningful outcome.
 8. Populate `CONTEXT_MANIFEST.json` only for non-obvious context/Skill hints that improve deterministic routing; do not list every file.

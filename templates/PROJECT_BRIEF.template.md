@@ -16,6 +16,10 @@
 ## Material assumptions
 - <...>
 
+## Ubiquitous Language
+<!-- Optional: 0–12 project-specific terms only. Omit ordinary vocabulary and implementation detail. -->
+- <Term> — <precise project meaning>. Source: <canonical pointer when useful>
+
 ## Out of scope — first release
 - <...>
 

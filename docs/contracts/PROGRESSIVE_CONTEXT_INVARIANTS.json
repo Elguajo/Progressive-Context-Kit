@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-architectural-invariants",
-  "invariant_count": 12,
+  "invariant_count": 13,
   "invariants": [
     {
       "id": "PC-001",
@@ -74,6 +74,12 @@
       "owner": "docs/system/HANDOFF_PROTOCOL.md",
       "anchor": "One handoff prompt = one unresolved execution target.",
       "summary": "NEXT_SESSION_PROMPT never bundles unfinished current work with later queued work"
+    },
+    {
+      "id": "PC-013",
+      "owner": "docs/system/UBIQUITOUS_LANGUAGE.md",
+      "anchor": "Project-domain vocabulary belongs in the **Project Brief**",
+      "summary": "Project-domain language stays compact in the existing Brief context instead of creating a parallel glossary or another default read"
     }
   ]
 }
