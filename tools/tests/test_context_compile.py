@@ -1,4 +1,4 @@
-import json, unittest, tempfile, shutil, sys
+import json, os, subprocess, unittest, tempfile, shutil, sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'tools'))
@@ -97,5 +97,17 @@ class ContextCompileTests(unittest.TestCase):
             (dst/'docs/project/ROADMAP.md').write_text('# Roadmap\n- [>] Escape `docs/phases/../../../outside-phase-secret.md`\n')
             text=build(dst)
             self.assertNotIn('PHASE SECRET SHOULD NOT LOAD',text)
+
+    def test_compiler_stdout_is_utf8_when_environment_requests_cp1251(self):
+        with tempfile.TemporaryDirectory() as d:
+            dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))
+            (dst/'docs/project/PROJECT_BRIEF.md').write_text('# Brief\nUnicode → output\n',encoding='utf-8')
+            env={**os.environ,'PYTHONIOENCODING':'cp1251'}
+            result=subprocess.run(
+                [sys.executable,str(ROOT/'tools/context_compile.py'),'--root',str(dst)],
+                capture_output=True,env=env,
+            )
+            self.assertEqual(result.returncode,0,result.stderr.decode('utf-8',errors='replace'))
+            self.assertIn('Unicode → output',result.stdout.decode('utf-8'))
 
 if __name__=='__main__': unittest.main()
