@@ -33,6 +33,36 @@ LEGACY_FRAMEWORK_MARKERS = [
 def fail_if(c, errors, msg):
     if c: errors.append(msg)
 
+
+def project_skill_path(root, name):
+    return root / '.agents' / 'skills' / name / 'SKILL.md'
+
+
+def global_skill_roots():
+    home = Path.home()
+    return (home / '.codex' / 'skills', home / '.agents' / 'skills')
+
+
+def verify_skill_resolution(root, errors, warns):
+    """Validate project-owned routed Skills without treating global-only Skills as conflicts."""
+    for name in sorted(EXPECTED_SKILLS):
+        primary = project_skill_path(root, name)
+        global_matches = [base / name / 'SKILL.md' for base in global_skill_roots()]
+        found = [path for path in global_matches if path.is_file()]
+        if not primary.is_file():
+            message = f'Expected project Skill is missing: PRIMARY: {primary}'
+            if found:
+                message += '; ALSO FOUND: ' + ', '.join(str(path) for path in found)
+            errors.append(message)
+            continue
+        if found:
+            warns.append(
+                f'Skill collision for {name}: PRIMARY: {primary}; ALSO FOUND: '
+                + ', '.join(str(path) for path in found)
+                + '; project-local wins'
+            )
+
+
 def verify_skills(root, errors):
     a = {p.parent.name:p for p in (root/'.agents/skills').glob('*/SKILL.md')}
     c = {p.parent.name:p for p in (root/'.claude/skills').glob('*/SKILL.md')}
@@ -125,7 +155,7 @@ def main():
     if (root/'.progressive/PROFILE').is_file(): fail_if(read(root/'.progressive/PROFILE').strip() not in {'standalone','personal'},errors,'invalid runtime PROFILE')
     if (root/'.progressive/ADOPTION_STATE').is_file(): fail_if(read(root/'.progressive/ADOPTION_STATE').strip() == 'pending',errors,'existing-project adoption is pending; reconcile conflicts and finalize adoption')
     if (root/'.progressive/AGENT_TARGET').is_file(): fail_if(read(root/'.progressive/AGENT_TARGET').strip() not in {'codex','claude','both'},errors,'invalid AGENT_TARGET')
-    verify_skills(root,errors); verify_tooling(root,errors); verify_project_state(root,errors,warns)
+    verify_skill_resolution(root,errors,warns); verify_skills(root,errors); verify_tooling(root,errors); verify_project_state(root,errors,warns)
     routing_errors,_ = validate_routing_integrity(root); errors += routing_errors
     adapter_errors,adapter_warns = validate_tool_adapters(root); errors += adapter_errors; warns += adapter_warns
     for x in errors: print('ERROR:',x)

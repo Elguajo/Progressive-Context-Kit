@@ -48,19 +48,20 @@ Final report: **Result**; **Manual check** only when useful; **Files changed**; 
 
 # Progressive Context Kit — Personal Repository Router
 
-Universal engineering behavior is supplied by the user-global layer in Personal deployment and composed directly into the repository instructions in Standalone deployment. This router owns repository context, workflow/tool routing, and project-state ownership.
+Universal engineering behavior is supplied by the user-global layer. Standalone composes it; router owns context, workflow/tool routing, project state.
 
 ## Context routing
 
 - **Tiny/local task:** target file + nearby evidence/tests only; project docs only when product/architecture constraints matter.
 - **Normal product work:** prefer `python3 tools/context_compile.py`; otherwise read `docs/project/PROJECT_BRIEF.md` → `ARCHITECTURE.md` → `ROADMAP.md` → `NEXT_SESSION.md` when present → `[>]` phase → prior phase's `Completion Record` when present, then only relevant ADR/source/tests/schemas/current docs.
 - Never warm up by reading full completed phases, all ADRs, `docs/system/*`, `docs/system/LINEAGE.md`, full chat history, or large manuals.
-- `ROADMAP.md` is canonical for current phase. If every phase is `[x]`, new work is a change request.
+- `ROADMAP.md` is canonical for current phase. All `[x]` means new work is a change request.
 - If Git is unavailable, continue without treating that as an error.
 
 ## Workflow routing
 
 Load only matching Skills/protocols:
+- Routed `.agents/...` paths are repository-root-relative: project Skills win; missing is an error, no global fallback. Other global Skills work.
 - new product initialization → `project-bootstrap`
 - existing repository adoption → `existing-project-adoption`
 - missing materially useful preferred tooling → `tooling-bootstrap`

@@ -35,6 +35,10 @@ This is the behavior-side counterpart to:
 The global layer keeps only short routing/invariant statements for testing and documentation;
 it does not duplicate their task-specific procedures.
 
+Routed `.agents/...` references are repository-root-relative. The Personal repository router
+defines project-owned Skill precedence and missing-Skill handling; global-only Skills remain
+available when no project-owned PCK route exists.
+
 ## Adopted v2.4 improvements
 
 - Architecture decisions no longer force exactly three A/B/C strategies; they show all and only

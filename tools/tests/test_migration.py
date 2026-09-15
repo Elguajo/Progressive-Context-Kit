@@ -29,4 +29,8 @@ class MigrationTests(unittest.TestCase):
         data=json.loads((ROOT/'docs/migration/BEHAVIOR_CONTRACT.json').read_text(encoding='utf-8'))
         self.assertGreaterEqual(data['rule_count'],147)
 
+    def test_migration_preserves_repository_relative_skill_path_clarification(self):
+        text = (ROOT / 'docs/migration/CODEX_CUSTOM_INSTRUCTIONS_V2_5.md').read_text(encoding='utf-8')
+        self.assertIn('`.agents/...` references are repository-root-relative', text)
+
 if __name__=='__main__': unittest.main()
