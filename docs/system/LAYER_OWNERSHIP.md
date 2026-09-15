@@ -15,6 +15,7 @@ Each durable rule/fact gets one canonical owner.
 - `TOOL_REGISTRY.json` → preferred branded capability mapping/install policy.
 - `TOOLING_STATUS.json` → project-local persisted tooling availability/configuration cache.
 - Skill/protocol → conditional detailed procedure.
+- PCK `.agents/...` Skill path → repository-root-relative; project-local version wins, and a missing routed Skill is an error rather than a global fallback.
 - NEXT_SESSION → volatile continuation navigation, overwritten in place.
 - LINEAGE → framework-maintenance evidence only, never normal task warm-up.
 

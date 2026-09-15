@@ -15,6 +15,8 @@ This is the behavior-side counterpart to:
 
 > **Minimize active context, not available knowledge.**
 
+All `.agents/...` paths in this document are relative to the current repository root.
+
 ## v2.4 → v2.5 ownership
 
 | v2.4 concern | v2.5 canonical owner |

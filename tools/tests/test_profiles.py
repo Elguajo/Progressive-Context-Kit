@@ -44,6 +44,7 @@ class ProfileTests(unittest.TestCase):
         self.assertNotIn('## Safety and approvals', text)
         self.assertNotIn("The user's global Codex Custom Instructions", text)
         self.assertIn('implementation-execution', text)
+        self.assertIn('Routed `.agents/...` paths are repository-root-relative; project-local wins, never same-named global fallback.', text)
 
     def test_action_first_semantics_exist_in_both_global_adapters(self):
         required = [
