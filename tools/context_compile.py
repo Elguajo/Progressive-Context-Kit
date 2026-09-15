@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import argparse, json, re
+import argparse, json, re, sys
 from common import PHASE_RE, current_phase, project_file, read, resolve_path, safe_join
 
 CORE=['docs/project/PROJECT_BRIEF.md','docs/project/ARCHITECTURE.md','docs/project/ROADMAP.md','docs/project/NEXT_SESSION.md']
@@ -114,5 +114,10 @@ def main():
     text=build(root,a.max_extra_chars)
     if a.output:
         out=Path(a.output); out=out if out.is_absolute() else root/out; out.parent.mkdir(parents=True,exist_ok=True); out.write_text(text,encoding='utf-8'); print(out)
-    else: print(text,end='')
+    else:
+        # Context can contain any Unicode from project documentation.  Force UTF-8
+        # instead of inheriting a legacy Windows code page such as CP1251.
+        try: sys.stdout.reconfigure(encoding='utf-8')
+        except (AttributeError, ValueError): pass
+        print(text,end='')
 if __name__=='__main__': main()

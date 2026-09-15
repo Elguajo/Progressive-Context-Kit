@@ -15,6 +15,8 @@ This is the behavior-side counterpart to:
 
 > **Minimize active context, not available knowledge.**
 
+All `.agents/...` paths in this document are relative to the current repository root.
+
 ## v2.4 → v2.5 ownership
 
 | v2.4 concern | v2.5 canonical owner |
@@ -34,10 +36,6 @@ This is the behavior-side counterpart to:
 
 The global layer keeps only short routing/invariant statements for testing and documentation;
 it does not duplicate their task-specific procedures.
-
-Routed `.agents/...` references are repository-root-relative. The Personal repository router
-defines project-owned Skill precedence and missing-Skill handling; global-only Skills remain
-available when no project-owned PCK route exists.
 
 ## Adopted v2.4 improvements
 

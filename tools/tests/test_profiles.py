@@ -44,7 +44,6 @@ class ProfileTests(unittest.TestCase):
         self.assertNotIn('## Safety and approvals', text)
         self.assertNotIn("The user's global Codex Custom Instructions", text)
         self.assertIn('implementation-execution', text)
-
     def test_skill_paths_are_repository_relative_in_all_generated_profiles(self):
         rule = 'Routed `.agents/...` paths are repository-root-relative'
         for rel in ['profiles/personal/AGENTS.md', 'AGENTS.md', 'profiles/standalone/AGENTS.md']:
