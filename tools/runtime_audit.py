@@ -47,6 +47,22 @@ def verify_skills(root, errors):
         elif ma.group(1).strip() not in ALLOWED_SKILL_ACTIVATION:
             errors.append('Skill activation invalid: '+name+'='+ma.group(1).strip())
 
+def verify_skill_resolution(root, errors, warns):
+    local_root = root / '.agents/skills'
+    global_roots = [Path.home() / '.codex/skills', Path.home() / '.agents/skills']
+    for name in sorted(EXPECTED_SKILLS):
+        primary = local_root / name / 'SKILL.md'
+        if not primary.is_file():
+            errors.append('Expected project Skill is missing: '+str(primary))
+            continue
+        collisions = [candidate / name / 'SKILL.md' for candidate in global_roots if (candidate / name / 'SKILL.md').is_file()]
+        if collisions:
+            warns.append(
+                'Skill collision: '+name+'; PRIMARY: '+str(primary)+'; ALSO FOUND: '
+                + ', '.join(str(path) for path in collisions)
+                + '; Resolution: project-local wins; no same-named global fallback.'
+            )
+
 def verify_tooling(root, errors):
     try:
         reg = json.loads(read(resolve_path(root,'integrations/TOOL_REGISTRY.json')))
@@ -125,7 +141,7 @@ def main():
     if (root/'.progressive/PROFILE').is_file(): fail_if(read(root/'.progressive/PROFILE').strip() not in {'standalone','personal'},errors,'invalid runtime PROFILE')
     if (root/'.progressive/ADOPTION_STATE').is_file(): fail_if(read(root/'.progressive/ADOPTION_STATE').strip() == 'pending',errors,'existing-project adoption is pending; reconcile conflicts and finalize adoption')
     if (root/'.progressive/AGENT_TARGET').is_file(): fail_if(read(root/'.progressive/AGENT_TARGET').strip() not in {'codex','claude','both'},errors,'invalid AGENT_TARGET')
-    verify_skills(root,errors); verify_tooling(root,errors); verify_project_state(root,errors,warns)
+    verify_skills(root,errors); verify_skill_resolution(root,errors,warns); verify_tooling(root,errors); verify_project_state(root,errors,warns)
     routing_errors,_ = validate_routing_integrity(root); errors += routing_errors
     adapter_errors,adapter_warns = validate_tool_adapters(root); errors += adapter_errors; warns += adapter_warns
     for x in errors: print('ERROR:',x)

@@ -48,7 +48,7 @@ Final report: **Result**; **Manual check** only when useful; **Files changed**; 
 
 # Progressive Context Kit — Personal Repository Router
 
-Universal engineering behavior is supplied by the user-global layer in Personal deployment and composed directly into the repository instructions in Standalone deployment. This router owns repository context, workflow/tool routing, and project-state ownership.
+Universal engineering behavior is supplied by the user-global layer in Personal; Standalone composes it locally. This router owns context, workflow/tool routing, and state.
 
 ## Context routing
 
@@ -61,6 +61,7 @@ Universal engineering behavior is supplied by the user-global layer in Personal 
 ## Workflow routing
 
 Load only matching Skills/protocols:
+- Routed `.agents/...` paths are repository-root-relative; project-local wins, never same-named global fallback.
 - new product initialization → `project-bootstrap`
 - existing repository adoption → `existing-project-adoption`
 - missing materially useful preferred tooling → `tooling-bootstrap`

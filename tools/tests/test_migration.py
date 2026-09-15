@@ -24,6 +24,10 @@ class MigrationTests(unittest.TestCase):
         data=json.loads((ROOT/'docs/migration/COVERAGE_MATRIX.json').read_text(encoding='utf-8'))
         self.assertIn('.agents/skills/documentation-governance/SKILL.md',data['sections']['DOCUMENTATION_UPDATE_APPROVAL'])
 
+    def test_skill_paths_are_documented_as_repository_relative(self):
+        migration=(ROOT/'docs/migration/CODEX_CUSTOM_INSTRUCTIONS_V2_5.md').read_text(encoding='utf-8')
+        self.assertIn('All `.agents/...` paths in this document are relative to the current repository root.', migration)
+
 
     def test_atomic_behavior_contract_exists(self):
         data=json.loads((ROOT/'docs/migration/BEHAVIOR_CONTRACT.json').read_text(encoding='utf-8'))
