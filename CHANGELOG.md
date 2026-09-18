@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.1.0 — 2026-09-18
+
+- Fixed routed Skill resolution so PCK always treats `.agents/...` paths as repository-root-relative. Project-local Skills now take precedence over same-named global Skills; Runtime Audit reports a collision without allowing a global fallback to silently change project behavior.
+- Fixed `context_compile.py` to emit UTF-8 when writing compiled context to standard output, preserving non-ASCII project documentation even in legacy terminal locales.
+- Strengthened Project Runtime vocabulary auditing: CommonMark-indented entries are recognized, formatted terms are normalized before duplicate checks, and malformed entries produce actionable warnings.
+- Refined implementation coordination for genuinely independent work. An isolated child-task context is optional, requires explicit harness support and a sufficient file-based brief, and never creates canonical project state or mandates a particular worktree, model, or subagent workflow.
+- Added review-evidence guidance that distinguishes acceptance-criteria compliance from code quality and uses scoped re-review after a narrow fix when risk has not widened.
+- Updated English and Russian onboarding and technical reference material to clarify the Framework Source / Project Runtime model, runtime release assets, and project-local Skill behavior.
+- Recorded the architecture boundary for a future Progressive Recall capability. Recall is not included in this release; any future implementation remains project-local, disposable, provenance-aware, and non-canonical.
+- Validation snapshot before cutting the release: **Progressive Gate 11/11** and **188/188 unit/regression tests passing** on the release candidate.
+
 ## 2.0.0 — 2026-08-25
 
 - Added **machine-readable Skill activation semantics** (`automatic`, `explicit`, `both`) across all canonical Skills, with source/runtime validation and mirror-safe regression coverage. Existing routing behavior remains unchanged; metadata now makes activation intent inspectable without adding always-loaded context.

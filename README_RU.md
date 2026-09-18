@@ -38,7 +38,7 @@ Progressive Context Kit — quality-first framework для AI coding-агент�
    <опиши продукт, пользователей, реальные ограничения и явные non-goals>
    ```
 
-Текущий стабильный asset: `Progressive-Context-Project-Runtime-v2.0.0.zip`.
+Текущий стабильный asset: `Progressive-Context-Project-Runtime-v2.1.0.zip`.
 
 Если продуктовый репозиторий уже существует, не распаковывай Runtime ZIP поверх project-owned файлов. Вместо этого используй [путь adoption](docs/human/GETTING_STARTED.ru.md#10-existing-projects) в доверенном checkout Framework Source.
 

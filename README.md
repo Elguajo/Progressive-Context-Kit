@@ -38,7 +38,7 @@ For a new product:
    <describe the desired product, users, real constraints, and explicit non-goals>
    ```
 
-Current stable asset: `Progressive-Context-Project-Runtime-v2.0.0.zip`.
+Current stable asset: `Progressive-Context-Project-Runtime-v2.1.0.zip`.
 
 For an existing product repository, do not extract a Runtime ZIP over project-owned files. Use the [adoption path](docs/human/GETTING_STARTED.md#10-existing-projects) from a trusted Framework Source checkout instead.
 
