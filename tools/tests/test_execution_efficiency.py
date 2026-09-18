@@ -74,6 +74,28 @@ class ExecutionEfficiencyTests(unittest.TestCase):
         self.assertIn('route to `systematic-debugging`', text)
         self.assertIn('rather than continuing symptom patches', text)
 
+    def test_task_scoped_coordination_is_conditional_and_mirrored(self):
+        canonical = (ROOT / '.agents/skills/implementation-execution/SKILL.md').read_text(encoding='utf-8')
+        mirror = (ROOT / '.claude/skills/implementation-execution/SKILL.md').read_text(encoding='utf-8')
+        self.assertEqual(canonical, mirror)
+        text = normalized(canonical)
+        for phrase in [
+            'explicitly permits child work',
+            'may be used only when',
+            'essential task context',
+            'file-based brief',
+            'same-shape microtasks',
+            'not canonical project state',
+            'Do not mandate a particular worktree',
+        ]:
+            self.assertIn(phrase, text)
+
+    def test_quality_protocol_separates_requirement_and_quality_review(self):
+        text = (ROOT / 'docs/system/QUALITY_PROTOCOL.md').read_text(encoding='utf-8')
+        self.assertIn('requirement compliance', text)
+        self.assertIn('code quality', text)
+        self.assertIn('scoped re-review', text)
+
 
 if __name__ == '__main__':
     unittest.main()

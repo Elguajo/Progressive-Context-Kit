@@ -12,6 +12,14 @@ Validate from narrowest to broadest, skipping only checks irrelevant to the chan
 5. broader suites when shared code or public interfaces changed;
 6. e2e/manual/runtime verification when required by the behavior.
 
+## Review evidence
+
+When a change warrants independent review, check requirement compliance separately from code
+quality. Requirement compliance verifies the acceptance criteria and scope against the actual
+diff/evidence; code quality evaluates correctness, regression safety, maintainability, and tests.
+After a narrow fix, use a scoped re-review of the original finding and the fix unless new evidence
+widens the risk. These checks complement, rather than replace, the validation order above.
+
 ## Convergence
 
 Required evidence is the applicable validation above plus the current acceptance criteria.

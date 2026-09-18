@@ -39,6 +39,20 @@ seconds for builds/test suites — instead of repeated short polls. Do not send 
 only to peek, and do not poll when the execution call already blocks until completion. Poll
 sooner only when the command is expected to finish quickly or new evidence makes it useful.
 
+## Task-scoped coordination
+
+When an approved implementation plan contains genuinely independent tasks and the active harness
+explicitly permits child work, an isolated task context may be used only when the essential task
+context can be captured in a minimal file-based brief. Give the worker the relevant interfaces and
+acceptance criteria, and a path for its concise evidence report. Keep task artifacts transient:
+they are not canonical project state.
+
+For substantial tasks, independently assess requirement compliance and code quality after fresh
+verification. A narrow fix gets a scoped re-review of the finding and its fix; it does not require
+repeating a whole-task review without new risk. Batch only independent same-shape microtasks that
+share one clear implementation and review surface. Do not mandate a particular worktree,
+workspace, ledger, model, or subagent implementation when native project workflow is sufficient.
+
 For bug fixes: root cause → reproduce when practical → smallest complete fix → regression test
 when supported → adjacent-behavior verification. Use `systematic-debugging` when cause is
 unclear rather than guessing.
