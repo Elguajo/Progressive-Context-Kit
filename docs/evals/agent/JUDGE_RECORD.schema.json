@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Elguajo/Progressive-Context-Kit/docs/evals/agent/JUDGE_RECORD.schema.json",
+  "title": "Progressive Context Kit Blinded Judge Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "experiment_id", "pair_id", "judge", "artifacts", "rubric_ref", "scores", "hard_failures", "preference", "confidence", "notes"],
+  "properties": {
+    "schema": {"const": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "pair_id": {"type": "string", "minLength": 1},
+    "judge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent", "model", "reasoning"],
+      "properties": {
+        "agent": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "reasoning": {"type": "string", "minLength": 1}
+      }
+    },
+    "artifacts": {"const": ["A", "B"]},
+    "rubric_ref": {"type": "string", "minLength": 1},
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B"],
+      "properties": {"A": {"$ref": "#/$defs/quality"}, "B": {"$ref": "#/$defs/quality"}}
+    },
+    "hard_failures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B"],
+      "properties": {
+        "A": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "B": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "preference": {"enum": ["A", "B", "TIE", "INCONCLUSIVE"]},
+    "confidence": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+    "notes": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_correctness", "repository_grounding", "instruction_adherence", "validation_truthfulness", "regression_safety", "security_approval", "decision_quality", "question_efficiency", "rework_avoidance", "context_tool_efficiency"],
+      "properties": {
+        "task_correctness": {"type": "integer", "minimum": 0, "maximum": 3},
+        "repository_grounding": {"type": "integer", "minimum": 0, "maximum": 3},
+        "instruction_adherence": {"type": "integer", "minimum": 0, "maximum": 3},
+        "validation_truthfulness": {"type": "integer", "minimum": 0, "maximum": 3},
+        "regression_safety": {"type": "integer", "minimum": 0, "maximum": 3},
+        "security_approval": {"type": "integer", "minimum": 0, "maximum": 3},
+        "decision_quality": {"type": "integer", "minimum": 0, "maximum": 3},
+        "question_efficiency": {"type": "integer", "minimum": 0, "maximum": 3},
+        "rework_avoidance": {"type": "integer", "minimum": 0, "maximum": 3},
+        "context_tool_efficiency": {"type": "integer", "minimum": 0, "maximum": 3}
+      }
+    }
+  }
+}

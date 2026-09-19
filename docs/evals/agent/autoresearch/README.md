@@ -19,9 +19,17 @@ combined result to one rule.
 
 ### 1. Observe
 
-Start from real evidence: benchmark traces, paired outliers, repeated production-task traces, or
-another auditable run source. Record the concrete pattern and at least one evidence reference.
-Do not start from a preference for a rule.
+Start from real evidence: benchmark traces, paired outliers, repeated production-task traces,
+repeated human corrections, questions already answered by canonical state, unnecessary rereads
+(including after compaction), stale-handoff reconstruction, unsupported completion claims,
+workflow-ambiguity validation failures, tool misuse, context overflow/waste, or another auditable
+run source. Record the concrete pattern and at least one evidence reference. A human correction is
+an observation candidate, not a framework rule.
+
+Classify it before changing the framework: `ONE-OFF` means no framework change; a `REPEATED LOCAL
+PATTERN` may belong in an existing Skill, protocol, or tool rule; a `SYSTEMIC FRAMEWORK PATTERN`
+may justify a contract, validator, compiler, or framework policy. Transcript/traces are optional
+authorized evidence, never a provider-specific required input or default resume dependency.
 
 ### 2. Hypothesize
 
@@ -30,10 +38,12 @@ primary metric or behavior that should change and what would count as no effect 
 
 ### 3. Change
 
-Create the smallest candidate change that can test the hypothesis. Keep unrelated framework
-behavior fixed and record at least one changed file/surface. If multiple files must change to
-express one behavior, that can still be one primary change; multiple independent behavioral
-ideas cannot.
+Create the smallest candidate change that can test the hypothesis. Apply the structural-promotion
+order in `../../../system/CHANGE_CONTROL.md` before selecting its layer: structure, deterministic
+detection, mechanical canonicalization, conditional procedure, then prose only when judgment
+cannot be encoded. Keep unrelated framework behavior fixed and record at least one changed
+file/surface. If multiple files must change to express one behavior, that can still be one primary
+change; multiple independent behavioral ideas cannot.
 
 ### 4. Paired eval
 
@@ -44,6 +54,10 @@ permissions, environment, and token-accounting method controlled between arms.
 Analyze records with:
 
 `python3 tools/analyze_agent_eval.py runs.jsonl --format json > summary.json`
+
+When the hypothesis concerns workflow behavior or adherence, require blinded judge records and
+non-self-report run evidence with `--require-judge --require-workflow-evidence`; attach the
+separate private A/B arm map only to the analyzer, never to judge-visible input.
 
 ### 5. Decide
 

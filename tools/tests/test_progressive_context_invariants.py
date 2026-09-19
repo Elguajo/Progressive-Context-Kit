@@ -87,7 +87,25 @@ class ProgressiveContextInvariantTests(unittest.TestCase):
         template = (ROOT / 'templates/NEXT_SESSION.template.md').read_text(encoding='utf-8')
         self.assertIn('Volatile hot context. Overwrite this file on each meaningful handoff', template)
         self.assertIn('do not accumulate prior-session history', template)
-        self.assertIn('completion reports, or chat history unless evidence requires it', template)
+        self.assertIn('completion reports, or chat history unless a specific contradiction', template)
+        self.assertIn('reconcile this handoff against the current Phase, live', template)
+
+    def test_resume_integrity_reconciles_navigation_without_history_replay(self):
+        protocol = (ROOT / 'docs/system/CONTEXT_PROTOCOL.md').read_text(encoding='utf-8')
+        handoff = (ROOT / 'docs/system/HANDOFF_PROTOCOL.md').read_text(encoding='utf-8')
+        self.assertIn('`NEXT_SESSION.md` is a navigation pointer, not authority over current project state.', protocol)
+        self.assertIn('canonical/live state and select the nearest unresolved target instead.', protocol)
+        self.assertIn('do not warm up full completed phases, completion reports, or chat/transcript history', protocol)
+        self.assertIn('A stale handoff must not override canonical state.', handoff)
+
+    def test_safe_pause_stays_in_progress_without_commit_or_completion_artifacts(self):
+        template = (ROOT / 'templates/NEXT_SESSION.template.md').read_text(encoding='utf-8')
+        handoff = (ROOT / 'docs/system/HANDOFF_PROTOCOL.md').read_text(encoding='utf-8')
+        self.assertIn('A safe pause is an `IN PROGRESS` handoff, never a fourth session outcome.', handoff)
+        self.assertIn('Do not fabricate a completion record/report', handoff)
+        self.assertIn('a WIP Git commit: Git may help', handoff)
+        self.assertIn('<RUNNABLE / GREEN | KNOWN BROKEN / RECOVERABLE | BLOCKED>', template)
+        self.assertIn('First recovery action:', template)
 
     def test_next_session_prompt_is_single_focus_until_current_gate_closes(self):
         template = (ROOT / 'templates/NEXT_SESSION.template.md').read_text(encoding='utf-8')

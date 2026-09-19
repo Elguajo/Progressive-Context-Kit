@@ -113,6 +113,24 @@
         "token_accounting": {"type": "string", "minLength": 1}
       }
     },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_refs",
+        "project_state_refs",
+        "command_result_refs",
+        "verification_refs",
+        "tool_trace_refs"
+      ],
+      "properties": {
+        "artifact_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "project_state_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "command_result_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "verification_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "tool_trace_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
     "notes": {"type": "string"}
   }
 }

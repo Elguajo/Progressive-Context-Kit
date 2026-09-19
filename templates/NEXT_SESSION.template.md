@@ -13,6 +13,16 @@ Outcome: <IN PROGRESS | PHASE COMPLETE | PROJECT COMPLETE>
 ## Verification evidence
 - `<check>` → <result>
 
+## Current working state
+<RUNNABLE / GREEN | KNOWN BROKEN / RECOVERABLE | BLOCKED>
+
+When the state is `KNOWN BROKEN / RECOVERABLE` or `BLOCKED`, replace the placeholder with the
+exact state and add both fields below. Runtime Audit rejects a declared non-runnable state without
+them; do not imply success that was not observed.
+
+- Why: <exact observed issue, dependency, or decision>
+- First recovery action: <one concrete action>
+
 ## Blockers / uncertainty
 - <none or exact issue>
 
@@ -31,6 +41,8 @@ execution target into this handoff. Do not use "then continue/start/implement <l
 while this target remains unresolved.
 
 Read the active instruction layers, recover project state from the Default Read Set,
-verify the Roadmap marker, and continue this one target autonomously. Do not reread
-full completed phases, completion reports, or chat history unless evidence requires it.
+verify the Roadmap marker, and reconcile this handoff against the current Phase, live
+repository/worktree state, and decisive evidence before continuing this one target. Do not reread
+full completed phases, completion reports, or chat history unless a specific contradiction
+requires that historical evidence.
 ```

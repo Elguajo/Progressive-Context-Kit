@@ -122,6 +122,28 @@ def verify_ubiquitous_language(root, warns):
     if duplicates:
         warns.append('Project Brief Ubiquitous Language repeats canonical terms: '+', '.join(duplicates))
 
+
+def verify_next_session(root, errors):
+    """Lint declared non-runnable handoffs without judging task completion semantically."""
+    text = read(project_file(root, 'NEXT_SESSION.md'))
+    match = re.search(r'^## Current working state\s*$\n(.*?)(?=^## |\Z)', text, re.M | re.S)
+    if not match:
+        return
+    lines = [line.strip() for line in match.group(1).splitlines() if line.strip()]
+    if not lines or lines[0].startswith('<'):
+        return
+    state = lines[0]
+    allowed = {'RUNNABLE / GREEN', 'KNOWN BROKEN / RECOVERABLE', 'BLOCKED'}
+    if state not in allowed:
+        errors.append('NEXT_SESSION has invalid current working state: '+state)
+        return
+    if state == 'RUNNABLE / GREEN':
+        return
+    section = match.group(1)
+    for field in ('Why', 'First recovery action'):
+        if not re.search(rf'^- {re.escape(field)}:\s*\S', section, re.M):
+            errors.append(f'NEXT_SESSION {state} requires non-empty "- {field}:"')
+
 def verify_project_state(root, errors, warns):
     road = read(project_file(root,'ROADMAP.md'))
     markers = re.findall(r'^- \[([ >x])\].*?`((?:docs|\.progressive)/phases/[^`]+\.md)`', road, re.M)
@@ -139,6 +161,7 @@ def verify_project_state(root, errors, warns):
             if marker == 'x' and p.is_file() and not completion_record(p):
                 warns.append('completed phase lacks Completion Record: '+rel)
     verify_ubiquitous_language(root, warns)
+    verify_next_session(root, errors)
     phase = current_phase(root) or template_file(root,'PHASE.template.md')
     project_chars = sum(chars(project_file(root,n)) for n in ['PROJECT_BRIEF.md','ARCHITECTURE.md','ROADMAP.md']) + chars(phase)
     if current_phase(root):

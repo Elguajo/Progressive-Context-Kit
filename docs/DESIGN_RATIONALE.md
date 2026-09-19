@@ -82,3 +82,11 @@ Framework migration evidence, human onboarding, release tooling, source tests, p
 All framework behavior, routing, Skills, templates, protocols, tests, and release rules are maintained only in Framework Source. The user-facing Project Runtime is disposable build output created from Source by `tools/build_release.py`.
 
 The release builder validates Source first, generates the Runtime through `tools/build_runtime.py`, audits the extracted Runtime, compiles its default context, and emits a SHA-256 checksum plus machine-readable manifest. Runtime files must never be patched separately to fix framework behavior; the fix belongs in Source and the Runtime is rebuilt.
+
+## Continuity evolution provenance
+
+The resume-integrity, safe-pause, blinded-evaluation, and structural-promotion refinements added
+in 2026-09 are a conceptual reconstruction informed by `cursor/plugins` `pstack` at pinned path
+revision `5bf2b1544db739998121a306340631963c2ff3de` (MIT), inspected on 2026-09-19. No pstack code
+or material text is copied. PCK retains its own durable-state, progressive-context, and generated
+Runtime architecture rather than porting pstack orchestration or transcript-recall mechanisms.

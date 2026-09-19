@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-framework",
-  "rule_count": 68,
+  "rule_count": 75,
   "rules": [
     {"id":"FW-001","owner":"profiles/personal/AGENTS.md","anchor":"docs/system/LINEAGE.md","summary":"LINEAGE excluded from normal warm-up"},
     {"id":"FW-002","owner":"integrations/TOOL_REGISTRY.json","anchor":"MinishLab/semble","summary":"Semble is preferred semantic discovery implementation"},
@@ -70,6 +70,13 @@
     {"id":"FW-065","owner":"tools/runtime_layout.py","anchor":"'PLANNING_DEPTH.md'","summary":"Adaptive planning protocol is packaged into Project Runtime"},
     {"id":"FW-066","owner":"docs/contracts/SKILL_ACTIVATION.md","anchor":"activation: automatic | explicit | both","summary":"Canonical Skills declare machine-readable activation semantics without expanding always-loaded context"},
     {"id":"FW-067","owner":"docs/contracts/PROGRESSIVE_GATE.md","anchor":"One command owns the Framework Source verification sequence.","summary":"Framework Source verification has one canonical aggregate entrypoint while child validators retain their own logic"},
-    {"id":"FW-068","owner":"integrations/TOOL_ADAPTER_PROTOCOL.md","anchor":"Stable capability, replaceable adapter.","summary":"Branded tools remain replaceable implementations behind stable capabilities with explicit route boundaries, fallbacks, approval constraints, and on-demand loading"}
+    {"id":"FW-068","owner":"integrations/TOOL_ADAPTER_PROTOCOL.md","anchor":"Stable capability, replaceable adapter.","summary":"Branded tools remain replaceable implementations behind stable capabilities with explicit route boundaries, fallbacks, approval constraints, and on-demand loading"},
+    {"id":"FW-069","owner":"docs/evals/agent/MODEL_EVAL_PROTOCOL.md","anchor":"## Blinded candidate and judge review","summary":"Workflow evaluation can blind candidate intent and judge arm identity while retaining controlled paired comparison"},
+    {"id":"FW-070","owner":"docs/evals/agent/JUDGE_RECORD.schema.json","anchor":"Progressive Context Kit Blinded Judge Record","summary":"Blinded pairwise judge outcomes use a machine-readable anonymous A/B record separate from run records"},
+    {"id":"FW-071","owner":"docs/system/CHANGE_CONTROL.md","anchor":"For a recurring workflow correction, choose the strongest low-context enforcement layer before","summary":"Framework evolution prefers structural prevention, deterministic detection, and mechanical canonicalization before conditional procedure or prose"},
+    {"id":"FW-072","owner":"docs/evals/agent/autoresearch/README.md","anchor":"an observation candidate, not a framework rule.","summary":"Autoresearch turns repeated evidence into a hypothesis and measured candidate rather than automatically encoding corrections"},
+    {"id":"FW-073","owner":"docs/system/PLANNING_DEPTH.md","anchor":"For FULL work, and for FOCUSED work with a material unresolved assumption, test an unknown before","summary":"Material invalidating assumptions are tested before dependent implementation without adding ceremony to direct work"},
+    {"id":"FW-074","owner":"docs/system/CHANGE_CONTROL.md","anchor":"PCK owns context, durable project state, continuity, and planning contracts.","summary":"PCK excludes transcript-first resume, parallel ledgers/routers/schedulers, duplicated product harnesses, and autonomous shipping"},
+    {"id":"FW-075","owner":"tools/runtime_audit.py","anchor":"Lint declared non-runnable handoffs without judging task completion semantically.","summary":"Runtime Audit rejects declared known-broken or blocked handoffs without an observed reason and first recovery action"}
   ]
 }

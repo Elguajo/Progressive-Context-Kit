@@ -60,6 +60,18 @@ class FrameworkContractTests(unittest.TestCase):
         self.assertEqual(rules['FW-058']['owner'],'.agents/skills/documentation-governance/SKILL.md')
         self.assertEqual(rules['FW-059']['owner'],'global/AGENTS.codex.md')
         self.assertEqual(rules['FW-060']['owner'],'global/CLAUDE.md')
+    def test_continuity_evolution_rules_are_structural_and_source_only(self):
+        c=json.loads((ROOT/'docs/contracts/FRAMEWORK_CONTRACT.json').read_text())
+        s=json.loads((ROOT/'docs/evals/static/FRAMEWORK_SCENARIOS.json').read_text())
+        rules={r['id']:r for r in c['rules']}
+        expected={f'FW-{n:03d}' for n in range(69,76)}
+        scenario=next(sc for sc in s['scenarios'] if sc['id']=='continuity-evolution')
+        self.assertEqual(expected,set(scenario['covers']))
+        self.assertEqual(rules['FW-069']['owner'],'docs/evals/agent/MODEL_EVAL_PROTOCOL.md')
+        self.assertEqual(rules['FW-070']['owner'],'docs/evals/agent/JUDGE_RECORD.schema.json')
+        self.assertEqual(rules['FW-071']['owner'],'docs/system/CHANGE_CONTROL.md')
+        self.assertEqual(rules['FW-074']['owner'],'docs/system/CHANGE_CONTROL.md')
+        self.assertEqual(rules['FW-075']['owner'],'tools/runtime_audit.py')
     def test_anchor_loss_fails(self):
         with tempfile.TemporaryDirectory() as d:
             dst=Path(d)/'r'; shutil.copytree(ROOT,dst,ignore=shutil.ignore_patterns('dist','__pycache__'))

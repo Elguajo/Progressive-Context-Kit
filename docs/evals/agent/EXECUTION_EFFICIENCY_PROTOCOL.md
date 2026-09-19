@@ -24,6 +24,10 @@ For every pair keep constant:
 Only the workflow under test should differ. Record the exact baseline and candidate
 `workflow_ref` (commit, tag, or immutable artifact identifier).
 
+For workflow-behavior claims, follow the blinded candidate and judge procedure in
+`MODEL_EVAL_PROTOCOL.md`. Anonymous `A`/`B` judge artifacts and the separate private arm map do
+not replace these controls; they prevent arm knowledge from biasing candidate or judge behavior.
+
 Use the same `pair_id` for baseline and candidate runs. Repeat pairs when practical because
 agent runs are nondeterministic; five or more repetitions per task is preferred for claims
 about stable median effects, but smaller samples remain useful as exploratory evidence.
@@ -99,6 +103,15 @@ The analyzer:
 - reports paired quality deltas;
 - fails the quality gate on any baseline-pass → candidate-fail hard regression;
 - otherwise applies the configured quality non-inferiority tolerance.
+
+When blinded judge records are available, pass their JSONL/JSON input and the separate anonymous
+pair map to the analyzer. Judge-detected hard failures and judge quality scores then provide the
+quality evidence; the map is a control artifact and must not be shown to the judge.
+
+When reporting a workflow-behavior or adherence result, use `--require-judge
+--require-workflow-evidence` as well. This requires references to produced artifacts,
+project-state changes, commands/results, and verification for both arms, rather than relying on
+the candidate's outcome fields alone.
 
 A lower efficiency metric is better. A positive quality delta is better.
 

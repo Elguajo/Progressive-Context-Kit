@@ -39,6 +39,15 @@ Triggers include one or more of:
 
 FULL does not mean "generate every document". It means deepen only the specification, decision records, research, readiness, security analysis, and phased execution that the risk/uncertainty actually requires.
 
+### Risk-first sequencing
+
+For FULL work, and for FOCUSED work with a material unresolved assumption, test an unknown before
+building the work that depends on it when that assumption could invalidate architecture or scope
+and a narrow research step, prototype, or spike is cheaper than proceeding blindly. Sequence the
+work as: critical unknown → narrow evidence → architecture decision when needed → dependent
+implementation. Do not create a prototype by default or impose a fixed number of options; DIRECT
+work remains lightweight.
+
 ## Selection rule
 
 Silently classify planning depth before creating or materially expanding project specifications:

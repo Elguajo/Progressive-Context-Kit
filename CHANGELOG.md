@@ -1,5 +1,30 @@
 # Changelog
 
+## Unreleased
+
+- Added resume integrity: `NEXT_SESSION.md` is now explicitly reconciled as volatile navigation
+  against Roadmap/current Phase and live repository evidence before a cold-start continuation
+  acts. The bounded check does not replay completed work or make chat history a default input.
+- Defined safe pause as a recoverable `IN PROGRESS` transaction with explicit runnable,
+  known-broken/recoverable, and blocked states. It records only observed state, preserves
+  single-focus continuation, never fabricates phase completion, and does not require a WIP commit.
+- Extended Framework Source real-agent evaluation with blinded candidate/judge guidance, a separate
+  machine-readable `JUDGE_RECORD` schema, anonymous A/B artifacts, a private arm map, and analyzer
+  support for judge-derived quality/hard-regression evidence. Eval infrastructure remains out of
+  Project Runtime.
+- Added structural-promotion policy, evidence-harvesting guidance for Autoresearch, and risk-first
+  sequencing for material invalidating unknowns in FULL/uncertain FOCUSED work. Added explicit
+  boundaries against transcript-first resume, parallel ledgers/routers/schedulers, duplicated
+  product harnesses, and autonomous shipping.
+- Added Framework Contract rules `FW-069`…`FW-074` and Progressive Context invariants `PC-014` and
+  `PC-015`, with pinned ID sets and static/regression coverage. These are conceptual
+  reconstructions informed by MIT-licensed pstack at `5bf2b1544db739998121a306340631963c2ff3de`;
+  no pstack code or material text was copied.
+- Tightened the new surfaces after review: Runtime Audit now rejects explicitly declared
+  known-broken/blocked handoffs without a reason and first recovery action; workflow-behavior
+  claims require blinded judge evidence plus artifact, project-state, command-result, and
+  verification references. Added `FW-075` and `PC-016` for those structural checks.
+
 ## 2.1.0 — 2026-09-18
 
 - Fixed routed Skill resolution so PCK always treats `.agents/...` paths as repository-root-relative. Project-local Skills now take precedence over same-named global Skills; Runtime Audit reports a collision without allowing a global fallback to silently change project behavior.

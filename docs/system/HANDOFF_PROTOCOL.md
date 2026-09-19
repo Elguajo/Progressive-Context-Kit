@@ -40,9 +40,36 @@ If the session remains `IN PROGRESS`, keep the phase active and do not fabricate
 
 On project completion every phase is `[x]` and none is `[>]`.
 
+## Safe pause transaction
+
+A safe pause is an `IN PROGRESS` handoff, never a fourth session outcome. Before pausing, finish
+the current atomic unit or return it to a known recoverable state; do not begin another queued
+unit. Record only facts actually present on disk or in canonical project state, verification
+actually observed, and one of these working states:
+
+- `RUNNABLE / GREEN`;
+- `KNOWN BROKEN / RECOVERABLE` with the exact observed issue and first recovery action; or
+- `BLOCKED` with the exact external dependency or decision.
+
+For either non-runnable state, use these exact `NEXT_SESSION` fields so a Runtime Audit can catch
+a dangerous false handoff: `- Why: <non-empty fact>` and `- First recovery action: <one concrete
+action>`. This lint checks declared state only; it does not decide whether an agent's semantic
+claim of completion is true.
+
+Persist an Architecture, current-Phase, or ADR update only when its canonical fact actually
+changed. Then overwrite `NEXT_SESSION.md` with one resume target and its first concrete action.
+Do not fabricate a completion record/report, create another durable execution ledger, or require
+a WIP Git commit: Git may help where a project convention already uses it, but safe pause also
+works without Git.
+
 ## NEXT_SESSION semantics
 
 `NEXT_SESSION.md` is volatile hot navigation, not project history. Overwrite it on each meaningful handoff; do not create an accumulating chain of `NEXT_SESSION_001.md`, `NEXT_SESSION_002.md`, etc. It contains only current phase, completed work from the just-ended session, verification, blockers/uncertainty, next action, and a ready-to-copy prompt. Durable completed-phase detail belongs in `docs/completions/`; the phase keeps only its compact Completion Record; full source history remains in version control when available.
+
+On resume, treat that handoff as a pointer. Reconcile its target with the Roadmap/current Phase,
+the live worktree/repository, and the evidence that establishes whether the target or blocker is
+still open before acting. A stale handoff must not override canonical state. This is a bounded
+check, not a request to reconstruct work from chat history or re-audit completed work.
 
 ### Single-focus continuation
 

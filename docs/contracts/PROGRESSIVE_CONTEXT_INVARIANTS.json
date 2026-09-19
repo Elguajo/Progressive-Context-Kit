@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-architectural-invariants",
-  "invariant_count": 13,
+  "invariant_count": 16,
   "invariants": [
     {
       "id": "PC-001",
@@ -80,6 +80,24 @@
       "owner": "docs/system/UBIQUITOUS_LANGUAGE.md",
       "anchor": "Project-domain vocabulary belongs in the **Project Brief**",
       "summary": "Project-domain language stays compact in the existing Brief context instead of creating a parallel glossary or another default read"
+    },
+    {
+      "id": "PC-014",
+      "owner": "docs/system/CONTEXT_PROTOCOL.md",
+      "anchor": "`NEXT_SESSION.md` is a navigation pointer, not authority over current project state.",
+      "summary": "Resume reconciles volatile handoff navigation with current canonical state and live repository evidence before action"
+    },
+    {
+      "id": "PC-015",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "A safe pause is an `IN PROGRESS` handoff, never a fourth session outcome.",
+      "summary": "Safe pause records recoverable actual state without fabricating phase completion or requiring a WIP commit"
+    },
+    {
+      "id": "PC-016",
+      "owner": "tools/runtime_audit.py",
+      "anchor": "Lint declared non-runnable handoffs without judging task completion semantically.",
+      "summary": "A declared known-broken or blocked handoff has machine-checked recovery fields without making Runtime Audit decide semantic task completion"
     }
   ]
 }

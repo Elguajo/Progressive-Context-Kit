@@ -68,6 +68,12 @@
       "description":"A preferred branded tool is selected, unavailable, replaced, or a new implementation is added for an existing development capability.",
       "covers":["FW-068"],
       "expected":"Tool selection routes by stable capability and task evidence before brand; every adapter declares preferred/avoid conditions, official source, safe fallback, profiles, and extra approval constraints; common on-demand/approval policy stays centralized; Source Gate and Project Runtime audit reject registry drift without making adapter detail always-loaded context."
+    },
+    {
+      "id":"continuity-evolution",
+      "description":"A framework revision strengthens resume, safe pause, evolution evidence, or planning without broadening PCK into an orchestration system.",
+      "covers":["FW-069","FW-070","FW-071","FW-072","FW-073","FW-074","FW-075"],
+      "expected":"Candidate tasks and judge artifacts can be blinded while paired controls remain fixed and machine-readable judge records use anonymous A/B labels. Repeated corrections become evidence candidates and promotion first seeks structural prevention, deterministic detection, or mechanical canonicalization. Material invalidating assumptions are tested before dependent FULL/uncertain FOCUSED work. Declared non-runnable pauses contain a reason and first recovery action. PCK keeps durable-state-first continuity and does not add transcript-first resume, a parallel ledger/router/scheduler, product verification harness, or autonomous shipping."
     }
   ]
 }

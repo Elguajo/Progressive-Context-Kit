@@ -115,6 +115,38 @@ class RuntimeReleaseTests(unittest.TestCase):
             self.assertNotEqual(leak_audit.returncode,0)
             self.assertIn('legacy framework surface leaked into project root: docs/system/CONTEXT_PROTOCOL.md',leak_audit.stdout)
 
+    def test_runtime_audit_rejects_declared_nonrunnable_pause_without_recovery_fields(self):
+        build=subprocess.run([sys.executable,str(ROOT/'tools/build_runtime.py')],capture_output=True,text=True)
+        self.assertEqual(build.returncode,0,build.stdout+build.stderr)
+        z=ROOT/f'dist/Progressive-Context-Project-Runtime-v{VERSION}.zip'
+        with tempfile.TemporaryDirectory() as d:
+            with zipfile.ZipFile(z) as zf: zf.extractall(d)
+            runtime=Path(d)/f'Progressive-Context-Project-Runtime-v{VERSION}'
+            next_session=runtime/'.progressive/project/NEXT_SESSION.md'
+            next_session.write_text(
+                '# Next Session\n\n'
+                '## Current working state\n'
+                'KNOWN BROKEN / RECOVERABLE\n\n'
+                '## Next action\nRepair the failing check.\n',
+                encoding='utf-8',
+            )
+            audit=subprocess.run([sys.executable,str(runtime/'.progressive/tools/audit.py'),'--root',str(runtime)],capture_output=True,text=True)
+            self.assertNotEqual(audit.returncode,0)
+            self.assertIn('NEXT_SESSION KNOWN BROKEN / RECOVERABLE requires non-empty "- Why:"',audit.stdout)
+            self.assertIn('NEXT_SESSION KNOWN BROKEN / RECOVERABLE requires non-empty "- First recovery action:"',audit.stdout)
+
+            next_session.write_text(
+                '# Next Session\n\n'
+                '## Current working state\n'
+                'KNOWN BROKEN / RECOVERABLE\n'
+                '- Why: focused test still fails after the partial change\n'
+                '- First recovery action: run the focused test and inspect its assertion\n\n'
+                '## Next action\nRepair the failing check.\n',
+                encoding='utf-8',
+            )
+            audit=subprocess.run([sys.executable,str(runtime/'.progressive/tools/audit.py'),'--root',str(runtime)],capture_output=True,text=True)
+            self.assertEqual(audit.returncode,0,audit.stdout+audit.stderr)
+
     def test_runtime_build_is_deterministic(self):
         first=subprocess.run([sys.executable,str(ROOT/'tools/build_runtime.py')],capture_output=True,text=True)
         self.assertEqual(first.returncode,0,first.stdout+first.stderr)
