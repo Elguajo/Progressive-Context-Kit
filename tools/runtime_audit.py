@@ -3,6 +3,7 @@ from pathlib import Path
 import argparse, json, re
 from common import chars, current_phase, project_file, read, resolve_path, template_file
 from context_compile import completion_bridge, completion_record
+from task_prompts import active_prompt, hot_prompt, phase_context
 from routing_integrity import validate as validate_routing_integrity
 from tool_adapter_protocol import validate as validate_tool_adapters
 
@@ -14,7 +15,7 @@ REQUIRED = [
     '.progressive/project/PROJECT_BRIEF.md','.progressive/project/ARCHITECTURE.md','.progressive/project/ROADMAP.md','.progressive/project/NEXT_SESSION.md','.progressive/project/CONTEXT_MANIFEST.json','.progressive/project/TOOLING_STATUS.json',
     '.progressive/system/CONTEXT_PROTOCOL.md','.progressive/system/HANDOFF_PROTOCOL.md','.progressive/system/LAYER_OWNERSHIP.md','.progressive/system/PLANNING_DEPTH.md','.progressive/system/QUALITY_PROTOCOL.md','.progressive/system/TOOL_ROUTING.md','.progressive/system/UBIQUITOUS_LANGUAGE.md',
     '.progressive/integrations/TOOL_ADAPTER_PROTOCOL.md','.progressive/integrations/TOOL_REGISTRY.json','.progressive/integrations/PROFILES.md',
-    '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/routing_integrity.py','.progressive/tools/audit.py','.progressive/tools/tool_adapter_protocol.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
+    '.progressive/templates/PHASE.template.md','.progressive/templates/PHASE_COMPLETION.template.md','.progressive/templates/TASK_PROMPT.template.md','.progressive/tools/common.py','.progressive/tools/context_compile.py','.progressive/tools/task_prompts.py','.progressive/tools/routing_integrity.py','.progressive/tools/audit.py','.progressive/tools/tool_adapter_protocol.py','.progressive/tools/tooling_status.py','.progressive/tools/tooling_bootstrap.py',
 ]
 # Real products may legitimately own root directories named docs/, tools/, templates/,
 # integrations/, profiles/, or prompts/. Detect legacy Framework Source leakage by
@@ -162,8 +163,11 @@ def verify_project_state(root, errors, warns):
                 warns.append('completed phase lacks Completion Record: '+rel)
     verify_ubiquitous_language(root, warns)
     verify_next_session(root, errors)
+    _, prompt, prompt_error = active_prompt(root)
+    if prompt_error:
+        errors.append('Task prompt integrity: '+prompt_error)
     phase = current_phase(root) or template_file(root,'PHASE.template.md')
-    project_chars = sum(chars(project_file(root,n)) for n in ['PROJECT_BRIEF.md','ARCHITECTURE.md','ROADMAP.md']) + chars(phase)
+    project_chars = sum(chars(project_file(root,n)) for n in ['PROJECT_BRIEF.md','ARCHITECTURE.md','ROADMAP.md','NEXT_SESSION.md']) + len(phase_context(read(phase))) + len(hot_prompt(prompt))
     if current_phase(root):
         _, record = completion_bridge(root,current_phase(root)); project_chars += len(record)
     if project_chars > 22000: warns.append(f'project default context exceeds 22000-char soft budget: {project_chars}')

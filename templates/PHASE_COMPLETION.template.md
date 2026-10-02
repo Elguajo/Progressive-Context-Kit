@@ -8,6 +8,10 @@ Status: COMPLETED
 ## Delivered
 - <capability/artifact now available>
 
+## Task provenance
+- <owning phase archive path#task-id → observed outcome; reference retained requests/prompts/evidence,
+  including superseded/cancelled targets when relevant. Do not duplicate prompt bodies.>
+
 ## Implementation notes
 <durable technical details useful to humans or later investigation; do not repeat the phase plan or diff line by line>
 

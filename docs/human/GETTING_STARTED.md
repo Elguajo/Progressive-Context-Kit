@@ -132,8 +132,14 @@ After a meaningful session:
 1. let the agent validate and hand off;
 2. close the session completely;
 3. start a fresh session in the same repository;
-4. paste only the generated `NEXT SESSION PROMPT`;
+4. send the short launch instruction with the saved task ID, or use `CONTINUE_PROJECT.md` below;
 5. do not manually re-explain the project unless something important was actually lost.
+
+NEXT_SESSION points to a prompt in the current Phase-owned `<phase-name>.prompts.md` archive. The agent checks freshness before execution; completed/superseded records remain history. A legacy inline prompt is retained in the Phase on its first continuation, without migrating completed phases.
+
+```text
+Use .progressive/prompts/CONTINUE_PROJECT.md and continue autonomously.
+```
 
 This is the practical continuity test Progressive is designed to pass.
 

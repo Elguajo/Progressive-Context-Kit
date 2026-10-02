@@ -7,10 +7,11 @@ flowchart TD
     W["Work in current Phase"] --> V{"Acceptance / verification passed?"}
     V -- No --> W
     V -- Yes --> C["Update canonical Architecture / ADR if needed"]
-    C --> R["Write one Phase Completion Report"]
+    C --> P["Retain Phase task prompts and observed evidence"]
+    P --> R["Write one Phase Completion Report with task IDs"]
     R --> B["Write compact Completion Record"]
     B --> M["Mark ROADMAP phase complete"]
-    M --> N["Overwrite NEXT_SESSION with hot continuation state"]
+    M --> N["Update NEXT_SESSION with hot state and active prompt pointer"]
     N --> X["Next Phase / next session"]
 ```
 

@@ -88,7 +88,8 @@ class ProgressiveContextInvariantTests(unittest.TestCase):
         self.assertIn('Volatile hot context. Overwrite this file on each meaningful handoff', template)
         self.assertIn('do not accumulate prior-session history', template)
         self.assertIn('completion reports, or chat history unless a specific contradiction', template)
-        self.assertIn('reconcile this handoff against the current Phase, live', template)
+        self.assertIn('Active task prompt', template)
+        self.assertNotIn('## NEXT SESSION PROMPT', template)
 
     def test_resume_integrity_reconciles_navigation_without_history_replay(self):
         protocol = (ROOT / 'docs/system/CONTEXT_PROTOCOL.md').read_text(encoding='utf-8')

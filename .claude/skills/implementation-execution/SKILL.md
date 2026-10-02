@@ -8,6 +8,14 @@ may_delegate: ["systematic-debugging"]
 
 # Implementation Execution
 
+Before a meaningful execution target, select/create its Phase-owned task prompt archive record using
+`docs/system/HANDOFF_PROTOCOL.md` and check applicability using
+`docs/system/CONTEXT_PROTOCOL.md`. Preserve the request/prompt after use, execute only the
+unresolved portion, and keep observed evidence with its ID. Load only the execution view;
+within an already-grounded session use `context_compile.py --task-only` rather than repeating
+the full bundle. Original requests and accumulated evidence stay cold. Do not create records for routine
+mechanical substeps or uninitialized Framework Source maintenance.
+
 Once direction is clear, implement end-to-end in one cohesive pass. Approval is for the chosen
 direction, not incomplete core-logic fragments.
 

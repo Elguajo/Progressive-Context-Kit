@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "contract": "progressive-context-architectural-invariants",
-  "invariant_count": 16,
+  "invariant_count": 19,
   "invariants": [
     {
       "id": "PC-001",
@@ -98,6 +98,24 @@
       "owner": "tools/runtime_audit.py",
       "anchor": "Lint declared non-runnable handoffs without judging task completion semantically.",
       "summary": "A declared known-broken or blocked handoff has machine-checked recovery fields without making Runtime Audit decide semantic task completion"
+    },
+    {
+      "id": "PC-017",
+      "owner": "docs/system/HANDOFF_PROTOCOL.md",
+      "anchor": "Preserve the original request and executed prompt body after use.",
+      "summary": "Phase-owned task prompts retain intent and observed evidence; changed instructions create linked revisions rather than rewriting history"
+    },
+    {
+      "id": "PC-018",
+      "owner": "docs/system/CONTEXT_PROTOCOL.md",
+      "anchor": "A stored CURRENT must",
+      "summary": "Each task execution/resume checks semantic freshness against canonical state, live evidence and current authorization"
+    },
+    {
+      "id": "PC-019",
+      "owner": "tools/task_prompts.py",
+      "anchor": "prompt history is read only through an explicit pointer",
+      "summary": "Default context excludes prompt history; only the current-phase nonterminal nonstale referenced record may be compiled"
     }
   ]
 }

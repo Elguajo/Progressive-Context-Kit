@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse, json, re, sys
 from common import PHASE_RE, current_phase, project_file, read, resolve_path, safe_join
+from task_prompts import active_prompt, hot_prompt, phase_context
 
 CORE=['docs/project/PROJECT_BRIEF.md','docs/project/ARCHITECTURE.md','docs/project/ROADMAP.md','docs/project/NEXT_SESSION.md']
 PLACEHOLDER_PATTERNS=[r'^Status:\s*UNINITIALIZED\s*$',r'^<.*>$',r'^\.\.\.$']
@@ -79,10 +80,12 @@ def build(root,max_extra_chars=4000):
         text=compact(read(resolve_path(root,rel)))
         if text: chunks.append(f'## {rel}\n{text}')
     if phase:
-        text=compact(read(phase)); chunks.append(f'## {phase.relative_to(root).as_posix()}\n{text}')
+        text=compact(phase_context(read(phase))); chunks.append(f'## {phase.relative_to(root).as_posix()}\n{text}')
         prev,record=completion_bridge(root,phase)
         if prev and record:
             chunks.append(f'## Previous phase completion bridge — {prev.relative_to(root).as_posix()}\n{record}')
+    task=task_context(root,max_extra_chars)
+    if task: chunks.append(task)
     hints=manifest_for_phase(root,phase)
     if hints['skills']: chunks.append('## Skill hints\n'+'\n'.join('- '+x for x in hints['skills']))
     if hints['notes']: chunks.append('## Context notes\n'+'\n'.join('- '+x for x in hints['notes']))
@@ -91,17 +94,24 @@ def build(root,max_extra_chars=4000):
         overflow=len(required)-MAX_REQUIRED_FILES
         parts=[]
         total=0
+        included={resolve_path(root,rel) for rel in CORE}
+        if phase: included.add(phase.resolve())
         for rel in required[:MAX_REQUIRED_FILES]:
             try:
                 p=resolve_path(root,rel)
             except ValueError as e:
                 parts.append(f'### {rel}\nREJECTED — {e}'); continue
             if not p.is_file(): parts.append(f'### {rel}\nMISSING — verify manifest/repository state.'); continue
+            if p in included:
+                parts.append(f'### {rel}\nALREADY INCLUDED — use the compiled canonical section.'); continue
+            if p.name.endswith('.prompts.md'):
+                parts.append(f'### {rel}\nPOINTER ONLY — task prompt archive stays cold; read only a specifically needed record.'); continue
             text=read(p)
             if len(text)>max_extra_chars:
                 parts.append(f'### {rel}\nPOINTER ONLY — {len(text)} chars exceeds compact inline limit; read targeted sections if needed.'); continue
             if total+len(text)>MAX_TOTAL_EXTRA_CHARS:
                 parts.append(f'### {rel}\nPOINTER ONLY — manifest total-context budget ({MAX_TOTAL_EXTRA_CHARS} chars) reached; read targeted sections if needed.'); continue
+            included.add(p)
             total+=len(text); parts.append(f'### {rel}\n{text.strip()}')
         if overflow>0:
             parts.append(f'### (budget)\n{overflow} additional manifest-required file(s) omitted — exceeds max_required_files ({MAX_REQUIRED_FILES}).')
@@ -109,9 +119,31 @@ def build(root,max_extra_chars=4000):
     return '\n\n'.join(chunks).strip()+'\n'
 
 
+def task_context(root,max_extra_chars=4000):
+    """Task delta for an already-grounded session; never a cold-start substitute."""
+    chunks=[]
+    ref,record,error=active_prompt(root)
+    if error:
+        chunks.append('## Task prompt integrity\nREJECTED — '+error+'; reconcile canonical state before execution.')
+    elif record:
+        hot=hot_prompt(record)
+        if len(hot)>max_extra_chars:
+            chunks.append(f'## Active task prompt — {ref}\nPOINTER ONLY — {len(hot)} hot chars exceeds compact inline limit; read Prompt, Freshness check and Current checkpoint sections before execution.')
+        else:
+            chunks.append(f'## Active task prompt — {ref}\n{hot}')
+        chunks.append('Recheck prompt freshness against current instructions, Phase, live repository and decisive evidence before execution; stored CURRENT is not proof of freshness.')
+    elif ref=='NONE':
+        chunks.append('## Active task prompt\nNONE — select only from canonical state; do not replay completed prompts.')
+    else:
+        chunks.append('## Active task prompt\nNo saved record — reconcile canonical state and legacy handoff before selecting a target.')
+    return '\n\n'.join(chunks).strip()
+
+
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument('--root',default='.'); ap.add_argument('--output'); ap.add_argument('--max-extra-chars',type=int,default=4000); a=ap.parse_args(); root=Path(a.root).resolve()
-    text=build(root,a.max_extra_chars)
+    ap=argparse.ArgumentParser(); ap.add_argument('--root',default='.'); ap.add_argument('--output'); ap.add_argument('--max-extra-chars',type=int,default=4000)
+    ap.add_argument('--task-only',action='store_true',help='Only active task execution context; use after full grounding in the same session.')
+    a=ap.parse_args(); root=Path(a.root).resolve()
+    text=task_context(root,a.max_extra_chars)+'\n' if a.task_only else build(root,a.max_extra_chars)
     if a.output:
         out=Path(a.output); out=out if out.is_absolute() else root/out; out.parent.mkdir(parents=True,exist_ok=True); out.write_text(text,encoding='utf-8'); print(out)
     else:

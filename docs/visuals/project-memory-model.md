@@ -11,20 +11,21 @@ flowchart TB
     end
 
     subgraph E[Execution]
-        P[Current Phase\nwhat are we doing now?]
+        P[Current Phase\nplan + acceptance]
     end
 
     subgraph H[History and continuity]
         CR[Completion Record\ncompact cross-phase bridge]
         CP[Completion Report\ndetailed phase history]
         ADR[ADR\nwhy a consequential decision was made]
-        NS[NEXT_SESSION\nvolatile next action]
+        NS[NEXT_SESSION\nvolatile next action + active prompt pointer]
     end
 
     B --> A --> R --> P
     P --> CR
     P --> CP
-    P --> NS
+    P --> PA[Phase-owned prompt archive\npreserved requests + revisions + evidence]
+    PA -. active execution view only .-> NS
     A -. consequential rationale .-> ADR
     CR --> R
 ```

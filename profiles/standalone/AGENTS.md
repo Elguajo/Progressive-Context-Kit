@@ -53,8 +53,8 @@ Universal engineering behavior is supplied by the user-global layer. Standalone 
 ## Context routing
 
 - **Tiny/local task:** target file + nearby evidence/tests only; project docs only when product/architecture constraints matter.
-- **Normal product work:** prefer `python3 tools/context_compile.py`; otherwise read `docs/project/PROJECT_BRIEF.md` → `ARCHITECTURE.md` → `ROADMAP.md` → `NEXT_SESSION.md` when present → `[>]` phase → prior phase's `Completion Record` when present, then only relevant ADR/source/tests/schemas/current docs.
-- Never warm up by reading full completed phases, all ADRs, `docs/system/*`, `docs/system/LINEAGE.md`, full chat history, or large manuals.
+- **Normal product work:** prefer `python3 tools/context_compile.py`; otherwise read `docs/project/PROJECT_BRIEF.md` → `ARCHITECTURE.md` → `ROADMAP.md` → `NEXT_SESSION.md` when present → `[>]` phase plan + active prompt (check freshness) → prior phase's `Completion Record` when present, then relevant ADR/source/tests/schemas/docs.
+- Never warm up with full completed phases, all ADRs, `docs/system/*`, `docs/system/LINEAGE.md`, full chat history, or large manuals.
 - `ROADMAP.md` is canonical for current phase. All `[x]` means new work is a change request.
 - If Git is unavailable, continue without treating that as an error.
 
@@ -84,4 +84,4 @@ If a preferred tool is absent and materially useful, use `tooling-bootstrap`: ve
 
 ## Canonical project state
 
-Brief owns product outcome/scope; Architecture owns system shape/boundaries; Roadmap owns phase order/status; current Phase owns execution/acceptance/verification; completed Phase owns its compact Completion Record; `CONTEXT_MANIFEST.json` owns optional phase hints; ADR owns consequential rationale; NEXT_SESSION is overwriteable hot navigation; `TOOLING_STATUS.json` is tooling cache. Use `docs/system/LAYER_OWNERSHIP.md` when placement is ambiguous.
+Brief owns product outcome/scope; Architecture owns system shape/boundaries; Roadmap owns phase order/status; Phase owns tasks/acceptance/verification and prompt/evidence records; completed Phase owns its compact Completion Record; `CONTEXT_MANIFEST.json` owns optional phase hints; ADR owns consequential rationale; NEXT_SESSION owns hot navigation/prompt pointer; `TOOLING_STATUS.json` is tooling cache. Placement: `docs/system/LAYER_OWNERSHIP.md`.

@@ -9,14 +9,17 @@ flowchart TD
     C --> D[Architecture]
     D --> E[Roadmap]
     E --> F[Current Phase]
-    F --> G[Relevant code + tests + matching Skill]
+    F --> P[Resolve active Phase task prompt]
+    P --> Q[Check freshness against live state and acceptance]
+    Q --> G[Relevant code + tests + matching Skill]
     G --> H{Need older implementation detail?}
     H -- No --> I[Work]
     H -- Yes --> J[Read specific cold history on demand]
     J --> I
     I --> K[Verification]
     K --> L[Handoff]
-    L --> M[Overwrite NEXT_SESSION]
+    L --> N[Preserve Phase prompt + outcome evidence]
+    N --> M[Update NEXT_SESSION pointer when state changes]
 ```
 
 Normal startup stays bounded. Detailed historical material is pulled only when evidence requires it.

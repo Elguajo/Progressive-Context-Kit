@@ -37,7 +37,7 @@ Stable identifiers such as `PC-012`, code symbols, filenames, CLI flags, and com
 | **CR** | Completion Record | Compact durable bridge stored with a completed Phase. Prefer the full term in normal prose. |
 | **PCR** | Phase Completion Report | Detailed durable history for one completed Phase. It is cold/on-demand context. Prefer the full term in normal prose. |
 | **NS** | `NEXT_SESSION` | Informal shorthand for the volatile hot continuation state. Prefer the filename or full term. |
-| **NSP** | `NEXT_SESSION_PROMPT` | Informal shorthand for the ready-to-copy single-focus continuation prompt. Prefer the full name. |
+| **NSP** | `NEXT_SESSION_PROMPT` | Legacy shorthand for the inline continuation prompt; use the Phase task ID pointer for new work. |
 
 These abbreviations are not a requirement for using the Kit. They mainly help interpret implementation notes, issues, PR discussions, diagrams, and invariant IDs.
 
@@ -123,11 +123,15 @@ A detailed durable report for one completed Phase. It stores implementation note
 
 ### `NEXT_SESSION`
 
-Volatile hot navigation for the next meaningful continuation. It is overwritten rather than accumulated as history.
+Volatile hot navigation with an `Active task prompt` pointer into the Phase. Update it when state changes; request/prompt/evidence history stays in the Phase.
 
 ### `NEXT_SESSION_PROMPT`
 
-The ready-to-copy continuation prompt inside `NEXT_SESSION`. Under **Single-Focus Continuation**, it carries one unresolved execution target only; later queued work remains in the Phase/Roadmap until the current target is actually closed and persisted.
+Legacy inline continuation prompt in `NEXT_SESSION`. Executable prompts now live in the Phase, selected by an `Active task prompt` ID pointer. Retain a legacy prompt as a Phase-owned archive record on its first continuation. **Single-Focus Continuation** still limits each record to one unresolved target.
+
+### Task prompt record
+
+A record in the Phase-owned `<phase-name>.prompts.md` archive: ID, original request, preserved executable prompt, status, freshness check and observed outcome. Changed instructions get a linked replacement revision. CURRENT must be rechecked before execution.
 
 ### Handoff
 

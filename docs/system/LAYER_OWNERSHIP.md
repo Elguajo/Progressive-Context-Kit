@@ -7,7 +7,7 @@ Each durable rule/fact gets one canonical owner.
 - Brief → product outcome/users/scope/constraints/success. Compact project-domain Ubiquitous Language also lives here when materially useful.
 - Architecture → current stack/system shape/trust boundaries/operational assumptions.
 - Roadmap → phase order/status/current pointer.
-- Current Phase → execution tasks/acceptance/verification plus compact task-completion notes when later work needs them.
+- Current Phase → execution tasks/acceptance/verification; its adjacent `<phase-name>.prompts.md` archive owns preserved task requests, prompt revisions, freshness checks and observed outcomes/evidence. Only the active execution view is hot context.
 - Completed Phase `Completion Record` → compact cross-phase bridge and pointer to the final report; remains normal warm-up context.
 - Phase Completion Report (`docs/completions/`) → detailed durable human-readable result/evidence/implementation notes/debt for one completed phase; read on demand, not normal warm-up.
 - `CONTEXT_MANIFEST.json` → optional non-obvious phase-specific context/Skill hints; never duplicate full docs.
@@ -15,7 +15,7 @@ Each durable rule/fact gets one canonical owner.
 - `TOOL_REGISTRY.json` → preferred branded capability mapping/install policy.
 - `TOOLING_STATUS.json` → project-local persisted tooling availability/configuration cache.
 - Skill/protocol → conditional detailed procedure.
-- NEXT_SESSION → volatile continuation navigation, overwritten in place.
+- NEXT_SESSION → volatile continuation navigation with an `Active task prompt` pointer, updated in place when navigation/state changes; executable task prompts belong to the Phase.
 - LINEAGE → framework-maintenance evidence only, never normal task warm-up.
 
 Project-domain vocabulary must not become a parallel glossary layer: current meaning stays in the Brief, while deeper Architecture/ADR/schema/public-contract sources may be referenced rather than copied.

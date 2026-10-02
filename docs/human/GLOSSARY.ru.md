@@ -37,7 +37,7 @@ NSP должен сохранять семантику DRS после PCR.
 | **CR** | Completion Record | Компактный durable bridge внутри завершённой Phase. В обычном тексте лучше писать полное название. |
 | **PCR** | Phase Completion Report | Подробная долговременная история одной завершённой Phase; относится к cold/on-demand context. |
 | **NS** | `NEXT_SESSION` | Неформальное сокращение для volatile hot continuation state. Лучше использовать имя файла или полное название. |
-| **NSP** | `NEXT_SESSION_PROMPT` | Неформальное сокращение для готового single-focus prompt следующей сессии. Лучше писать полное название. |
+| **NSP** | `NEXT_SESSION_PROMPT` | Legacy-сокращение для inline-промпта; для новых задач используется ссылка на ID записи в фазе. |
 
 Эти сокращения не нужны для работы с Kit. Они нужны прежде всего для понимания implementation notes, issues, PR discussions, diagrams и invariant IDs.
 
@@ -123,11 +123,15 @@ Instructions или context, которые загружаются по умол
 
 ### `NEXT_SESSION`
 
-Volatile hot navigation для следующего meaningful continuation. Этот файл перезаписывается, а не накапливается как история.
+Volatile hot navigation со ссылкой `Active task prompt` на запись в фазе. Обновляется при изменении состояния; история запросов, промптов и evidence остаётся в фазе.
 
 ### `NEXT_SESSION_PROMPT`
 
-Готовый continuation prompt внутри `NEXT_SESSION`. По правилу **Single-Focus Continuation** он содержит только один незакрытый execution target; будущие queued Tasks остаются в Phase/Roadmap, пока текущая цель реально не закрыта и evidence не сохранён.
+Legacy inline-промпт внутри `NEXT_SESSION`. Теперь исполняемый промпт хранится в фазе, а `Active task prompt` указывает на его ID. При первом продолжении старый промпт сохраняется как запись архива фазы. **Single-Focus Continuation** по-прежнему ограничивает запись одной незакрытой целью.
+
+### Task prompt record
+
+Запись в соседнем архиве `<phase-name>.prompts.md` фазы: ID, исходный запрос, сохранённый промпт, статус, проверка актуальности и наблюдаемые результаты. Изменённые инструкции получают новую связанную версию. CURRENT требует повторной проверки перед работой.
 
 ### Handoff
 

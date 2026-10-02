@@ -29,6 +29,7 @@ SYSTEM_RUNTIME = [
 RUNTIME_TOOLS = {
     'common.py': 'common.py',
     'context_compile.py': 'context_compile.py',
+    'task_prompts.py': 'task_prompts.py',
     'context_report.py': 'context_report.py',
     'routing_integrity.py': 'routing_integrity.py',
     'runtime_audit.py': 'audit.py',

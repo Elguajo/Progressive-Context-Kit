@@ -28,7 +28,7 @@ It owns phase sequence and status, not task-level implementation detail.
 ### Current Phase
 Answers: **What are we doing now, what are the acceptance criteria, and how will this phase be verified?**
 
-It owns active execution state.
+It owns the plan/acceptance and an adjacent `<phase-name>.prompts.md` archive: original requests, preserved task prompts with IDs, revisions, freshness checks and observed outcomes/evidence. Changed instructions create a linked replacement revision. Only the active execution view enters normal context; original requests and accumulated evidence stay cold.
 
 ### `Completion Record`
 Answers: **What must the next phase know without reading the full prior phase?**
@@ -48,7 +48,7 @@ Use ADRs for rationale that needs to survive independently of one phase.
 ### `NEXT_SESSION.md`
 Answers: **What should the next session know and do immediately?**
 
-It is volatile hot navigation and should be overwritten instead of accumulating history.
+It is volatile hot navigation with an `Active task prompt` pointer into the Phase. Update it when state/navigation changes; executable task prompts are preserved in the Phase. Before execution, reconcile the record with the current phase, code, acceptance, blockers and authorization, even if it was previously marked CURRENT.
 
 ## Ownership rule
 
@@ -62,3 +62,6 @@ Examples:
 - next action changed → overwrite `NEXT_SESSION.md`.
 
 Do not solve uncertainty by copying the same durable fact into multiple documents.
+
+For the upstream comparison and measured context-isolation fixture, see
+[Task Continuity and Context Economy](TASK_CONTEXT_PRACTICES.md).
