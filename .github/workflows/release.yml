@@ -88,6 +88,11 @@ jobs:
           ASSET="$(ls dist/Progressive-Context-Project-Runtime-v*.zip | head -n 1)"
           MANIFEST="${ASSET%.zip}.manifest.json"
           CHECKSUMS="dist/SHA256SUMS.txt"
+          NOTES="docs/releases/${TAG}.md"
+          if [[ ! -s "$NOTES" ]]; then
+            echo "Release notes are missing or empty: $NOTES" >&2
+            exit 1
+          fi
           TAG_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG}" --jq .object.sha)"
           if [[ "$TAG_SHA" != "$RELEASE_SHA" ]]; then
             echo "Tag $TAG points at $TAG_SHA, not this run's verified commit ($RELEASE_SHA)." >&2
@@ -95,11 +100,12 @@ jobs:
           fi
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" --clobber
+            gh release edit "$TAG" --title "$TAG - Progressive Context Kit" --notes-file "$NOTES"
           else
             gh release create "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" \
               --target "$RELEASE_SHA" \
               --title "$TAG - Progressive Context Kit" \
-              --generate-notes
+              --notes-file "$NOTES"
           fi
 
       - name: Build-only verification (no release ref, no publish)
