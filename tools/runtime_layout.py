@@ -1,9 +1,10 @@
 from __future__ import annotations
 from pathlib import Path
-import shutil
+import json, shutil
 
 RUNTIME_DIR = '.progressive'
 PROJECT_INSTRUCTIONS_SENTINEL = '\n\n<!-- PROJECT-SPECIFIC-INSTRUCTIONS -->\n\n'
+INSTRUCTION_BASE_FILE = 'INSTRUCTION_BASE.json'
 
 TEXT_REPLACEMENTS = [
     ('docs/project/', '.progressive/project/'),
@@ -88,6 +89,17 @@ def render_agent_profile(root: Path, profile: str) -> str:
         text = '\n'.join(lines) + ('\n' if text.endswith('\n') else '')
     return text
 
+
+def write_instruction_base(root: Path, target: Path, profile: str) -> None:
+    """Keep pristine installed instructions as cold update metadata, never as agent context."""
+    data={'schema':1,'profile':profile,'files':{
+        'AGENTS.md':render_agent_profile(root,profile).rstrip()+'\n',
+        'CLAUDE.md':transform_text((root/'CLAUDE.md').read_text(encoding='utf-8')).rstrip()+'\n',
+    }}
+    path=target/RUNTIME_DIR/INSTRUCTION_BASE_FILE
+    path.parent.mkdir(parents=True,exist_ok=True)
+    path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
 def runtime_entries(root: Path, profile: str = 'standalone'):
     """Return (source, destination-relative, transform_text) entries for Project Runtime."""
     entries = []
@@ -147,6 +159,7 @@ def write_runtime(root: Path, target: Path, profile: str = 'standalone', agent: 
     (meta / 'PROFILE').write_text(profile + '\n', encoding='utf-8')
     (meta / 'AGENT_TARGET').write_text(agent + '\n', encoding='utf-8')
     (meta / 'ADOPTION_STATE').write_text('ready\n', encoding='utf-8')
+    write_instruction_base(root,target,profile)
     (meta / 'phases').mkdir(exist_ok=True)
     (meta / 'completions').mkdir(exist_ok=True)
     (meta / 'decisions').mkdir(exist_ok=True)

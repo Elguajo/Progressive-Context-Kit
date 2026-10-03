@@ -1,5 +1,35 @@
 # Changelog
 
+## 3.1.0 — 2026-10-03
+
+- Added Phase-owned task prompt archives: each task retains its original request, executable
+  prompt, freshness checks, checkpoint and observed evidence. `NEXT_SESSION.md` points to the
+  active task instead of repeatedly replacing its instructions. Changed instructions create
+  linked revisions; used request/prompt bodies and completed history remain preserved.
+- Added active-prompt applicability checks against the current Phase, project instructions and
+  live evidence. Structural validation rejects stale, terminal, missing or foreign prompt
+  targets while retaining legacy inline handoff compatibility.
+- Bounded continuation context to the selected task's execution view. Original requests,
+  accumulated evidence and historical prompt records remain cold. `context_compile.py --task-only`
+  supports already-grounded sessions; manifest routing avoids duplicated core context and
+  accidentally inlining entire prompt archives.
+- Added exact historical Personal/Standalone profile recognition for existing Runtime updates,
+  without requiring Git or network access. Appended local rules and project-owned state remain
+  preserved; updates preflight both root instruction files before any replacement.
+- Added three-way instruction merging to the Framework Source updater. Independent local and
+  framework line edits are combined, including user additions, replacements and deletions.
+  Incompatible overlapping edits stop before writes; `--dry-run` shows the proposed merge.
+  Legacy projects without a saved original can supply their exact pristine Runtime through
+  `--instruction-base`.
+- New installs, successful updates and generated Runtime ZIPs include cold
+  `.progressive/INSTRUCTION_BASE.json` metadata for future merges. Before replacing instructions,
+  the updater saves byte-exact entrypoint copies and any existing base in a unique backup
+  directory; backup failure prevents replacement. These files never enter normal agent context.
+- Updated English and Russian Runtime upgrade guidance. Framework Source owns the updater and
+  historical compatibility catalog; neither is added to the generated Project Runtime.
+- Validation snapshot: **Progressive Gate 11/11** and **226/226 unit/regression tests passing**.
+  This is static/integrity evidence, not empirical model-quality or billing-savings proof.
+
 ## 3.0.0 — 2026-09-19
 
 - Added resume integrity: `NEXT_SESSION.md` is reconciled as volatile navigation against the

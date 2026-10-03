@@ -1,9 +1,12 @@
-import unittest,tempfile,subprocess,sys
+import contextlib,io,json,unittest,tempfile,subprocess,sys
+from unittest.mock import patch
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 SCRIPT=ROOT/'tools/init_project.py'
 sys.path.insert(0,str(ROOT/'tools'))
-from runtime_layout import PROJECT_INSTRUCTIONS_SENTINEL, render_agent_profile
+from runtime_layout import INSTRUCTION_BASE_FILE, PROJECT_INSTRUCTIONS_SENTINEL, render_agent_profile, write_runtime
+from init_project import CLAUDE_SENTINEL
+import init_project
 
 class InitTests(unittest.TestCase):
     def run_cmd(self,target,*args):
@@ -17,6 +20,7 @@ class InitTests(unittest.TestCase):
         self.assertEqual(self.run_cmd(target,'--profile',profile).returncode,0)
         legacy=(ROOT/f'tools/tests/fixtures/legacy_profiles/v3.0.0-{profile}.md').read_text(encoding='utf-8')
         (target/'AGENTS.md').write_text(legacy,encoding='utf-8')
+        (target/'.progressive'/INSTRUCTION_BASE_FILE).unlink()
         return legacy
 
     def test_standard_legacy_profiles_update_without_git_or_losing_project_state(self):
@@ -95,6 +99,80 @@ class InitTests(unittest.TestCase):
             self.assertEqual(self.run_cmd(target,'--update-framework').returncode,0)
             self.assertTrue(agents.read_text().endswith('LOCAL CONSTRAINT\n'))
 
+    def test_marked_inline_edits_block_all_writes_and_show_diff(self):
+        for filename in ('AGENTS.md','CLAUDE.md'):
+            with self.subTest(filename=filename),tempfile.TemporaryDirectory() as d:
+                target=Path(d)/'p'
+                self.legacy_install(target,'standalone')
+                path=target/filename
+                if filename=='AGENTS.md':
+                    path.write_text(path.read_text().rstrip()+'\n'+PROJECT_INSTRUCTIONS_SENTINEL+'LOCAL SUFFIX\n')
+                else:
+                    path.write_text(path.read_text()+CLAUDE_SENTINEL+'LOCAL SUFFIX\n')
+                path.write_text('MANUAL INLINE RULE\n'+path.read_text())
+                before=self.snapshot(target)
+                for args in (('--update-framework','--dry-run'),('--update-framework',)):
+                    result=self.run_cmd(target,*args)
+                    self.assertEqual(result.returncode,2,result.stdout+result.stderr)
+                    self.assertIn(filename+' is not a recognized',result.stdout)
+                    self.assertIn('+MANUAL INLINE RULE',result.stdout)
+                    self.assertIn('No files were changed',result.stdout)
+                    self.assertEqual(self.snapshot(target),before)
+
+    def test_known_marked_legacy_prefix_updates_and_backups_are_exact_and_unique(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p'
+            legacy=self.legacy_install(target,'standalone')
+            agents=target/'AGENTS.md';claude=target/'CLAUDE.md'
+            old_agents=(legacy.rstrip()+'\n'+PROJECT_INSTRUCTIONS_SENTINEL+'CUSTOM RULE: Проверка\n').replace('\n','\r\n').encode('utf-8')
+            agents.write_bytes(old_agents)
+            old_claude=claude.read_bytes()
+            before=self.snapshot(target)
+            dry=self.run_cmd(target,'--update-framework','--dry-run')
+            self.assertEqual(dry.returncode,0,dry.stdout+dry.stderr)
+            self.assertEqual(self.snapshot(target),before)
+            result=self.run_cmd(target,'--update-framework')
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            self.assertTrue(agents.read_text().endswith('CUSTOM RULE: Проверка\n'))
+            backup_dirs=list((target/'.progressive/update-backup').iterdir())
+            self.assertEqual(len(backup_dirs),1)
+            self.assertEqual((backup_dirs[0]/'AGENTS.md').read_bytes(),old_agents)
+            self.assertEqual((backup_dirs[0]/'CLAUDE.md').read_bytes(),old_claude)
+            self.assertIn('instruction backup:',result.stdout)
+            updated=self.snapshot(target)
+            self.assertEqual(self.run_cmd(target,'--update-framework').returncode,0)
+            self.assertEqual(self.snapshot(target),updated)
+            agents.write_bytes(old_agents)
+            self.assertEqual(self.run_cmd(target,'--update-framework').returncode,0)
+            self.assertEqual(len(list((target/'.progressive/update-backup').iterdir())),2)
+            self.assertEqual((backup_dirs[0]/'AGENTS.md').read_bytes(),old_agents)
+
+    def test_marked_profile_switch_preserves_both_instruction_suffixes(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p'
+            self.assertEqual(self.run_cmd(target,'--profile','personal').returncode,0)
+            agents=target/'AGENTS.md';claude=target/'CLAUDE.md'
+            agents.write_text(agents.read_text()+'AGENT LOCAL RULE\n')
+            claude.write_text(claude.read_text()+CLAUDE_SENTINEL+'CLAUDE LOCAL RULE\n')
+            result=self.run_cmd(target,'--profile','standalone','--update-framework')
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            self.assertTrue(agents.read_text().endswith('AGENT LOCAL RULE\n'))
+            self.assertTrue(claude.read_text().endswith('CLAUDE LOCAL RULE\n'))
+
+    def test_backup_failure_stops_before_instruction_or_framework_replacement(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p'
+            self.legacy_install(target,'standalone')
+            before=self.snapshot(target)
+            output=io.StringIO()
+            with patch.object(sys,'argv',[str(SCRIPT),str(target),'--update-framework']), \
+                 patch('init_project.shutil.copy2',side_effect=OSError('backup copy failed')), \
+                 contextlib.redirect_stdout(output):
+                result=init_project.main()
+            self.assertEqual(result,2)
+            self.assertIn('backup copy failed',output.getvalue())
+            self.assertEqual(self.snapshot(target),before)
+
     def test_explicit_profile_switch_recognizes_the_installed_legacy_profile(self):
         with tempfile.TemporaryDirectory() as d:
             target=Path(d)/'p'
@@ -172,10 +250,113 @@ class InitTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             target=Path(d)/'p'
             self.assertEqual(self.run_cmd(target,'--profile','standalone').returncode,0)
+            (target/'.progressive'/INSTRUCTION_BASE_FILE).unlink()
             (target/'CLAUDE.md').write_text('USER CUSTOM CLAUDE INSTRUCTIONS',encoding='utf-8')
             result=self.run_cmd(target,'--update-framework')
             self.assertNotEqual(result.returncode,0)
             self.assertEqual((target/'CLAUDE.md').read_text(encoding='utf-8'),'USER CUSTOM CLAUDE INSTRUCTIONS')
+
+    def test_installed_baseline_preserves_inline_edits_deletions_and_suffixes_on_repeated_updates(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p'
+            self.assertEqual(self.run_cmd(target,'--profile','standalone').returncode,0)
+            baseline=(target/'.progressive'/INSTRUCTION_BASE_FILE).read_bytes()
+            agents=target/'AGENTS.md';claude=target/'CLAUDE.md'
+            agents.write_text(agents.read_text().replace('## Context routing','## My custom routing')+
+                              'LOCAL SUFFIX\n')
+            claude.write_text('MY CLAUDE RULE\n'+claude.read_text()+CLAUDE_SENTINEL+'CLAUDE SUFFIX\n')
+            before=self.snapshot(target)
+            result=self.run_cmd(target,'--update-framework','--dry-run')
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            self.assertEqual(self.snapshot(target),before)
+            result=self.run_cmd(target,'--update-framework')
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            self.assertIn('## My custom routing',agents.read_text())
+            self.assertNotIn('## Context routing',agents.read_text())
+            self.assertTrue(agents.read_text().endswith('LOCAL SUFFIX\n'))
+            self.assertTrue(claude.read_text().startswith('MY CLAUDE RULE\n'))
+            self.assertTrue(claude.read_text().endswith('CLAUDE SUFFIX\n'))
+            self.assertEqual((target/'.progressive'/INSTRUCTION_BASE_FILE).read_bytes(),baseline)
+            updated=self.snapshot(target)
+            self.assertEqual(self.run_cmd(target,'--update-framework').returncode,0)
+            self.assertEqual(self.snapshot(target),updated)
+
+    def test_independent_framework_change_merges_and_overlap_writes_nothing(self):
+        for overlap in (False,True):
+            with self.subTest(overlap=overlap),tempfile.TemporaryDirectory() as d:
+                target=Path(d)/'p'
+                self.assertEqual(self.run_cmd(target,'--profile','personal').returncode,0)
+                agents=target/'AGENTS.md'
+                original=render_agent_profile(ROOT,'personal')
+                agents.write_text(agents.read_text().replace('## Context routing','## User routing'))
+                updated=original.replace('## Context routing','## Framework routing') if overlap else original.replace('## Preferred tooling','## Updated tooling')
+                before=self.snapshot(target);output=io.StringIO()
+                with patch.object(sys,'argv',[str(SCRIPT),str(target),'--update-framework']), \
+                     patch('init_project.render_agent_profile',return_value=updated), \
+                     patch('runtime_layout.render_agent_profile',return_value=updated), \
+                     contextlib.redirect_stdout(output):
+                    result=init_project.main()
+                if overlap:
+                    self.assertEqual(result,2,output.getvalue())
+                    self.assertIn('overlapping local/framework edits',output.getvalue())
+                    self.assertEqual(self.snapshot(target),before)
+                else:
+                    self.assertEqual(result,0,output.getvalue())
+                    self.assertIn('## User routing',agents.read_text())
+                    self.assertIn('## Updated tooling',agents.read_text())
+                    backups=list((target/'.progressive/update-backup').iterdir())
+                    self.assertEqual((backups[0]/'AGENTS.md').read_bytes(),before['AGENTS.md'])
+                    self.assertEqual((backups[0]/INSTRUCTION_BASE_FILE).read_bytes(),before['.progressive/'+INSTRUCTION_BASE_FILE])
+                    bases=json.loads((target/'.progressive'/INSTRUCTION_BASE_FILE).read_text())
+                    self.assertEqual(bases['files']['AGENTS.md'],updated.rstrip()+'\n')
+
+    def test_legacy_inline_edits_merge_with_explicit_original_runtime(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p';original=Path(d)/'original'
+            legacy=self.legacy_install(target,'standalone')
+            original.mkdir()
+            (original/'AGENTS.md').write_text(legacy)
+            (original/'CLAUDE.md').write_bytes((target/'CLAUDE.md').read_bytes())
+            # This change is independent of the task-prompt framework upgrade.
+            agents=target/'AGENTS.md'
+            agents.write_text(legacy.replace('## Preferred tooling','## My tooling rules'))
+            result=self.run_cmd(target,'--update-framework','--instruction-base',str(original))
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            self.assertIn('## My tooling rules',agents.read_text())
+            self.assertIn('active prompt (check freshness)',agents.read_text())
+            self.assertTrue((target/'.progressive'/INSTRUCTION_BASE_FILE).is_file())
+            self.assertEqual(self.run_cmd(target,'--update-framework').returncode,0)
+
+    def test_runtime_zip_baseline_is_pristine_and_not_compiled_into_context(self):
+        with tempfile.TemporaryDirectory() as d:
+            target=Path(d)/'p'
+            write_runtime(ROOT,target,'standalone')
+            bases=init_project.read_instruction_base(target)
+            self.assertEqual(bases['AGENTS.md'],render_agent_profile(ROOT,'standalone').rstrip()+'\n')
+            self.assertNotIn(PROJECT_INSTRUCTIONS_SENTINEL,bases['AGENTS.md'])
+            compiled=subprocess.run([sys.executable,str(target/'.progressive/tools/context_compile.py'),'--root',str(target)],capture_output=True,text=True)
+            self.assertEqual(compiled.returncode,0,compiled.stdout+compiled.stderr)
+            self.assertNotIn(INSTRUCTION_BASE_FILE,compiled.stdout)
+
+    def test_invalid_baseline_and_missing_explicit_original_write_nothing(self):
+        for broken in ('invalid','missing'):
+            with self.subTest(broken=broken),tempfile.TemporaryDirectory() as d:
+                target=Path(d)/'p'
+                self.assertEqual(self.run_cmd(target).returncode,0)
+                args=['--update-framework']
+                if broken=='invalid':(target/'.progressive'/INSTRUCTION_BASE_FILE).write_text('{')
+                else:args+=['--instruction-base',str(Path(d)/'absent')]
+                before=self.snapshot(target)
+                result=self.run_cmd(target,*args)
+                self.assertEqual(result.returncode,2,result.stdout+result.stderr)
+                self.assertEqual(self.snapshot(target),before)
+
+    def test_merge_preserves_deleted_rule_and_rejects_competing_insertions(self):
+        merge=init_project.merge_instruction_prefix
+        self.assertEqual(merge('AGENTS.md','a\nrule\nz\n','a\nz\n','A\nrule\nz\n'),'A\nz\n')
+        self.assertEqual(merge('AGENTS.md','a\nb\nz\n','a\nB\nz\n','a\nB\nZ\n'),'a\nB\nZ\n')
+        with self.assertRaisesRegex(RuntimeError,'overlapping'):
+            merge('AGENTS.md','a\nz\n','a\nuser\nz\n','a\nframework\nz\n')
 
     def test_adopt_existing_preserves_unrecognized_claude_md_via_sentinel(self):
         with tempfile.TemporaryDirectory() as d:

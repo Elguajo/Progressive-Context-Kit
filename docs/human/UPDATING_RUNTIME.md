@@ -45,9 +45,41 @@ or network. User text appended after a verified standard prefix is preserved und
 `PROJECT-SPECIFIC-INSTRUCTIONS` boundary.
 
 New installations and generated Runtime entrypoints already contain that boundary. Put local
-instructions after it. Inline edits to an unmarked framework prefix require manual reconciliation
-and are never automatically overwritten. Update checks both AGENTS.md and CLAUDE.md before
-writing any files. `--dry-run` performs the same checks and fails for unknown instruction formats.
+instructions after it for simpler upgrades. Inline edits are also preserved through three-way
+merging: pristine installed instructions + your current file + the new standard. Independent
+line edits are combined, including your additions, replacements and deletions; identical edits
+are applied once. Overlapping incompatible edits stop the update before any file is written.
+The boundary alone does not authorize replacement.
+
+New installs, successful updates and generated Runtime ZIPs save the pristine framework prefixes
+in `.progressive/INSTRUCTION_BASE.json`. This is cold updater metadata and is not loaded into
+normal agent context. It never records your custom merged prefix as the new standard, so future
+updates continue to preserve your rules.
+
+For an older project with inline edits and no saved original, provide the directory from the
+**exact pristine Runtime you originally installed** (extract the old ZIP separately):
+
+```bash
+python3 tools/init_project.py /path/to/project --update-framework --instruction-base /path/to/original-runtime --dry-run
+python3 tools/init_project.py /path/to/project --update-framework --instruction-base /path/to/original-runtime
+```
+
+That directory must contain original `AGENTS.md` and `CLAUDE.md`, without local suffixes.
+Do not use the modified project or a guessed/latest Runtime as the original. Without a reliable
+base, modified unknown prefixes still require manual reconciliation. Standard legacy profiles
+and their appended rules continue to update without this option.
+
+Update checks both instruction files before writing; `--dry-run` uses the same merge and displays
+the proposed instruction diff without saving it. Conflicts display a diff against the new standard,
+which may include framework version differences. Resolve overlapping rules deliberately; do not
+copy the whole older framework prefix into the project-specific section.
+
+Before an update replaces either instruction file, it saves both existing entrypoints, byte for
+byte, together with the existing instruction base, in a new
+`.progressive/update-backup/instructions-<unique-id>/` directory and prints its path. Earlier
+backups are preserved. If creating the backup fails, instruction replacement does
+not start. Dry runs, rejected updates, and updates with unchanged instruction files create no
+backup. These copies protect root instructions; they are not full-project rollback snapshots.
 
 The catalog is source-only compatibility evidence, not agent warm-up context. When extending
 compatibility, record the exact runtime-rendered standard prefix fingerprint (universal newlines,
