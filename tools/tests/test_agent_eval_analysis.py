@@ -104,6 +104,51 @@ def workflow_evidence():
 
 
 class AgentEvalAnalysisTests(unittest.TestCase):
+    def test_failed_attempt_tokens_are_included_in_cost_per_success(self):
+        summary=summarize([
+            record('p1','baseline',tokens=1000),record('p1','candidate',tokens=800),
+            record('p2','baseline',tokens=500,hard_pass=False),
+            record('p2','candidate',tokens=200,hard_pass=False),
+        ])
+        self.assertEqual(summary['baseline_outcomes'],{
+            'successful_runs':1,'failed_runs':1,'total_tokens':1500,'tokens_per_successful_task':1500,
+        })
+        self.assertEqual(summary['candidate_outcomes']['tokens_per_successful_task'],1000)
+        self.assertEqual(summary['quality_gate'],'INCONCLUSIVE')
+
+    def test_zero_success_returns_null_without_excluding_failed_tokens(self):
+        summary=summarize([record('p1','baseline',tokens=500,hard_pass=False),
+                           record('p1','candidate',tokens=200,hard_pass=False)])
+        self.assertIsNone(summary['candidate_outcomes']['tokens_per_successful_task'])
+        self.assertEqual(summary['candidate_outcomes']['total_tokens'],200)
+        self.assertEqual(summary['candidate_outcomes']['failed_runs'],1)
+
+    def test_success_denominator_uses_blinded_judge_when_available(self):
+        records=[record('p1','baseline'),record('p1','candidate')]
+        mapping={('execution-efficiency-test','p1'):{'baseline':'B','candidate':'A'}}
+        summary=summarize(records,judge_records=[judge_record('p1',a_failures=['wrong result'])],
+                          anonymous_pair_map=mapping)
+        self.assertEqual(summary['baseline_outcomes']['successful_runs'],1)
+        self.assertEqual(summary['candidate_outcomes']['successful_runs'],0)
+        self.assertIsNone(summary['candidate_outcomes']['tokens_per_successful_task'])
+
+    def test_different_agents_models_or_accounting_cannot_be_pooled(self):
+        for field in ('agent','model','reasoning','experiment_id','workflow_ref','token_accounting'):
+            with self.subTest(field=field):
+                records=[record('p1','baseline'),record('p1','candidate'),
+                         record('p2','baseline'),record('p2','candidate')]
+                for item in records[2:]:
+                    target=item['metrics'] if field=='token_accounting' else item
+                    target[field]='other'
+                with self.assertRaises(EvalDataError): summarize(records)
+
+    def test_provider_metrics_must_be_finite(self):
+        for value in (float('nan'),float('inf')):
+            with self.subTest(value=value):
+                item=record('p1','candidate'); item['metrics']['total_tokens']=value
+                with self.assertRaises(EvalDataError):
+                    summarize([record('p1','baseline'),item])
+
     def test_paired_summary_reports_candidate_savings(self):
         records = [
             record("p1", "baseline", tokens=1000, turns=10),

@@ -1,0 +1,290 @@
+[
+  {
+    "pair_id": "recon-batch-r01",
+    "arm": "baseline",
+    "anonymous_artifact": "A",
+    "usage": {
+      "input_tokens": 237383,
+      "cached_input_tokens": 219648,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4084,
+      "reasoning_output_tokens": 1740
+    },
+    "total_tokens": 241467,
+    "turns": 1,
+    "observable_tool_items": 8,
+    "shell_inspection_requests": 4,
+    "shell_inspection_item_ids": [
+      "item_2",
+      "item_3",
+      "item_11",
+      "item_13"
+    ],
+    "command_items": 6,
+    "failed_command_items": 1,
+    "elapsed": 119.88255029100401
+  },
+  {
+    "pair_id": "recon-batch-r01",
+    "arm": "candidate",
+    "anonymous_artifact": "B",
+    "usage": {
+      "input_tokens": 245144,
+      "cached_input_tokens": 226432,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3374,
+      "reasoning_output_tokens": 1411
+    },
+    "total_tokens": 248518,
+    "turns": 1,
+    "observable_tool_items": 9,
+    "shell_inspection_requests": 4,
+    "shell_inspection_item_ids": [
+      "item_2",
+      "item_3",
+      "item_6",
+      "item_12"
+    ],
+    "command_items": 7,
+    "failed_command_items": 1,
+    "elapsed": 107.49620641699585
+  },
+  {
+    "pair_id": "keyhole-read-r01",
+    "arm": "baseline",
+    "anonymous_artifact": "A",
+    "usage": {
+      "input_tokens": 228496,
+      "cached_input_tokens": 212608,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2537,
+      "reasoning_output_tokens": 785
+    },
+    "total_tokens": 231033,
+    "turns": 1,
+    "observable_tool_items": 8,
+    "shell_inspection_requests": 1,
+    "shell_inspection_item_ids": [
+      "item_3"
+    ],
+    "command_items": 6,
+    "failed_command_items": 2,
+    "elapsed": 82.29455937500461
+  },
+  {
+    "pair_id": "keyhole-read-r01",
+    "arm": "candidate",
+    "anonymous_artifact": "B",
+    "usage": {
+      "input_tokens": 204937,
+      "cached_input_tokens": 189312,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2259,
+      "reasoning_output_tokens": 809
+    },
+    "total_tokens": 207196,
+    "turns": 1,
+    "observable_tool_items": 9,
+    "shell_inspection_requests": 2,
+    "shell_inspection_item_ids": [
+      "item_3",
+      "item_8"
+    ],
+    "command_items": 7,
+    "failed_command_items": 2,
+    "elapsed": 77.47489320801105
+  },
+  {
+    "pair_id": "environment-probe-r01",
+    "arm": "baseline",
+    "anonymous_artifact": "B",
+    "usage": {
+      "input_tokens": 133542,
+      "cached_input_tokens": 119552,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2315,
+      "reasoning_output_tokens": 1012
+    },
+    "total_tokens": 135857,
+    "turns": 1,
+    "observable_tool_items": 6,
+    "shell_inspection_requests": 1,
+    "shell_inspection_item_ids": [
+      "item_3"
+    ],
+    "command_items": 5,
+    "failed_command_items": 1,
+    "elapsed": 70.04137900000205
+  },
+  {
+    "pair_id": "environment-probe-r01",
+    "arm": "candidate",
+    "anonymous_artifact": "A",
+    "usage": {
+      "input_tokens": 206763,
+      "cached_input_tokens": 191616,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2611,
+      "reasoning_output_tokens": 1132
+    },
+    "total_tokens": 209374,
+    "turns": 1,
+    "observable_tool_items": 8,
+    "shell_inspection_requests": 2,
+    "shell_inspection_item_ids": [
+      "item_3",
+      "item_5"
+    ],
+    "command_items": 7,
+    "failed_command_items": 1,
+    "elapsed": 85.85622724999848
+  },
+  {
+    "pair_id": "validation-convergence-r01",
+    "arm": "baseline",
+    "anonymous_artifact": "B",
+    "usage": {
+      "input_tokens": 176249,
+      "cached_input_tokens": 162560,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1558,
+      "reasoning_output_tokens": 348
+    },
+    "total_tokens": 177807,
+    "turns": 1,
+    "observable_tool_items": 7,
+    "shell_inspection_requests": 1,
+    "shell_inspection_item_ids": [
+      "item_3"
+    ],
+    "command_items": 6,
+    "failed_command_items": 0,
+    "elapsed": 55.70136745800846
+  },
+  {
+    "pair_id": "validation-convergence-r01",
+    "arm": "candidate",
+    "anonymous_artifact": "A",
+    "usage": {
+      "input_tokens": 284518,
+      "cached_input_tokens": 230656,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 2957,
+      "reasoning_output_tokens": 834
+    },
+    "total_tokens": 287475,
+    "turns": 1,
+    "observable_tool_items": 10,
+    "shell_inspection_requests": 4,
+    "shell_inspection_item_ids": [
+      "item_2",
+      "item_3",
+      "item_4",
+      "item_8"
+    ],
+    "command_items": 9,
+    "failed_command_items": 0,
+    "elapsed": 99.27145395800471
+  },
+  {
+    "pair_id": "failure-pivot-r01",
+    "arm": "baseline",
+    "anonymous_artifact": "A",
+    "usage": {
+      "input_tokens": 546660,
+      "cached_input_tokens": 520576,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 7055,
+      "reasoning_output_tokens": 1720
+    },
+    "total_tokens": 553715,
+    "turns": 1,
+    "observable_tool_items": 30,
+    "shell_inspection_requests": 11,
+    "shell_inspection_item_ids": [
+      "item_2",
+      "item_4",
+      "item_7",
+      "item_8",
+      "item_9",
+      "item_18",
+      "item_24",
+      "item_25",
+      "item_26",
+      "item_28",
+      "item_34"
+    ],
+    "command_items": 28,
+    "failed_command_items": 3,
+    "elapsed": 89.39455237500079
+  },
+  {
+    "pair_id": "failure-pivot-r01",
+    "arm": "candidate",
+    "anonymous_artifact": "B",
+    "usage": {
+      "input_tokens": 294106,
+      "cached_input_tokens": 274304,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4858,
+      "reasoning_output_tokens": 1756
+    },
+    "total_tokens": 298964,
+    "turns": 1,
+    "observable_tool_items": 10,
+    "shell_inspection_requests": 4,
+    "shell_inspection_item_ids": [
+      "item_2",
+      "item_7",
+      "item_9",
+      "item_10"
+    ],
+    "command_items": 9,
+    "failed_command_items": 2,
+    "elapsed": 60.898441834011464
+  },
+  {
+    "pair_id": "polling-discipline-r01",
+    "arm": "baseline",
+    "anonymous_artifact": "A",
+    "usage": {
+      "input_tokens": 196292,
+      "cached_input_tokens": 183040,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1303,
+      "reasoning_output_tokens": 290
+    },
+    "total_tokens": 197595,
+    "turns": 1,
+    "observable_tool_items": 5,
+    "shell_inspection_requests": 1,
+    "shell_inspection_item_ids": [
+      "item_3"
+    ],
+    "command_items": 4,
+    "failed_command_items": 0,
+    "elapsed": 74.16373004100751
+  },
+  {
+    "pair_id": "polling-discipline-r01",
+    "arm": "candidate",
+    "anonymous_artifact": "B",
+    "usage": {
+      "input_tokens": 197296,
+      "cached_input_tokens": 183808,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 1525,
+      "reasoning_output_tokens": 422
+    },
+    "total_tokens": 198821,
+    "turns": 1,
+    "observable_tool_items": 6,
+    "shell_inspection_requests": 1,
+    "shell_inspection_item_ids": [
+      "item_3"
+    ],
+    "command_items": 5,
+    "failed_command_items": 0,
+    "elapsed": 82.81440408299386
+  }
+]

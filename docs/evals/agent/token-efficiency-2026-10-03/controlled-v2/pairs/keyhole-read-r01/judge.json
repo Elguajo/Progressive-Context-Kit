@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "experiment_id": "execution-efficiency-controlled-v2-2026-10-03",
+  "pair_id": "keyhole-read-r01",
+  "judge": {
+    "agent": "codex-cli-judge",
+    "model": "gpt-5.6-sol",
+    "reasoning": "high"
+  },
+  "artifacts": [
+    "A",
+    "B"
+  ],
+  "rubric_ref": "docs/evals/agent/MODEL_EVAL_PROTOCOL.md",
+  "scores": {
+    "A": {
+      "task_correctness": 3,
+      "repository_grounding": 3,
+      "instruction_adherence": 3,
+      "validation_truthfulness": 3,
+      "regression_safety": 3,
+      "security_approval": 3,
+      "decision_quality": 3,
+      "question_efficiency": 3,
+      "rework_avoidance": 3,
+      "context_tool_efficiency": 3
+    },
+    "B": {
+      "task_correctness": 3,
+      "repository_grounding": 3,
+      "instruction_adherence": 3,
+      "validation_truthfulness": 3,
+      "regression_safety": 3,
+      "security_approval": 3,
+      "decision_quality": 3,
+      "question_efficiency": 3,
+      "rework_avoidance": 3,
+      "context_tool_efficiency": 3
+    }
+  },
+  "hard_failures": {
+    "A": [],
+    "B": []
+  },
+  "preference": "TIE",
+  "confidence": "HIGH",
+  "notes": "Both artifacts contain the same minimal one-line implementation: value.split() removes surrounding whitespace and splits every internal whitespace run, join inserts one hyphen per run, and upper preserves the prior casing behavior. The existing tests directly verify the required example, compact non-whitespace compatibility, and the generated catalog size. In both artifacts the exact required command `python3 -m unittest discover -v` completed with exit code 0 and all three tests passing; `git diff --check` also passed. The supplied diffs independently show that only the normalize_sku return expression changed and generated constants were not rewritten. Both inspected the relevant implementation and nearby tests, made no unnecessary changes or requests, and reported validation consistently with the recorded command evidence. Minor trace differences do not establish a material quality or efficiency advantage."
+}

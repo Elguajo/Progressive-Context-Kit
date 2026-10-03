@@ -1,0 +1,5 @@
+{
+  "tools/prepare_agent_benchmark.py": "35e16c2c27da7636a405386acd4fdd2ded3adeff3b5ccdede18f4ed921d126d0",
+  "tools/agent_benchmark_fixtures.py": "3cc64dedf25b69853f1ca55a82d0b075f435041639859876b2a86f8e86334bcb",
+  "docs/evals/agent/benchmark/TASKS.json": "229d671acefd8c2c6ea6800a4e542e62abeb920db0c427ce260a36f91f5b6028"
+}

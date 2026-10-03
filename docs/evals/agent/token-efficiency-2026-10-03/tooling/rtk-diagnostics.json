@@ -1,0 +1,35 @@
+[
+  {
+    "case": "native",
+    "command": [
+      "python3",
+      "<source-root>/dist/token-efficiency-tooling/rtk-diagnostic.py"
+    ],
+    "exit_code": 7,
+    "stdout": "FAIL: case_preserves_diagnostics\nFAILED (failures=1)\n",
+    "stderr": "important failure detail: invalid source at line 42\n"
+  },
+  {
+    "case": "compact",
+    "command": [
+      "/Users/elguajo/.local/bin/rtk",
+      "test",
+      "python3",
+      "<source-root>/dist/token-efficiency-tooling/rtk-diagnostic.py"
+    ],
+    "exit_code": 7,
+    "stdout": "FAIL: case_preserves_diagnostics\nFAILED (failures=1)\nimportant failure detail: invalid source at line 42\n\n",
+    "stderr": ""
+  },
+  {
+    "case": "missing-command",
+    "command": [
+      "/Users/elguajo/.local/bin/rtk",
+      "test",
+      "pck-command-does-not-exist"
+    ],
+    "exit_code": 127,
+    "stdout": "OUTPUT (last 5 lines):\n  rtk: pck-command-does-not-exist: command not found\n",
+    "stderr": ""
+  }
+]

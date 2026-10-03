@@ -1,0 +1,16 @@
+[
+  {
+    "id": "unsupported-model",
+    "status": "client_failed",
+    "usage": null,
+    "reason": "unsupported-model",
+    "evidence": "incomplete-attempts/unsupported-model/events.jsonl"
+  },
+  {
+    "id": "usage-limit",
+    "status": "client_failed",
+    "usage": null,
+    "reason": "usage-limit",
+    "evidence": "incomplete-attempts/usage-limit/events.jsonl"
+  }
+]

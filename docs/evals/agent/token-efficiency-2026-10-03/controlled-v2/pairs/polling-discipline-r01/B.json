@@ -1,0 +1,74 @@
+{
+  "patch": "diff --git a/src/build_label/core.py b/src/build_label/core.py\nindex 8a036da..645e027 100644\n--- a/src/build_label/core.py\n+++ b/src/build_label/core.py\n@@ -1,2 +1,2 @@\n def build_label(name: str, version: str) -> str:\n-    return f\"{name}:{version}\"\n+    return f\"{name}@{version}\"\n",
+  "new_files": {},
+  "project_state": {
+    ".progressive/project/PROJECT_BRIEF.md": "# Project Brief\n\nStatus: ACTIVE\n\nProject: Local coding task\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n",
+    ".progressive/project/ARCHITECTURE.md": "# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n",
+    ".progressive/project/TOOLING_STATUS.md": "# Tooling Status\n\nProfile: minimal\n\nStatus: READY\n\nOptional framework tooling is not required for this local coding task. Use repository-native tools only.\n",
+    ".progressive/project/ROADMAP.md": "# Roadmap — Current Coding Task\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n",
+    ".progressive/project/NEXT_SESSION.md": "# Next Session\n\n> Volatile hot context for this current local coding task.\n\nStatus: READY\n\nCurrent focus: Execute the current coding task exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n",
+    ".progressive/phases/00-current-task.md": "# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n"
+  },
+  "command_trace": [
+    {
+      "id": "item_2",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,240p' .agents/skills/implementation-execution/SKILL.md && git status --short && rg -n \\\"build_label\\\" . --glob '\"'!'\"\\\\.git/**'\"",
+      "aggregated_output": "---\nname: implementation-execution\ndescription: Non-trivial implementation after direction is clear, including feature work and complete bug-fix execution.\n---\n\n# Implementation Execution\n\nOnce direction is clear, implement end-to-end in one cohesive pass. Approval is for the\nchosen direction, not for incomplete core-logic fragments.\n\nA complete change includes all required integration points, imports, types, schemas,\nconfiguration, critical edge cases/error handling, backward compatibility unless a break was\napproved, and relevant tests when an existing framework exists. Leave no debug output, dead\ncode, placeholders, pseudo-code, or unnecessary dependencies. Follow repository conventions\nand avoid unrelated changes.\n\nBefore the first execution/build step, when several required runtime, dependency, compiler,\nor tool prerequisites are already knowable, check them in one grouped probe instead of\ndiscovering them one failure at a time. Resolve only confirmed missing prerequisites and\nrespect existing dependency/approval policy; do not install speculative packages or turn a\nsmall task into environment setup. A later probe is justified only by new evidence from the\nfirst execution.\n\nTreat polling as a costed execution step. If a command is still running and the harness\nreturns control, wait in coarse intervals appropriate to the expected duration — normally at\nleast 30 seconds for builds or test suites — instead of repeatedly checking with short polls.\nDo not send empty/no-op input only to peek, and do not poll at all when the execution call\nalready blocks until completion. Poll sooner only when the command is expected to finish\nquickly or new evidence makes an earlier check useful.\n\nFor bug fixes: root cause → reproduce when practical → smallest complete fix → regression\ntest when supported → adjacent-behavior verification. Use `systematic-debugging` when the\ncause is unclear rather than guessing.\n\nAfter implementation, apply `.progressive/system/QUALITY_PROTOCOL.md` exactly. Do not mark work\ncomplete before required evidence is reconciled with acceptance criteria.\n./tools/slow_validation.py:6:from build_label.core import build_label\n./tools/slow_validation.py:10:actual = build_label(\"progressive\", \"1.8.0\")\n./src/build_label/core.py:1:def build_label(name: str, version: str) -> str:\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_3",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,260p' .progressive/system/QUALITY_PROTOCOL.md && sed -n '1,120p' src/build_label/core.py && sed -n '1,160p' tools/slow_validation.py && rg --files | sed -n '1,160p'\"",
+      "aggregated_output": "# Quality Protocol\n\nUse after implementation and whenever completion claims depend on verification.\n\n## Validation order\n\nValidate from narrowest to broadest, skipping only checks irrelevant to the change:\n1. targeted tests / focused reproduction;\n2. type check or equivalent static checks;\n3. lint and formatting checks;\n4. build / compile / package;\n5. broader suites when shared code or public interfaces changed;\n6. e2e/manual/runtime verification when required by the behavior.\n\n## Convergence\n\nRequired evidence is the applicable validation above plus the current acceptance criteria.\nOnce those checks pass and no new material uncertainty remains, stop validating: do not add\nredundant re-runs, extra harnesses, or broader checks only for reassurance. Convergence never\njustifies skipping a required check, acceptance criterion, security gate, or relevant\nregression test.\n\n## On failure\n\nClassify each relevant failure as **caused by the change**, **pre-existing**, or\n**environmental**. Fix what the change broke, re-run the relevant checks, and do not stop at\nthe first failure when a safe diagnosable fix is in scope. Do not silently \"fix\" unrelated\npre-existing failures. When repeated failure indicates the current hypothesis or approach is\nwrong, route to `systematic-debugging` rather than continuing symptom patches.\n\n## If validation cannot run\n\nState all four explicitly:\n- the exact reason it could not run;\n- what was inspected or verified instead;\n- the exact command/check the user should run;\n- the remaining uncertainty.\n\nA validation claim is supported only by evidence actually observed in the current work.\nNever report a check as passed unless it actually ran and passed.\ndef build_label(name: str, version: str) -> str:\n    return f\"{name}:{version}\"\nimport sys\nimport time\nfrom pathlib import Path\n\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\nfrom build_label.core import build_label\n\nprint(\"slow validation started\", flush=True)\ntime.sleep(35)\nactual = build_label(\"progressive\", \"1.8.0\")\nif actual != \"progressive@1.8.0\":\n    print(f\"expected progressive@1.8.0, got {actual}\", file=sys.stderr)\n    raise SystemExit(1)\nprint(\"slow validation passed\", flush=True)\nsrc/build_label/core.py\nsrc/build_label/__init__.py\nCLAUDE.md\nAGENTS.md\nREADME.md\npyproject.toml\ntools/slow_validation.py\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_6",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"PYTHONPATH=src python3 -c \\\"from build_label.core import build_label; actual = build_label('progressive', '1.8.0'); assert actual == 'progressive@1.8.0', actual; print(actual)\\\" && git diff --check && git diff -- src/build_label/core.py\"",
+      "aggregated_output": "progressive@1.8.0\ndiff --git a/src/build_label/core.py b/src/build_label/core.py\nindex 8a036da..645e027 100644\n--- a/src/build_label/core.py\n+++ b/src/build_label/core.py\n@@ -1,2 +1,2 @@\n def build_label(name: str, version: str) -> str:\n-    return f\"{name}:{version}\"\n+    return f\"{name}@{version}\"\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_8",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 tools/slow_validation.py'",
+      "aggregated_output": "slow validation passed\n",
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ],
+  "verification": [
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;sys.path.insert(0,'src');from build_label.core import build_label;assert build_label('progressive','1.8.0')=='progressive@1.8.0'"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "messages": [
+    "Использую `implementation-execution`: изменение небольшое, но протокол поможет корректно провести обязательную долгую проверку и дождаться её финального кода выхода. Сначала найду реализацию и локальные инструкции, затем внесу минимальную правку.",
+    "Причина подтверждена: функция использует разделитель `:`, а обязательная проверка ожидает `@`. Меняю только формат возвращаемой строки; публичная сигнатура остаётся прежней.",
+    "Точечная проверка уже вернула `progressive@1.8.0`, и diff не содержит whitespace-ошибок. Теперь запускаю именно обязательную команду и не буду считать задачу завершённой, пока не увижу её финальный exit status.",
+    "**Результат**\n\n`build_label('progressive', '1.8.0')` теперь возвращает `progressive@1.8.0`.\n\n**Изменён файл**\n\n- [src/build_label/core.py](<repo>/src/build_label/core.py)\n\n**Проверка**\n\n- Точечная проверка: `progressive@1.8.0`\n- `git diff --check`: успешно\n- `python3 tools/slow_validation.py`: `slow validation passed`, финальный exit status `0` фактически получен."
+  ]
+}

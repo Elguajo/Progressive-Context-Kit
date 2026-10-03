@@ -5,6 +5,8 @@ permissions, tools, task wording, and acceptance criteria constant when comparin
 versions. Static contract coverage is not empirical quality evidence.
 
 Use:
+- `TOKEN_EFFICIENCY_PLAN.md` for the agreed two-agent pilot, confirmation and acceptance scope;
+- `token-efficiency-2026-10-03/` for implementation evidence and the exploratory historical Codex pilot (Claude deferred);
 - `MODEL_EVAL_PROTOCOL.md` for the general quality/non-regression protocol;
 - `EXECUTION_EFFICIENCY_PROTOCOL.md` for paired token/tool/runtime experiments;
 - `RUN_RECORD.schema.json` as the canonical paired-eval per-run record format;

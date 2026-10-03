@@ -24,3 +24,7 @@ Normal coding sessions must **not** recursively read this directory.
 `human/GETTING_STARTED.md` is for people installing/using the framework, and `human/TECHNICAL_REFERENCE.md` is for integration and maintenance details. They are not normal agent warm-up context and are intentionally excluded from the Project Runtime build.
 
 `DESIGN_RATIONALE.md`, `TOKEN_BUDGETS.md`, `BASELINE_COMPARISON.md`, and `COMPATIBILITY.md` are also framework/reference docs, not normal task warm-up context.
+
+Token-efficiency work is saved in [the agreed plan](evals/agent/TOKEN_EFFICIENCY_PLAN.md)
+and [its measurements and implementation evidence](evals/agent/token-efficiency-2026-10-03/README.md).
+These are Framework Source-only research records.

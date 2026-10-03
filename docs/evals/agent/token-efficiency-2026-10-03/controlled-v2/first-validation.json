@@ -1,0 +1,13 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-v"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_info (tests.test_existing.ExistingCommandTests.test_info) ... ok\ntest_ping (tests.test_existing.ExistingCommandTests.test_ping) ... ok\ntest_status_uses_canonical_metadata (tests.test_status.StatusCommandTests.test_status_uses_canonical_metadata) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+}

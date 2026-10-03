@@ -1,0 +1,228 @@
+{
+  "patch": "diff --git a/src/slug_service/render.py b/src/slug_service/render.py\nindex e146b67..66634cd 100644\n--- a/src/slug_service/render.py\n+++ b/src/slug_service/render.py\n@@ -1,5 +1,4 @@\n import re\n \n def render_slug(value: str) -> str:\n-    # TODO: complete punctuation/whitespace normalization.\n-    return value.strip().lower()\n+    return re.sub(r\"[^a-z0-9]+\", \"-\", value.strip().lower()).strip(\"-\")\n",
+  "new_files": {},
+  "project_state": {
+    ".progressive/project/PROJECT_BRIEF.md": "# Project Brief\n\nStatus: ACTIVE\n\nProject: Local coding task\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n",
+    ".progressive/project/ARCHITECTURE.md": "# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n",
+    ".progressive/project/TOOLING_STATUS.md": "# Tooling Status\n\nProfile: minimal\n\nStatus: READY\n\nOptional framework tooling is not required for this local coding task. Use repository-native tools only.\n",
+    ".progressive/project/ROADMAP.md": "# Roadmap — Current Coding Task\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n",
+    ".progressive/project/NEXT_SESSION.md": "# Next Session\n\n> Volatile hot context for this current local coding task.\n\nStatus: READY\n\nCurrent focus: Execute the current coding task exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n",
+    ".progressive/phases/00-current-task.md": "# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n"
+  },
+  "command_trace": [
+    {
+      "id": "item_2",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,240p' .agents/skills/implementation-execution/SKILL.md\"",
+      "aggregated_output": "---\nname: implementation-execution\ndescription: Non-trivial implementation after direction is clear, including feature work and complete bug-fix execution.\n---\n\n# Implementation Execution\n\nOnce direction is clear, implement end-to-end in one cohesive pass. Approval is for the\nchosen direction, not for incomplete core-logic fragments.\n\nA complete change includes all required integration points, imports, types, schemas,\nconfiguration, critical edge cases/error handling, backward compatibility unless a break was\napproved, and relevant tests when an existing framework exists. Leave no debug output, dead\ncode, placeholders, pseudo-code, or unnecessary dependencies. Follow repository conventions\nand avoid unrelated changes.\n\nBefore the first execution/build step, when several required runtime, dependency, compiler,\nor tool prerequisites are already knowable, check them in one grouped probe instead of\ndiscovering them one failure at a time. Resolve only confirmed missing prerequisites and\nrespect existing dependency/approval policy; do not install speculative packages or turn a\nsmall task into environment setup. A later probe is justified only by new evidence from the\nfirst execution.\n\nTreat polling as a costed execution step. If a command is still running and the harness\nreturns control, wait in coarse intervals appropriate to the expected duration — normally at\nleast 30 seconds for builds or test suites — instead of repeatedly checking with short polls.\nDo not send empty/no-op input only to peek, and do not poll at all when the execution call\nalready blocks until completion. Poll sooner only when the command is expected to finish\nquickly or new evidence makes an earlier check useful.\n\nFor bug fixes: root cause → reproduce when practical → smallest complete fix → regression\ntest when supported → adjacent-behavior verification. Use `systematic-debugging` when the\ncause is unclear rather than guessing.\n\nAfter implementation, apply `.progressive/system/QUALITY_PROTOCOL.md` exactly. Do not mark work\ncomplete before required evidence is reconciled with acceptance criteria.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_3",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,260p' .progressive/system/QUALITY_PROTOCOL.md\"",
+      "aggregated_output": "# Quality Protocol\n\nUse after implementation and whenever completion claims depend on verification.\n\n## Validation order\n\nValidate from narrowest to broadest, skipping only checks irrelevant to the change:\n1. targeted tests / focused reproduction;\n2. type check or equivalent static checks;\n3. lint and formatting checks;\n4. build / compile / package;\n5. broader suites when shared code or public interfaces changed;\n6. e2e/manual/runtime verification when required by the behavior.\n\n## Convergence\n\nRequired evidence is the applicable validation above plus the current acceptance criteria.\nOnce those checks pass and no new material uncertainty remains, stop validating: do not add\nredundant re-runs, extra harnesses, or broader checks only for reassurance. Convergence never\njustifies skipping a required check, acceptance criterion, security gate, or relevant\nregression test.\n\n## On failure\n\nClassify each relevant failure as **caused by the change**, **pre-existing**, or\n**environmental**. Fix what the change broke, re-run the relevant checks, and do not stop at\nthe first failure when a safe diagnosable fix is in scope. Do not silently \"fix\" unrelated\npre-existing failures. When repeated failure indicates the current hypothesis or approach is\nwrong, route to `systematic-debugging` rather than continuing symptom patches.\n\n## If validation cannot run\n\nState all four explicitly:\n- the exact reason it could not run;\n- what was inspected or verified instead;\n- the exact command/check the user should run;\n- the remaining uncertainty.\n\nA validation claim is supported only by evidence actually observed in the current work.\nNever report a check as passed unless it actually ran and passed.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_5",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"rg -n \\\"render_slug|toolchain|prerequisite|python\\\" . --glob '\"'!*.pyc'\"' --glob '\"'!__pycache__/**'\"'\"",
+      "aggregated_output": "./AGENTS.md:63:- **Normal product work:** prefer `python3 .progressive/tools/context_compile.py`; otherwise read `.progressive/project/PROJECT_BRIEF.md` → `ARCHITECTURE.md` → `ROADMAP.md` → `NEXT_SESSION.md` when present → `[>]` phase → prior phase's `Completion Record` when present, then only relevant ADR/source/tests/schemas/current docs.\n./src/slug_service/render.py:3:def render_slug(value: str) -> str:\n./pyproject.toml:4:requires-python = \">=3.11\"\n./ENVIRONMENT.md:1:# Local toolchain\n./ENVIRONMENT.md:3:Required prerequisites are all knowable before the first execution step:\n./ENVIRONMENT.md:4:- Python 3.11+ (`python3 --version`)\n./ENVIRONMENT.md:6:- local schema helper (`python3 tools/schema_probe.py --version`)\n./ENVIRONMENT.md:8:Normal validation: `python3 -m unittest discover -v`.\n./tests/test_render.py:6:from slug_service.render import render_slug\n./tests/test_render.py:9:    def test_render_slug(self):\n./tests/test_render.py:11:            render_slug(\"  Hello, Progressive Context!  \"),\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_4",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"rg --files -g '\"'!*__pycache__*'\"'\"",
+      "aggregated_output": "src/slug_service/__init__.py\nsrc/slug_service/render.py\nCLAUDE.md\nAGENTS.md\nREADME.md\ntests/test_render.py\ntests/__init__.py\npyproject.toml\ntools/schema_probe.py\nENVIRONMENT.md\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_6",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git status --short'",
+      "aggregated_output": "",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_7",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,220p' src/slug_service/render.py\"",
+      "aggregated_output": "import re\n\ndef render_slug(value: str) -> str:\n    # TODO: complete punctuation/whitespace normalization.\n    return value.strip().lower()\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_8",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,220p' README.md\"",
+      "aggregated_output": "# Slug Service\n\nRead `ENVIRONMENT.md` before implementation. No third-party packages are required.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_9",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,220p' ENVIRONMENT.md\"",
+      "aggregated_output": "# Local toolchain\n\nRequired prerequisites are all knowable before the first execution step:\n- Python 3.11+ (`python3 --version`)\n- Git (`git --version`)\n- local schema helper (`python3 tools/schema_probe.py --version`)\n\nNormal validation: `python3 -m unittest discover -v`.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_10",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,220p' tests/test_render.py\"",
+      "aggregated_output": "import sys\nfrom pathlib import Path\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nimport unittest\nfrom slug_service.render import render_slug\n\nclass RenderSlugTests(unittest.TestCase):\n    def test_render_slug(self):\n        self.assertEqual(\n            render_slug(\"  Hello, Progressive Context!  \"),\n            \"hello-progressive-context\",\n        )\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_11",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,220p' src/slug_service/__init__.py\"",
+      "aggregated_output": "",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_12",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,220p' tools/schema_probe.py\"",
+      "aggregated_output": "import sys\n\nif \"--version\" in sys.argv:\n    print(\"schema-probe 1.2.0\")\n    raise SystemExit(0)\nprint(\"usage: schema_probe.py --version\", file=sys.stderr)\nraise SystemExit(2)\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_13",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,220p' pyproject.toml\"",
+      "aggregated_output": "[project]\nname = \"slug-service\"\nversion = \"0.3.0\"\nrequires-python = \">=3.11\"\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_15",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 --version'",
+      "aggregated_output": "Python 3.12.10\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_16",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git --version'",
+      "aggregated_output": "git version 2.50.1 (Apple Git-155)\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_17",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 tools/schema_probe.py --version'",
+      "aggregated_output": "schema-probe 1.2.0\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_18",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git log --oneline --all --decorate -- src/slug_service/render.py'",
+      "aggregated_output": "b530727 (HEAD -> main) local task snapshot\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_20",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest tests.test_render.RenderSlugTests.test_render_slug -v'",
+      "aggregated_output": "test_render_slug (tests.test_render.RenderSlugTests.test_render_slug) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_21",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+      "aggregated_output": "test_render_slug (tests.test_render.RenderSlugTests.test_render_slug) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_24",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git status --short'",
+      "aggregated_output": " M src/slug_service/render.py\n?? src/slug_service/__pycache__/\n?? tests/__pycache__/\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_23",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git diff -- src/slug_service/render.py pyproject.toml'",
+      "aggregated_output": "diff --git a/src/slug_service/render.py b/src/slug_service/render.py\nindex e146b67..66634cd 100644\n--- a/src/slug_service/render.py\n+++ b/src/slug_service/render.py\n@@ -1,5 +1,4 @@\n import re\n \n def render_slug(value: str) -> str:\n-    # TODO: complete punctuation/whitespace normalization.\n-    return value.strip().lower()\n+    return re.sub(r\"[^a-z0-9]+\", \"-\", value.strip().lower()).strip(\"-\")\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_25",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git diff --check'",
+      "aggregated_output": "",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_26",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'rm -r src/slug_service/__pycache__ tests/__pycache__'",
+      "aggregated_output": "",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_27",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git status --short'",
+      "aggregated_output": " M src/slug_service/render.py\n",
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ],
+  "verification": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_render_slug (tests.test_render.RenderSlugTests.test_render_slug) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "messages": [
+    "Использую `implementation-execution`: сначала сверю локальный контракт и обязательный toolchain, затем внесу минимальную правку и прогоню штатную проверку.",
+    "Контракт здесь локальный и компактный: стандартная библиотека, Python 3.11+, нормализация пунктуации/пробелов. Перед тестами проверяю все три заранее объявленных prerequisite одним пакетом.",
+    "Реализация готова: последовательности любых не-ASCII-букв/цифр сворачиваются в один дефис, краевые дефисы удаляются. Целевой тест уже прошёл; завершаю проверкой полного набора и чистоты diff.",
+    "**Результат**\n\n`render_slug` теперь приводит строку к нижнему регистру, заменяет последовательности пунктуации/пробелов дефисом и удаляет краевые дефисы. Зависимости не добавлены.\n\n**Изменённый файл**\n\n- [src/slug_service/render.py](<repo>/src/slug_service/render.py:3)\n\n**Валидация**\n\n- Toolchain: Python 3.12.10, Git 2.50.1, schema-probe 1.2.0.\n- Целевой unittest: пройден.\n- `python3 -m unittest discover -v`: 1 тест пройден.\n- `git diff --check`: пройден."
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "baseline_workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a",
+  "candidate_workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503",
+  "experiment_config": {
+    "agent_target": "both",
+    "baseline_description": "Last main commit before Execution Efficiency rules were introduced.",
+    "baseline_workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a",
+    "candidate_description": "Completed Phase 6 workflow with execution-efficiency rules, static protection, and measurement foundation.",
+    "candidate_workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503",
+    "claim_repetitions_minimum": 5,
+    "controlled_fields": [
+      "agent product",
+      "model version",
+      "reasoning/effort setting",
+      "task fixture snapshot",
+      "task wording",
+      "acceptance criteria",
+      "tool availability",
+      "permissions",
+      "environment"
+    ],
+    "default_repetitions": 1,
+    "description": "Paired real-agent benchmark for Progressive Context execution-efficiency guarantees.",
+    "experiment_id": "execution-efficiency-v1",
+    "notes": [
+      "Phase 7 benchmark files are Framework Source-only and must never enter Project Runtime.",
+      "One exploratory repetition is useful for smoke-testing the harness; use at least five paired repetitions per task before making stable median-efficiency claims.",
+      "The polling scenario is interpretable only when the agent harness can return control while a long-running command is still executing."
+    ],
+    "optional_metrics": [
+      "input_tokens",
+      "output_tokens",
+      "cache_read_tokens",
+      "cost_usd",
+      "initial_context_tokens",
+      "peak_context_tokens"
+    ],
+    "primary_metrics": [
+      "total_tokens",
+      "turns",
+      "tool_calls",
+      "file_reads",
+      "wall_time_seconds"
+    ],
+    "profile": "standalone",
+    "quality_tolerance": 0.0,
+    "schema": 1,
+    "token_accounting_requirement": "Use the same provider-reported accounting in both arms; otherwise input_tokens + output_tokens consistently."
+  },
+  "experiment_config_sha256": "83dbc34a8c0ae1a7ed14f3776a13a4acd3773762e58dbba4de89973e6a422049",
+  "experiment_id": "execution-efficiency-v1",
+  "pairs": [
+    {
+      "acceptance": "tasks/recon-batch/acceptance.md",
+      "acceptance_sha256": "b0385d5828246c3d997e24533ae1cabb58806a1a47afd90bf6199332a543e98b",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "3f7f7f1a98001c79f2feb63f7b71be04b08bd87b",
+          "repo": "tasks/recon-batch/r01/baseline/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "50e2911b4c3a423da5cb151ec52d7515b828137b",
+          "repo": "tasks/recon-batch/r01/candidate/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "09db45e78954ead133c0e42f5bb4ed9e63d1e4553cdc8cb64a79502c14584b19",
+      "mechanism": "batch-reconnaissance",
+      "pair_id": "recon-batch-r01",
+      "prompt": "tasks/recon-batch/prompt.md",
+      "task_class": "directed-implementation",
+      "task_id": "recon-batch",
+      "task_sha256": "d71bf26eaf07e22e1dd7cd3b1d6a63f30d3aaf96b803c51bd15729ef5ac20667"
+    },
+    {
+      "acceptance": "tasks/keyhole-read/acceptance.md",
+      "acceptance_sha256": "1db3d21c1df11e677aeb12751c6853c98c96f720619eff33d8d978cbaaa066f0",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "ba62b3351ba0b10adaf91f1bbc349ae5ff331c8f",
+          "repo": "tasks/keyhole-read/r01/baseline/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "cdfcaaafa0cf280418ec00a453065e49dc5530cc",
+          "repo": "tasks/keyhole-read/r01/candidate/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "179cd3a2ae84d3d05f572e66d87b8006e4e8833d43dbe7d8fdadda073cf67e94",
+      "mechanism": "bounded-keyhole-reads",
+      "pair_id": "keyhole-read-r01",
+      "prompt": "tasks/keyhole-read/prompt.md",
+      "task_class": "directed-bug-fix",
+      "task_id": "keyhole-read",
+      "task_sha256": "b8c879124590cb77255ee71c864abcc26c9f7dce818a001900d51dd222f9c264"
+    },
+    {
+      "acceptance": "tasks/environment-probe/acceptance.md",
+      "acceptance_sha256": "352fb2735e3bee45cb1a0bbcb5a97eb121698f4562afc547b0d595dc37a43d9b",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "bec7dc4f65eeece0624fe3562ba533b26c2059ee",
+          "repo": "tasks/environment-probe/r01/baseline/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "25040adcbf87004fe54e4173247a2da5b2df26af",
+          "repo": "tasks/environment-probe/r01/candidate/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "dff82f9098e0ce746c5d7899e971dd7e75b309d0093199b595fa1cbd6d8cb5c7",
+      "mechanism": "single-pass-environment-probing",
+      "pair_id": "environment-probe-r01",
+      "prompt": "tasks/environment-probe/prompt.md",
+      "task_class": "directed-implementation",
+      "task_id": "environment-probe",
+      "task_sha256": "e04db3ac13cf7130f760708bac6edf03cc3976f71f3ac78351a3c674abff02a2"
+    },
+    {
+      "acceptance": "tasks/validation-convergence/acceptance.md",
+      "acceptance_sha256": "0f788f9b7a45506f1dd10da7ea625ca4cfb41a36818ad9ac10e066ea58a7d731",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "3b8acfe0e08bb5b347630652154c19c83c9125a1",
+          "repo": "tasks/validation-convergence/r01/baseline/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "b3ed2e0937fdb77af992fd02d26147f8410c3fb6",
+          "repo": "tasks/validation-convergence/r01/candidate/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "bbf3ad9a61e43c0c35822340dfb2c27f8128c73c76e60863799c95edec438cf5",
+      "mechanism": "convergent-validation",
+      "pair_id": "validation-convergence-r01",
+      "prompt": "tasks/validation-convergence/prompt.md",
+      "task_class": "directed-implementation",
+      "task_id": "validation-convergence",
+      "task_sha256": "c78e169161db991cf879938ef3b1969b1c54675509dd27fcd05d8409769154e7"
+    },
+    {
+      "acceptance": "tasks/failure-pivot/acceptance.md",
+      "acceptance_sha256": "d14a3dcd074f4225a00af7c072d671e83b8eeeda33faa54af69c5f564fc5d9dd",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "9ef8d3beed5c2ba9f3af92939309f1f384982054",
+          "repo": "tasks/failure-pivot/r01/baseline/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "c77938ef563707ff9aaaebf582b183c1368778ae",
+          "repo": "tasks/failure-pivot/r01/candidate/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "f1c913de24ac30cb0de07a52fa9e90c0465adc572400e1ad972845437d7c0847",
+      "mechanism": "repeated-failure-pivot",
+      "pair_id": "failure-pivot-r01",
+      "prompt": "tasks/failure-pivot/prompt.md",
+      "task_class": "unclear-root-cause-bug",
+      "task_id": "failure-pivot",
+      "task_sha256": "5a17afdf1ccf5a3145f592b5c22cc2a11338fe1741d9188d2e30c5fb774fda09"
+    },
+    {
+      "acceptance": "tasks/polling-discipline/acceptance.md",
+      "acceptance_sha256": "22420402e1d52f50b0c732084f7af07af7750f1ffee25d8213dca9745390ff8d",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "912b023ca4e6efbed77e79c798006d2cbf66236f",
+          "repo": "tasks/polling-discipline/r01/baseline/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "48bc1393bf717fef0f565947b289a92b65d76ecd",
+          "repo": "tasks/polling-discipline/r01/candidate/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "f125a7f899a3a947c2fc44958c641cc32b2cc3cdf078d366e1ad7101297fd56f",
+      "mechanism": "bounded-polling",
+      "pair_id": "polling-discipline-r01",
+      "prompt": "tasks/polling-discipline/prompt.md",
+      "task_class": "directed-implementation",
+      "task_id": "polling-discipline",
+      "task_sha256": "9f3d7a27e09af5008427c78a97442519e623a443045614e05fbb5bffd10b014f"
+    }
+  ],
+  "repetitions": 1,
+  "schema": 1
+}

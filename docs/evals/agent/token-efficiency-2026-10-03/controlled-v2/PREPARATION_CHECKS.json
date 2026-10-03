@@ -1,0 +1,86 @@
+[
+  {
+    "pair_id": "recon-batch-r01",
+    "arm": "baseline",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 3
+  },
+  {
+    "pair_id": "recon-batch-r01",
+    "arm": "candidate",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 3
+  },
+  {
+    "pair_id": "keyhole-read-r01",
+    "arm": "baseline",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 3
+  },
+  {
+    "pair_id": "keyhole-read-r01",
+    "arm": "candidate",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 3
+  },
+  {
+    "pair_id": "environment-probe-r01",
+    "arm": "baseline",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 1
+  },
+  {
+    "pair_id": "environment-probe-r01",
+    "arm": "candidate",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 1
+  },
+  {
+    "pair_id": "validation-convergence-r01",
+    "arm": "baseline",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 2
+  },
+  {
+    "pair_id": "validation-convergence-r01",
+    "arm": "candidate",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 2
+  },
+  {
+    "pair_id": "failure-pivot-r01",
+    "arm": "baseline",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 2
+  },
+  {
+    "pair_id": "failure-pivot-r01",
+    "arm": "candidate",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": 2
+  },
+  {
+    "pair_id": "polling-discipline-r01",
+    "arm": "baseline",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": null
+  },
+  {
+    "pair_id": "polling-discipline-r01",
+    "arm": "candidate",
+    "neutral_setup": true,
+    "neutral_history": true,
+    "discovered_tests": null
+  }
+]

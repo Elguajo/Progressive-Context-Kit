@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import statistics
 import sys
 from pathlib import Path
@@ -120,7 +121,7 @@ def _number(value, label: str, *, integer: bool = False, nullable: bool = False)
         if integer
         else isinstance(value, (int, float)) and not isinstance(value, bool)
     )
-    if not good or value < 0:
+    if not good or value < 0 or not math.isfinite(value):
         kind = "non-negative integer" if integer else "non-negative number"
         raise EvalDataError(f"{label} must be a {kind}")
 
@@ -343,6 +344,15 @@ def summarize(
     pairs = pair_records(records)
     if not pairs:
         raise EvalDataError("no complete pairs")
+    for field in ("agent", "model", "reasoning", "experiment_id"):
+        if len({baseline[field] for baseline, _ in pairs}) != 1:
+            raise EvalDataError(f"analyze each {field} separately; mixed comparisons are not comparable")
+    for field in ("token_accounting",):
+        if len({baseline["metrics"][field] for baseline, _ in pairs}) != 1:
+            raise EvalDataError("analyze each token_accounting method separately")
+    for index, arm in enumerate(("baseline", "candidate")):
+        if len({pair[index]["workflow_ref"] for pair in pairs}) != 1:
+            raise EvalDataError(f"analyze each {arm} workflow_ref separately")
 
     if (judge_records is None) != (anonymous_pair_map is None):
         raise EvalDataError("blinded judging requires both judge records and anonymous pair map")
@@ -366,6 +376,7 @@ def summarize(
     candidate_hard_failures = []
     quality_deltas = []
     judged_preferences: dict[str, int] = {}
+    successful_runs = {"baseline": 0, "candidate": 0}
     for baseline, candidate in pairs:
         pair_name = f"{baseline['experiment_id']}:{baseline['pair_id']}"
         if judgments is None:
@@ -384,6 +395,8 @@ def summarize(
             candidate_quality = quality_mean_scores(judgment["scores"][candidate_artifact])
             preference = judgment["preference"]
             judged_preferences[preference] = judged_preferences.get(preference, 0) + 1
+        successful_runs["baseline"] += int(baseline_pass)
+        successful_runs["candidate"] += int(candidate_pass)
         if baseline_pass and not candidate_pass:
             hard_regressions.append(pair_name)
         if not candidate_pass:
@@ -408,8 +421,25 @@ def summarize(
         gate = "PASS"
         reason = "no hard regression and quality threshold satisfied"
 
+    outcomes = {}
+    for index, arm in enumerate(("baseline", "candidate")):
+        total_tokens = sum(pair[index]["metrics"]["total_tokens"] for pair in pairs)
+        successes = successful_runs[arm]
+        outcomes[arm] = {
+            "successful_runs": successes,
+            "failed_runs": len(pairs) - successes,
+            "total_tokens": total_tokens,
+            "tokens_per_successful_task": total_tokens / successes if successes else None,
+        }
+
     return {
         "pair_count": len(pairs),
+        "agent": pairs[0][0]["agent"],
+        "model": pairs[0][0]["model"],
+        "reasoning": pairs[0][0]["reasoning"],
+        "token_accounting": pairs[0][0]["metrics"]["token_accounting"],
+        "baseline_outcomes": outcomes["baseline"],
+        "candidate_outcomes": outcomes["candidate"],
         "quality_gate": gate,
         "quality_gate_reason": reason,
         "quality_tolerance": quality_tolerance,
@@ -440,6 +470,13 @@ def print_human(summary: dict) -> None:
         print(f"  {arm}:")
         for key, value in summary[f"{arm}_medians"].items():
             print(f"    {key}: {value:.3f}")
+    print("\nTask outcomes (includes tokens from failed runs):")
+    for arm in ("baseline", "candidate"):
+        outcome = summary[f"{arm}_outcomes"]
+        per_success = outcome["tokens_per_successful_task"]
+        cost = "n/a" if per_success is None else f"{per_success:.3f}"
+        print(f"  {arm}: {outcome['successful_runs']} successful, {outcome['failed_runs']} failed; "
+              f"tokens per successful task: {cost}")
 
 
 def main() -> int:

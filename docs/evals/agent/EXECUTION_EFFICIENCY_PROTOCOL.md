@@ -104,6 +104,14 @@ The analyzer:
 - fails the quality gate on any baseline-pass → candidate-fail hard regression;
 - otherwise applies the configured quality non-inferiority tolerance.
 
+Analyze each agent, model, reasoning setting, workflow comparison and token-accounting method
+separately; pooled summaries of incompatible comparisons are rejected. Additive arm outcome
+summaries report successful/failed runs, total attempt tokens, and tokens per successful task.
+Include failed-attempt tokens in the numerator; no successes yields null, never zero or a
+claim of savings. Success follows the same evidence source as the quality gate: blinded judge
+hard failures when supplied, otherwise recorded outcomes. Keep the existing per-run schema;
+input/output/cache figures must not be summed twice when provider totals already include them.
+
 When blinded judge records are available, pass their JSONL/JSON input and the separate anonymous
 pair map to the analyzer. Judge-detected hard failures and judge quality scores then provide the
 quality evidence; the map is a control artifact and must not be shown to the judge.

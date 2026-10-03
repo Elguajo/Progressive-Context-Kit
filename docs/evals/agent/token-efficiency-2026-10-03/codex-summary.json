@@ -1,0 +1,66 @@
+{
+  "agent": "codex",
+  "baseline_medians": {
+    "cache_read_tokens": 197824.0,
+    "file_reads": 1.0,
+    "input_tokens": 212394.0,
+    "output_tokens": 2426.0,
+    "quality_mean": 2.9,
+    "tool_calls": 7.5,
+    "total_tokens": 214314.0,
+    "turns": 1.0,
+    "wall_time_seconds": 78.22914470800606
+  },
+  "baseline_outcomes": {
+    "failed_runs": 1,
+    "successful_runs": 5,
+    "tokens_per_successful_task": 307494.8,
+    "total_tokens": 1537474
+  },
+  "candidate_hard_failures": [
+    "execution-efficiency-v1:environment-probe-r01"
+  ],
+  "candidate_medians": {
+    "cache_read_tokens": 209024.0,
+    "file_reads": 3.0,
+    "input_tokens": 225953.5,
+    "output_tokens": 2784.0,
+    "quality_mean": 2.75,
+    "tool_calls": 9.0,
+    "total_tokens": 228946.0,
+    "turns": 1.0,
+    "wall_time_seconds": 84.33531566649617
+  },
+  "candidate_outcomes": {
+    "failed_runs": 1,
+    "successful_runs": 5,
+    "tokens_per_successful_task": 290069.6,
+    "total_tokens": 1450348
+  },
+  "hard_regressions": [],
+  "judge_preferences": {
+    "A": 2,
+    "B": 2,
+    "TIE": 2
+  },
+  "median_paired_percent_delta": {
+    "cache_read_tokens": 1.754079254079254,
+    "file_reads": 50.0,
+    "input_tokens": 1.8904414881213187,
+    "output_tokens": 0.9141764520091842,
+    "tool_calls": 16.25,
+    "total_tokens": 1.7702643982920447,
+    "turns": 0.0,
+    "wall_time_seconds": 2.9038441837076205
+  },
+  "median_paired_quality_delta": -0.10000000000000009,
+  "model": "gpt-5.6-sol",
+  "pair_count": 6,
+  "quality_evidence": "blinded_judge_records",
+  "quality_gate": "FAIL",
+  "quality_gate_reason": "quality non-inferiority threshold exceeded",
+  "quality_tolerance": 0.0,
+  "reasoning": "high",
+  "token_accounting": "codex turn.completed input_tokens + output_tokens; cache/reasoning subsets not added",
+  "workflow_evidence_required": true
+}

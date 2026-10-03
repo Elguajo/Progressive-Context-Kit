@@ -13,6 +13,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -37,6 +38,31 @@ OPTIONAL_FRAMEWORK_TOOLS = (
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_experiment(path: Path) -> dict:
+    experiment = load_json(path)
+    if not isinstance(experiment, dict) or experiment.get("schema") != 1:
+        raise ValueError("experiment must be an object with schema=1")
+    experiment_id = experiment.get("experiment_id")
+    if not isinstance(experiment_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", experiment_id):
+        raise ValueError("experiment_id must be a non-empty path-safe identifier")
+    for arm in ("baseline", "candidate"):
+        ref = experiment.get(f"{arm}_workflow_ref")
+        if not isinstance(ref, str) or not re.fullmatch(r"[0-9a-f]{40}", ref):
+            raise ValueError(f"{arm}_workflow_ref must be an immutable 40-char Git SHA")
+    if experiment["baseline_workflow_ref"] == experiment["candidate_workflow_ref"]:
+        raise ValueError("baseline and candidate workflow refs must differ")
+    if experiment.get("profile") != "standalone":
+        raise ValueError("benchmark preparation currently supports only the standalone profile")
+    if experiment.get("agent_target", "both") not in ("codex", "claude", "both"):
+        raise ValueError("agent_target must be codex, claude, or both")
+    if experiment.get("harness_profile", "historical") not in ("historical", "controlled-v2"):
+        raise ValueError("harness_profile must be historical or controlled-v2")
+    repetitions = experiment.get("default_repetitions", 1)
+    if not isinstance(repetitions, int) or isinstance(repetitions, bool) or repetitions < 1:
+        raise ValueError("default_repetitions must be a positive integer")
+    return experiment
 
 
 def sha256_file(path: Path) -> str:
@@ -114,14 +140,14 @@ def build_runtime_from_ref(repo: Path, ref: str, agent_target: str, destination:
                     target.write_bytes(archive.read(name))
 
 
-def init_clean_git_repo(root: Path) -> str:
+def init_clean_git_repo(root: Path, *, neutral: bool = False) -> str:
     env = os.environ.copy()
     env.update(
         {
-            "GIT_AUTHOR_NAME": "Progressive Benchmark",
-            "GIT_AUTHOR_EMAIL": "benchmark@example.invalid",
-            "GIT_COMMITTER_NAME": "Progressive Benchmark",
-            "GIT_COMMITTER_EMAIL": "benchmark@example.invalid",
+            "GIT_AUTHOR_NAME": "Local Task" if neutral else "Progressive Benchmark",
+            "GIT_AUTHOR_EMAIL": "task@example.invalid" if neutral else "benchmark@example.invalid",
+            "GIT_COMMITTER_NAME": "Local Task" if neutral else "Progressive Benchmark",
+            "GIT_COMMITTER_EMAIL": "task@example.invalid" if neutral else "benchmark@example.invalid",
             "GIT_AUTHOR_DATE": "2026-08-20T00:00:00+00:00",
             "GIT_COMMITTER_DATE": "2026-08-20T00:00:00+00:00",
         }
@@ -129,7 +155,7 @@ def init_clean_git_repo(root: Path) -> str:
     for command in (
         ["git", "init", "-q"],
         ["git", "add", "-A"],
-        ["git", "commit", "-q", "-m", "benchmark fixture"],
+        ["git", "commit", "-q", "-m", "local task snapshot" if neutral else "benchmark fixture"],
     ):
         result = subprocess.run(command, cwd=root, env=env, capture_output=True, text=True)
         if result.returncode:
@@ -155,7 +181,7 @@ def copy_runtime(source: Path, repo: Path) -> None:
             shutil.copy2(path, target)
 
 
-def benchmark_tooling_state() -> dict:
+def benchmark_tooling_state(*, neutral: bool = False) -> dict:
     return {
         "schema": 1,
         "profile": "minimal",
@@ -165,7 +191,10 @@ def benchmark_tooling_state() -> dict:
                 "status": "not_applicable",
                 "checked_at": None,
                 "version": None,
-                "evidence": "optional framework tool intentionally excluded from controlled benchmark",
+                "evidence": (
+                    "optional framework tool not required for this local coding task"
+                    if neutral else "optional framework tool intentionally excluded from controlled benchmark"
+                ),
                 "notes": None,
             }
             for key in OPTIONAL_FRAMEWORK_TOOLS
@@ -173,17 +202,25 @@ def benchmark_tooling_state() -> dict:
     }
 
 
-def initialize_benchmark_project(repo: Path, task_id: str) -> None:
+def initialize_benchmark_project(repo: Path, task_id: str, *, neutral: bool = False) -> None:
     """Replace uninitialized Runtime seeds with identical minimal active state in both arms."""
     project = repo / ".progressive/project"
     phases = repo / ".progressive/phases"
     project.mkdir(parents=True, exist_ok=True)
     phases.mkdir(parents=True, exist_ok=True)
+    phase_name = "00-current-task.md" if neutral else "00-benchmark-task.md"
+    project_name = "Local coding task" if neutral else "Real-agent benchmark fixture"
+    roadmap_name = "Current Coding Task" if neutral else "Benchmark Fixture"
+    hot_context = "current local coding task" if neutral else "disposable benchmark fixture"
+    current_focus = (
+        "Execute the current coding task exactly as supplied by the user."
+        if neutral else f"Execute benchmark task `{task_id}` exactly as supplied by the user."
+    )
 
     (project / "PROJECT_BRIEF.md").write_text(
         "# Project Brief\n\n"
         "Status: ACTIVE\n\n"
-        "Project: Real-agent benchmark fixture\n\n"
+        f"Project: {project_name}\n\n"
         "Goal: Complete the current user-provided local coding task correctly and with the "
         "smallest complete change.\n\n"
         "Scope: The current repository and current task only. Do not expand product scope.\n",
@@ -200,23 +237,23 @@ def initialize_benchmark_project(repo: Path, task_id: str) -> None:
         encoding="utf-8",
     )
     (project / "ROADMAP.md").write_text(
-        "# Roadmap — Benchmark Fixture\n\n"
+        f"# Roadmap — {roadmap_name}\n\n"
         "Legend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n"
-        "- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\n"
+        f"- [>] Phase 00 — Current coding task — `.progressive/phases/{phase_name}`\n\n"
         "Project complete when the current user task and its supplied acceptance criteria are "
         "verified.\n",
         encoding="utf-8",
     )
     (project / "NEXT_SESSION.md").write_text(
         "# Next Session\n\n"
-        "> Volatile hot context for this disposable benchmark fixture.\n\n"
+        f"> Volatile hot context for this {hot_context}.\n\n"
         "Status: READY\n\n"
-        f"Current focus: Execute benchmark task `{task_id}` exactly as supplied by the user.\n\n"
+        f"Current focus: {current_focus}\n\n"
         "Next action: Ground in the repository, implement the task, and produce required "
         "validation evidence.\n",
         encoding="utf-8",
     )
-    (phases / "00-benchmark-task.md").write_text(
+    (phases / phase_name).write_text(
         "# Phase 00 — Current Coding Task\n\n"
         "Status: IN PROGRESS\n\n"
         "## Goal\n\n"
@@ -230,7 +267,7 @@ def initialize_benchmark_project(repo: Path, task_id: str) -> None:
     tooling_json = project / "TOOLING_STATUS.json"
     if tooling_json.exists():
         tooling_json.write_text(
-            json.dumps(benchmark_tooling_state(), indent=2) + "\n",
+            json.dumps(benchmark_tooling_state(neutral=neutral), indent=2) + "\n",
             encoding="utf-8",
         )
     tooling_md = project / "TOOLING_STATUS.md"
@@ -238,9 +275,13 @@ def initialize_benchmark_project(repo: Path, task_id: str) -> None:
         tooling_md.write_text(
             "# Tooling Status\n\n"
             "Profile: minimal\n\n"
-            "Status: READY\n\n"
-            "Optional framework tooling is intentionally not applicable to this controlled "
-            "benchmark. Use repository-native tools only.\n",
+            "Status: READY\n\n" +
+            (
+                "Optional framework tooling is not required for this local coding task. "
+                "Use repository-native tools only.\n" if neutral else
+                "Optional framework tooling is intentionally not applicable to this controlled "
+                "benchmark. Use repository-native tools only.\n"
+            ),
             encoding="utf-8",
         )
 
@@ -259,12 +300,30 @@ def write_task_material(task_dir: Path, task: dict) -> tuple[Path, Path]:
     return prompt, acceptance
 
 
+def validate_workspace_location(workspace_root: Path, output: Path) -> None:
+    if (
+        workspace_root == ROOT or ROOT in workspace_root.parents or workspace_root in ROOT.parents
+        or workspace_root == output or output in workspace_root.parents or workspace_root in output.parents
+    ):
+        raise ValueError("controlled workspaces must be separate from the source and control pack")
+    if any(re.search(r"baseline|candidate|benchmark|experiment", part, re.I) for part in workspace_root.parts):
+        raise ValueError("workspace root path must not reveal experiment or arm labels")
+
+
 def prepare_pack(
     output: Path,
     repetitions: int,
     selected_tasks: set[str] | None = None,
+    *,
+    experiment_path: Path | None = None,
+    workspace_root: Path | None = None,
 ) -> dict:
-    experiment = load_json(BENCHMARK_ROOT / "EXPERIMENT.json")
+    experiment_path = experiment_path or BENCHMARK_ROOT / "EXPERIMENT.json"
+    experiment = load_experiment(experiment_path)
+    experiment_config_sha256 = sha256_file(experiment_path)
+    controlled = experiment.get("harness_profile", "historical") == "controlled-v2"
+    if not isinstance(repetitions, int) or isinstance(repetitions, bool) or repetitions < 1:
+        raise ValueError("repetitions must be a positive integer")
     tasks = load_json(BENCHMARK_ROOT / "TASKS.json")["tasks"]
 
     if selected_tasks:
@@ -274,6 +333,19 @@ def prepare_pack(
             raise ValueError("unknown task id(s): " + ", ".join(sorted(unknown)))
         tasks = [task for task in tasks if task["id"] in selected_tasks]
 
+    output = output.resolve()
+    if output == ROOT or output in ROOT.parents:
+        raise ValueError("benchmark output must not replace the source repository or its ancestors")
+    if workspace_root is not None:
+        if not controlled:
+            raise ValueError("--workspace-root requires harness_profile=controlled-v2")
+        workspace_root = workspace_root.resolve()
+        if workspace_root.exists():
+            raise ValueError("workspace root must be a new directory; existing work is never replaced")
+    if controlled:
+        # Validate the default temporary parent too, before replacing control-pack output.
+        location = workspace_root or Path(tempfile.gettempdir()).resolve() / "local-tasks-new"
+        validate_workspace_location(location, output)
     if output.exists():
         shutil.rmtree(output)
     output.mkdir(parents=True)
@@ -283,9 +355,13 @@ def prepare_pack(
         "experiment_id": experiment["experiment_id"],
         "baseline_workflow_ref": experiment["baseline_workflow_ref"],
         "candidate_workflow_ref": experiment["candidate_workflow_ref"],
+        "experiment_config": experiment,
+        "experiment_config_sha256": experiment_config_sha256,
         "repetitions": repetitions,
         "pairs": [],
     }
+    if controlled:
+        plan["harness_profile"] = "controlled-v2"
 
     with tempfile.TemporaryDirectory(prefix="pc-benchmark-runtime-") as runtime_tmp:
         runtime_cache: dict[str, Path] = {}
@@ -300,10 +376,20 @@ def prepare_pack(
             )
             runtime_cache[arm] = runtime_dir
 
+        if controlled:
+            if workspace_root is None:
+                workspace_root = Path(tempfile.mkdtemp(prefix="local-tasks-")).resolve()
+            else:
+                workspace_root.mkdir(parents=True, exist_ok=False)
+            plan["workspace_root"] = str(workspace_root)
+
         for task in tasks:
             with tempfile.TemporaryDirectory(prefix=f"pc-fixture-{task['id']}-") as fixture_tmp:
                 raw = Path(fixture_tmp) / "repo"
-                materialize_fixture(task["fixture"], raw)
+                if controlled:
+                    materialize_fixture(task["fixture"], raw, discoverable_tests=True)
+                else:
+                    materialize_fixture(task["fixture"], raw)
                 fixture_snapshot = fixture_digest(raw)
 
                 task_dir = output / "tasks" / task["id"]
@@ -326,14 +412,20 @@ def prepare_pack(
                         "arms": {},
                     }
                     for arm in ("baseline", "candidate"):
-                        repo_dir = task_dir / f"r{repetition:02d}" / arm / "repo"
+                        if controlled:
+                            identity = hashlib.sha256(
+                                f"{experiment_config_sha256}:{pair_id}:{arm}".encode("utf-8")
+                            ).hexdigest()[:24]
+                            repo_dir = workspace_root / f"task-{identity}" / "repo"
+                        else:
+                            repo_dir = task_dir / f"r{repetition:02d}" / arm / "repo"
                         shutil.copytree(raw, repo_dir)
                         copy_runtime(runtime_cache[arm], repo_dir)
-                        initialize_benchmark_project(repo_dir, task["id"])
+                        initialize_benchmark_project(repo_dir, task["id"], neutral=controlled)
                         pair["arms"][arm] = {
                             "workflow_ref": experiment[f"{arm}_workflow_ref"],
-                            "repo": str(repo_dir.relative_to(output)),
-                            "local_git_commit": init_clean_git_repo(repo_dir),
+                            "repo": os.path.relpath(repo_dir, output),
+                            "local_git_commit": init_clean_git_repo(repo_dir, neutral=controlled),
                         }
                     plan["pairs"].append(pair)
 
@@ -350,10 +442,20 @@ def main() -> int:
     )
     parser.add_argument(
         "--output",
-        default=str(ROOT / "dist/agent-benchmark/execution-efficiency-v1"),
+        default=None,
         help="Disposable benchmark-pack destination.",
     )
+    parser.add_argument(
+        "--experiment",
+        type=Path,
+        default=BENCHMARK_ROOT / "EXPERIMENT.json",
+        help="Experiment JSON with immutable workflow refs; defaults to the historical comparison.",
+    )
     parser.add_argument("--repetitions", type=int, default=None)
+    parser.add_argument(
+        "--workspace-root", type=Path,
+        help="New external directory for controlled-v2 task repos; defaults to a retained temporary directory.",
+    )
     parser.add_argument(
         "--task",
         action="append",
@@ -362,24 +464,25 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    experiment = load_json(BENCHMARK_ROOT / "EXPERIMENT.json")
-    repetitions = args.repetitions or int(experiment.get("default_repetitions", 1))
-    if repetitions < 1:
-        print("ERROR: --repetitions must be >= 1", file=sys.stderr)
-        return 2
-
     try:
+        experiment = load_experiment(args.experiment)
+        repetitions = args.repetitions if args.repetitions is not None else experiment.get("default_repetitions", 1)
+        if repetitions < 1:
+            raise ValueError("--repetitions must be >= 1")
+        output = Path(args.output) if args.output else ROOT / "dist/agent-benchmark" / experiment["experiment_id"]
         plan = prepare_pack(
-            Path(args.output).resolve(),
+            output,
             repetitions,
             set(args.tasks or []) or None,
+            experiment_path=args.experiment,
+            workspace_root=args.workspace_root,
         )
     except (OSError, ValueError, RuntimeError, subprocess.CalledProcessError, zipfile.BadZipFile) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
 
     print("AGENT BENCHMARK PACK: READY")
-    print(f"Output: {Path(args.output).resolve()}")
+    print(f"Output: {output.resolve()}")
     print(f"Pairs: {len(plan['pairs'])}")
     print(f"Baseline: {plan['baseline_workflow_ref']}")
     print(f"Candidate: {plan['candidate_workflow_ref']}")

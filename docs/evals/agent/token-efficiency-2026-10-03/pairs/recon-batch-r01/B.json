@@ -1,0 +1,117 @@
+{
+  "patch": "diff --git a/src/harbor/dispatcher.py b/src/harbor/dispatcher.py\nindex cdd241f..ddd4875 100644\n--- a/src/harbor/dispatcher.py\n+++ b/src/harbor/dispatcher.py\n@@ -1,8 +1,9 @@\n-from harbor.commands import info, ping\n+from harbor.commands import info, ping, status\n \n COMMANDS = {\n     \"ping\": ping.run,\n     \"info\": info.run,\n+    \"status\": status.run,\n }\n \n def dispatch(name):\n",
+  "new_files": {
+    "src/harbor/commands/status.py": "from harbor.config import MODE\nfrom harbor.meta import project_metadata\n\n\ndef run():\n    meta = project_metadata()\n    return {\"service\": meta[\"name\"], \"version\": meta[\"version\"], \"mode\": MODE}\n",
+    "tests/__init__.py": ""
+  },
+  "project_state": {
+    ".progressive/project/PROJECT_BRIEF.md": "# Project Brief\n\nStatus: ACTIVE\n\nProject: Real-agent benchmark fixture\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n",
+    ".progressive/project/ARCHITECTURE.md": "# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n",
+    ".progressive/project/TOOLING_STATUS.md": "# Tooling Status\n\nProfile: minimal\n\nStatus: READY\n\nOptional framework tooling is intentionally not applicable to this controlled benchmark. Use repository-native tools only.\n",
+    ".progressive/project/ROADMAP.md": "# Roadmap — Benchmark Fixture\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n",
+    ".progressive/project/NEXT_SESSION.md": "# Next Session\n\n> Volatile hot context for this disposable benchmark fixture.\n\nStatus: READY\n\nCurrent focus: Execute benchmark task `recon-batch` exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n",
+    ".progressive/phases/00-benchmark-task.md": "# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n"
+  },
+  "command_trace": [
+    {
+      "id": "item_2",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,240p' .agents/skills/implementation-execution/SKILL.md && git status --short && python3 .progressive/tools/context_compile.py 2>/dev/null || true && rg --files -g '\"'!*.pyc'\"' -g '\"'!__pycache__'\"' | sed -n '1,160p'\"",
+      "aggregated_output": "---\nname: implementation-execution\ndescription: Non-trivial implementation after direction is clear, including feature work and complete bug-fix execution.\n---\n\n# Implementation Execution\n\nOnce direction is clear, implement end-to-end in one cohesive pass. Approval is for the\nchosen direction, not for incomplete core-logic fragments.\n\nA complete change includes all required integration points, imports, types, schemas,\nconfiguration, critical edge cases/error handling, backward compatibility unless a break was\napproved, and relevant tests when an existing framework exists. Leave no debug output, dead\ncode, placeholders, pseudo-code, or unnecessary dependencies. Follow repository conventions\nand avoid unrelated changes.\n\nBefore the first execution/build step, when several required runtime, dependency, compiler,\nor tool prerequisites are already knowable, check them in one grouped probe instead of\ndiscovering them one failure at a time. Resolve only confirmed missing prerequisites and\nrespect existing dependency/approval policy; do not install speculative packages or turn a\nsmall task into environment setup. A later probe is justified only by new evidence from the\nfirst execution.\n\nTreat polling as a costed execution step. If a command is still running and the harness\nreturns control, wait in coarse intervals appropriate to the expected duration — normally at\nleast 30 seconds for builds or test suites — instead of repeatedly checking with short polls.\nDo not send empty/no-op input only to peek, and do not poll at all when the execution call\nalready blocks until completion. Poll sooner only when the command is expected to finish\nquickly or new evidence makes an earlier check useful.\n\nFor bug fixes: root cause → reproduce when practical → smallest complete fix → regression\ntest when supported → adjacent-behavior verification. Use `systematic-debugging` when the\ncause is unclear rather than guessing.\n\nAfter implementation, apply `.progressive/system/QUALITY_PROTOCOL.md` exactly. Do not mark work\ncomplete before required evidence is reconciled with acceptance criteria.\n# Compiled Current Context\n\nGenerated deterministically; canonical files remain source of truth.\n\n## docs/project/PROJECT_BRIEF.md\n# Project Brief\n\nStatus: ACTIVE\n\nProject: Real-agent benchmark fixture\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n\n## docs/project/ARCHITECTURE.md\n# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n\n## docs/project/ROADMAP.md\n# Roadmap — Benchmark Fixture\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n\n## docs/project/NEXT_SESSION.md\n# Next Session\n\n> Volatile hot context for this disposable benchmark fixture.\n\nStatus: READY\n\nCurrent focus: Execute benchmark task `recon-batch` exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n\n## .progressive/phases/00-benchmark-task.md\n# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\nsrc/harbor/meta.py\nsrc/harbor/commands/ping.py\nsrc/harbor/commands/info.py\nsrc/harbor/commands/__init__.py\nsrc/harbor/__init__.py\nsrc/harbor/config.py\nsrc/harbor/dispatcher.py\nCLAUDE.md\nAGENTS.md\nREADME.md\ntests/test_status.py\ntests/test_existing.py\npyproject.toml\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_3",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,240p' src/harbor/dispatcher.py; sed -n '1,200p' src/harbor/commands/ping.py; sed -n '1,200p' src/harbor/commands/info.py; sed -n '1,200p' src/harbor/config.py; sed -n '1,200p' src/harbor/meta.py; sed -n '1,160p' src/harbor/__init__.py; sed -n '1,160p' src/harbor/commands/__init__.py; sed -n '1,240p' tests/test_existing.py; sed -n '1,240p' tests/test_status.py; sed -n '1,200p' pyproject.toml; sed -n '1,220p' README.md\"",
+      "aggregated_output": "from harbor.commands import info, ping\n\nCOMMANDS = {\n    \"ping\": ping.run,\n    \"info\": info.run,\n}\n\ndef dispatch(name):\n    return COMMANDS[name]()\ndef run():\n    return {\"ok\": True}\nfrom harbor.config import MODE\nfrom harbor.meta import project_metadata\n\ndef run():\n    meta = project_metadata()\n    return {\"service\": meta[\"name\"], \"mode\": MODE}\nMODE = \"safe\"\nfrom pathlib import Path\nimport tomllib\n\ndef project_metadata():\n    root = Path(__file__).resolve().parents[2]\n    return tomllib.loads((root / \"pyproject.toml\").read_text(encoding=\"utf-8\"))[\"project\"]\nimport sys\nfrom pathlib import Path\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nimport unittest\nfrom harbor.dispatcher import dispatch\n\nclass ExistingCommandTests(unittest.TestCase):\n    def test_ping(self):\n        self.assertEqual(dispatch(\"ping\"), {\"ok\": True})\n\n    def test_info(self):\n        self.assertEqual(dispatch(\"info\"), {\"service\": \"harbor-service\", \"mode\": \"safe\"})\nimport sys\nfrom pathlib import Path\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nimport unittest\nfrom harbor.dispatcher import dispatch\n\nclass StatusCommandTests(unittest.TestCase):\n    def test_status_uses_canonical_metadata(self):\n        self.assertEqual(\n            dispatch(\"status\"),\n            {\"service\": \"harbor-service\", \"version\": \"2.4.1\", \"mode\": \"safe\"},\n        )\n[project]\nname = \"harbor-service\"\nversion = \"2.4.1\"\nrequires-python = \">=3.11\"\n# Harbor Service\n\nCommands are registered in `harbor.dispatcher`. Keep command implementations small and\nfollow existing command modules. Run `python3 -m unittest discover -v` for validation.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_6",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,260p' .progressive/system/QUALITY_PROTOCOL.md\"",
+      "aggregated_output": "# Quality Protocol\n\nUse after implementation and whenever completion claims depend on verification.\n\n## Validation order\n\nValidate from narrowest to broadest, skipping only checks irrelevant to the change:\n1. targeted tests / focused reproduction;\n2. type check or equivalent static checks;\n3. lint and formatting checks;\n4. build / compile / package;\n5. broader suites when shared code or public interfaces changed;\n6. e2e/manual/runtime verification when required by the behavior.\n\n## Convergence\n\nRequired evidence is the applicable validation above plus the current acceptance criteria.\nOnce those checks pass and no new material uncertainty remains, stop validating: do not add\nredundant re-runs, extra harnesses, or broader checks only for reassurance. Convergence never\njustifies skipping a required check, acceptance criterion, security gate, or relevant\nregression test.\n\n## On failure\n\nClassify each relevant failure as **caused by the change**, **pre-existing**, or\n**environmental**. Fix what the change broke, re-run the relevant checks, and do not stop at\nthe first failure when a safe diagnosable fix is in scope. Do not silently \"fix\" unrelated\npre-existing failures. When repeated failure indicates the current hypothesis or approach is\nwrong, route to `systematic-debugging` rather than continuing symptom patches.\n\n## If validation cannot run\n\nState all four explicitly:\n- the exact reason it could not run;\n- what was inspected or verified instead;\n- the exact command/check the user should run;\n- the remaining uncertainty.\n\nA validation claim is supported only by evidence actually observed in the current work.\nNever report a check as passed unless it actually ran and passed.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_7",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest tests.test_status -v && python3 -m unittest discover -v && git diff --check && git diff -- src/harbor/dispatcher.py src/harbor/commands/status.py && git status --short'",
+      "aggregated_output": "\n----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nNO TESTS RAN\n",
+      "exit_code": 5,
+      "status": "failed"
+    },
+    {
+      "id": "item_9",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'pwd; find tests src/harbor -maxdepth 3 -type f -print | sort; git status --short --untracked-files=all; git ls-files; git check-ignore -v src/harbor/commands/status.py tests/test_status.py || true; python3 -m unittest discover -s tests -v'",
+      "aggregated_output": "test_info (test_existing.ExistingCommandTests.test_info) ... ok\ntest_ping (test_existing.ExistingCommandTests.test_ping) ... ok\ntest_status_uses_canonical_metadata (test_status.StatusCommandTests.test_status_uses_canonical_metadata) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_11",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+      "aggregated_output": "test_info (tests.test_existing.ExistingCommandTests.test_info) ... ok\ntest_ping (tests.test_existing.ExistingCommandTests.test_ping) ... ok\ntest_status_uses_canonical_metadata (tests.test_status.StatusCommandTests.test_status_uses_canonical_metadata) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_12",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"find .progressive/tools src tests -type f -name '*.pyc' -delete; find .progressive/tools src tests -depth -type d -name '__pycache__' -empty -delete; git diff --check; git status --short --untracked-files=all; sed -n '1,120p' src/harbor/dispatcher.py; sed -n '1,120p' src/harbor/commands/status.py\"",
+      "aggregated_output": " M src/harbor/dispatcher.py\n?? src/harbor/commands/status.py\n?? tests/__init__.py\nfrom harbor.commands import info, ping, status\n\nCOMMANDS = {\n    \"ping\": ping.run,\n    \"info\": info.run,\n    \"status\": status.run,\n}\n\ndef dispatch(name):\n    return COMMANDS[name]()\nfrom harbor.config import MODE\nfrom harbor.meta import project_metadata\n\n\ndef run():\n    meta = project_metadata()\n    return {\"service\": meta[\"name\"], \"version\": meta[\"version\"], \"mode\": MODE}\n",
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ],
+  "verification": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_info (tests.test_existing.ExistingCommandTests.test_info) ... ok\ntest_ping (tests.test_existing.ExistingCommandTests.test_ping) ... ok\ntest_status_uses_canonical_metadata (tests.test_status.StatusCommandTests.test_status_uses_canonical_metadata) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_info (test_existing.ExistingCommandTests.test_info) ... ok\ntest_ping (test_existing.ExistingCommandTests.test_ping) ... ok\ntest_status_uses_canonical_metadata (test_status.StatusCommandTests.test_status_uses_canonical_metadata) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "messages": [
+    "Использую `implementation-execution`: сначала сверю канонические источники версии/режима и существующий шаблон команд, затем внесу минимальное изменение и прогоню полный `unittest discover`.",
+    "Канонические источники уже выделены: `pyproject.toml` читается через `project_metadata()`, а режим экспортируется из `harbor.config`. Новый обработчик сможет собрать ответ без дублирования литералов; существующие `ping` и `info` затрагивать не нужно.",
+    "Точечный тест прошёл, но заданная команда `discover` завершилась с `OK`, обнаружив 0 тестов. Это не достаточная проверка критериев, поэтому уточняю причину discovery и состояние Git перед финальным выводом.",
+    "**Результат**\n\nДобавлена команда `status`, зарегистрированная в существующем диспетчере. Она возвращает:\n\n```python\n{\"service\": \"harbor-service\", \"version\": \"2.4.1\", \"mode\": \"safe\"}\n```\n\nВерсия и имя читаются из `pyproject.toml` через `project_metadata()`, режим — из `harbor.config.MODE`.\n\n**Изменённые файлы**\n\n- [dispatcher.py](<repo>/src/harbor/dispatcher.py) — регистрация команды.\n- [status.py](<repo>/src/harbor/commands/status.py) — реализация.\n- [tests/__init__.py](<repo>/tests/__init__.py) — обеспечивает обнаружение тестов командой из acceptance criteria.\n\n**Проверка**\n\n`python3 -m unittest discover -v` — 3 теста пройдены, включая существующие `ping` и `info`.  \n`git diff --check` — ошибок нет."
+  ]
+}

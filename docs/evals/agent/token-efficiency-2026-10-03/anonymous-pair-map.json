@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "pairs": [
+    {
+      "experiment_id": "execution-efficiency-v1",
+      "pair_id": "recon-batch-r01",
+      "mapping": {
+        "baseline": "A",
+        "candidate": "B"
+      }
+    },
+    {
+      "experiment_id": "execution-efficiency-v1",
+      "pair_id": "keyhole-read-r01",
+      "mapping": {
+        "baseline": "A",
+        "candidate": "B"
+      }
+    },
+    {
+      "experiment_id": "execution-efficiency-v1",
+      "pair_id": "environment-probe-r01",
+      "mapping": {
+        "baseline": "B",
+        "candidate": "A"
+      }
+    },
+    {
+      "experiment_id": "execution-efficiency-v1",
+      "pair_id": "validation-convergence-r01",
+      "mapping": {
+        "baseline": "B",
+        "candidate": "A"
+      }
+    },
+    {
+      "experiment_id": "execution-efficiency-v1",
+      "pair_id": "failure-pivot-r01",
+      "mapping": {
+        "baseline": "A",
+        "candidate": "B"
+      }
+    },
+    {
+      "experiment_id": "execution-efficiency-v1",
+      "pair_id": "polling-discipline-r01",
+      "mapping": {
+        "baseline": "A",
+        "candidate": "B"
+      }
+    }
+  ]
+}

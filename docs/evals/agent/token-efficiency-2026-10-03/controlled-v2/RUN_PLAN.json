@@ -1,0 +1,199 @@
+{
+  "baseline_workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a",
+  "candidate_workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503",
+  "experiment_config": {
+    "agent_target": "both",
+    "baseline_description": "Last main commit before Execution Efficiency rules were introduced.",
+    "baseline_workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a",
+    "candidate_description": "Completed Phase 6 workflow with execution-efficiency rules, static protection, and measurement foundation.",
+    "candidate_workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503",
+    "claim_repetitions_minimum": 5,
+    "controlled_fields": [
+      "agent product",
+      "model version",
+      "reasoning/effort setting",
+      "task fixture snapshot",
+      "task wording",
+      "acceptance criteria",
+      "tool availability",
+      "permissions",
+      "environment"
+    ],
+    "default_repetitions": 1,
+    "description": "Diagnostic rerun of the historical workflow comparison with discoverable tests and neutral isolated task workspaces.",
+    "experiment_id": "execution-efficiency-controlled-v2-2026-10-03",
+    "harness_profile": "controlled-v2",
+    "notes": [
+      "Phase 7 benchmark files are Framework Source-only and must never enter Project Runtime.",
+      "One exploratory repetition is useful for smoke-testing the harness; use at least five paired repetitions per task before making stable median-efficiency claims.",
+      "The polling scenario is interpretable only when the agent harness can return control while a long-running command is still executing.",
+      "Historical workflow refs are unchanged. Harness and fixture controls differ from the first pilot, so records must not be pooled.",
+      "Claude runs are deferred by the user; this initial dataset covers Codex only."
+    ],
+    "optional_metrics": [
+      "input_tokens",
+      "output_tokens",
+      "cache_read_tokens",
+      "cost_usd",
+      "initial_context_tokens",
+      "peak_context_tokens"
+    ],
+    "primary_metrics": [
+      "total_tokens",
+      "turns",
+      "tool_calls",
+      "file_reads",
+      "wall_time_seconds"
+    ],
+    "profile": "standalone",
+    "quality_tolerance": 0.0,
+    "schema": 1,
+    "token_accounting_requirement": "Use the same provider-reported accounting in both arms; otherwise input_tokens + output_tokens consistently."
+  },
+  "experiment_config_sha256": "ebbab26268c0df54d3d02c31d7828e92c2a16d03ea1f74020c82cce36184bd98",
+  "experiment_id": "execution-efficiency-controlled-v2-2026-10-03",
+  "harness_profile": "controlled-v2",
+  "pairs": [
+    {
+      "acceptance": "tasks/recon-batch/acceptance.md",
+      "acceptance_sha256": "b0385d5828246c3d997e24533ae1cabb58806a1a47afd90bf6199332a543e98b",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "8e6606ef5efd160f8e8e72993bdb3fb204898797",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-a7520ab8c2ff24415e5c9362/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "0f1e70cc11d44d32fede8d7f9d8522e72cd72aec",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-7569690b19414d9ff94d6275/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "874da41d6061d038c35320709378947a8d64ddc8fd28ec1dffeaa36528d5eab6",
+      "mechanism": "batch-reconnaissance",
+      "pair_id": "recon-batch-r01",
+      "prompt": "tasks/recon-batch/prompt.md",
+      "task_class": "directed-implementation",
+      "task_id": "recon-batch",
+      "task_sha256": "d71bf26eaf07e22e1dd7cd3b1d6a63f30d3aaf96b803c51bd15729ef5ac20667"
+    },
+    {
+      "acceptance": "tasks/keyhole-read/acceptance.md",
+      "acceptance_sha256": "1db3d21c1df11e677aeb12751c6853c98c96f720619eff33d8d978cbaaa066f0",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "25e9681dd4589d4a5d3b4380b64a8729171d2986",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-f6ad2ec027b4b27325325478/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "3f666cf74b3496a365ec44e145fa3db57c2a9861",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-035ebaef38c33229bc4b0d1b/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "482a7cf2c508cbb90b5356f83aac89d51fb2b646e0998a9ff9e7593da6f9d840",
+      "mechanism": "bounded-keyhole-reads",
+      "pair_id": "keyhole-read-r01",
+      "prompt": "tasks/keyhole-read/prompt.md",
+      "task_class": "directed-bug-fix",
+      "task_id": "keyhole-read",
+      "task_sha256": "b8c879124590cb77255ee71c864abcc26c9f7dce818a001900d51dd222f9c264"
+    },
+    {
+      "acceptance": "tasks/environment-probe/acceptance.md",
+      "acceptance_sha256": "352fb2735e3bee45cb1a0bbcb5a97eb121698f4562afc547b0d595dc37a43d9b",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "48129eb1fc8aef51defe104832d93bbdd45483a4",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-56c8fa0f04245b87d90ca8bf/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "b530727fff76bdb7a7472337684e4ce025662175",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-aa07536fade32314342897c9/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "f0a1b7c4d15934360f40e49a31e7f06970752f51e65f86c0240c52ab08ddfba5",
+      "mechanism": "single-pass-environment-probing",
+      "pair_id": "environment-probe-r01",
+      "prompt": "tasks/environment-probe/prompt.md",
+      "task_class": "directed-implementation",
+      "task_id": "environment-probe",
+      "task_sha256": "e04db3ac13cf7130f760708bac6edf03cc3976f71f3ac78351a3c674abff02a2"
+    },
+    {
+      "acceptance": "tasks/validation-convergence/acceptance.md",
+      "acceptance_sha256": "0f788f9b7a45506f1dd10da7ea625ca4cfb41a36818ad9ac10e066ea58a7d731",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "0ad9d8dd112a0330db352468358ed145525094e4",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-2da4884506fd4efb325917e7/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "aecc6dc1a6171ee299cf08e7b48b44a949885b05",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-4cdf63f29648499e4ff0bbf2/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "bbf3ad9a61e43c0c35822340dfb2c27f8128c73c76e60863799c95edec438cf5",
+      "mechanism": "convergent-validation",
+      "pair_id": "validation-convergence-r01",
+      "prompt": "tasks/validation-convergence/prompt.md",
+      "task_class": "directed-implementation",
+      "task_id": "validation-convergence",
+      "task_sha256": "c78e169161db991cf879938ef3b1969b1c54675509dd27fcd05d8409769154e7"
+    },
+    {
+      "acceptance": "tasks/failure-pivot/acceptance.md",
+      "acceptance_sha256": "d14a3dcd074f4225a00af7c072d671e83b8eeeda33faa54af69c5f564fc5d9dd",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "2e636bb1e652874343d19387d6f8e4f80acefef0",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-ca25009acbbcf9596af2405d/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "91f1052c9efa16fc7ad3a62abed1f8dfb79b3c30",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-260bc6de740e4ddbcb6cd266/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "a63e9247c4712fb3d0b66c1bd7a0582de6aecc7321fcf8d7bd025c7b7140acfb",
+      "mechanism": "repeated-failure-pivot",
+      "pair_id": "failure-pivot-r01",
+      "prompt": "tasks/failure-pivot/prompt.md",
+      "task_class": "unclear-root-cause-bug",
+      "task_id": "failure-pivot",
+      "task_sha256": "5a17afdf1ccf5a3145f592b5c22cc2a11338fe1741d9188d2e30c5fb774fda09"
+    },
+    {
+      "acceptance": "tasks/polling-discipline/acceptance.md",
+      "acceptance_sha256": "22420402e1d52f50b0c732084f7af07af7750f1ffee25d8213dca9745390ff8d",
+      "arms": {
+        "baseline": {
+          "local_git_commit": "99e7f9e38367c203d2daed1e8052515db85005ad",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-037f645e1ab2b10fb4ff07d8/repo",
+          "workflow_ref": "b5d68e6ae258f02f7c5829e8f8bac54dd4d39a4a"
+        },
+        "candidate": {
+          "local_git_commit": "9cb2b9bb9f3d5fa17ec12e150ad37c7b8f00f9de",
+          "repo": "../../../../../../../../private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8/task-fad5efdcec73df11329ddbe1/repo",
+          "workflow_ref": "8a8e21f16cb30d5cffe7c493a6c31dc17bfaa503"
+        }
+      },
+      "fixture_snapshot": "f125a7f899a3a947c2fc44958c641cc32b2cc3cdf078d366e1ad7101297fd56f",
+      "mechanism": "bounded-polling",
+      "pair_id": "polling-discipline-r01",
+      "prompt": "tasks/polling-discipline/prompt.md",
+      "task_class": "directed-implementation",
+      "task_id": "polling-discipline",
+      "task_sha256": "9f3d7a27e09af5008427c78a97442519e623a443045614e05fbb5bffd10b014f"
+    }
+  ],
+  "repetitions": 1,
+  "schema": 1,
+  "workspace_root": "/private/var/folders/vf/s632xx9x68n699sp_14s_fdr0000gn/T/local-tasks-z1x4luj8"
+}

@@ -1,0 +1,21 @@
+{
+  "command": [
+    "codex",
+    "exec",
+    "--ignore-user-config",
+    "--ephemeral",
+    "--model",
+    "gpt-6.1-sol",
+    "-c",
+    "model_reasoning_effort=\"high\"",
+    "--sandbox",
+    "workspace-write",
+    "--json",
+    "--cd",
+    "<pack>/tasks/recon-batch/r01/baseline/repo",
+    "-"
+  ],
+  "agent_version": "0.147.0",
+  "model": "gpt-6.1-sol",
+  "reasoning": "high"
+}

@@ -1,0 +1,408 @@
+{
+  "experiment_id": "execution-efficiency-v1",
+  "pair_id": "failure-pivot-r01",
+  "task": "Fix the incorrect checkout discount behavior. The failing integration test is authoritative; do not weaken the test or mask the failure with retries/fallbacks. Find the root cause, make the smallest complete fix, and run the relevant tests until the required behavior is verified.\n",
+  "acceptance": "# Acceptance criteria\n\n- A configured `10%` discount produces a total of `90.00` from subtotal `100.00`.\n- The parser accepts the repository's documented percentage-string format.\n- No retry, exception swallowing, hard-coded checkout total, or test weakening is introduced.\n- `python3 -m unittest discover -v` passes.\n",
+  "artifacts": {
+    "A": {
+      "patch": "diff --git a/.progressive/phases/00-benchmark-task.md b/.progressive/phases/00-benchmark-task.md\nindex a3e10ea..8d235ba 100644\n--- a/.progressive/phases/00-benchmark-task.md\n+++ b/.progressive/phases/00-benchmark-task.md\n@@ -1,6 +1,6 @@\n # Phase 00 — Current Coding Task\n \n-Status: IN PROGRESS\n+Status: COMPLETED\n \n ## Goal\n \n@@ -9,3 +9,11 @@ Complete the exact current user-provided task without unrelated scope.\n ## Acceptance\n \n Use the acceptance criteria supplied with the user task and the repository's required validation evidence.\n+\n+## Completion Record\n+\n+- **Status:** Completed 2026-10-03.\n+- **Final report:** `.progressive/completions/00-benchmark-task.md`.\n+- **Outcome:** Documented percentage discounts are parsed and applied correctly without exception swallowing.\n+- **Validation:** `python3 -m unittest discover -v` passed 2 tests; Python compilation passed.\n+- **Decisions / Technical Debt:** Existing decimal calculation behavior was preserved; no known debt remains.\ndiff --git a/.progressive/project/NEXT_SESSION.md b/.progressive/project/NEXT_SESSION.md\nindex 00c6782..41b68f2 100644\n--- a/.progressive/project/NEXT_SESSION.md\n+++ b/.progressive/project/NEXT_SESSION.md\n@@ -2,8 +2,12 @@\n \n > Volatile hot context for this disposable benchmark fixture.\n \n-Status: READY\n+Status: PROJECT COMPLETE\n \n-Current focus: Execute benchmark task `failure-pivot` exactly as supplied by the user.\n+Current focus: None; the benchmark task is complete.\n \n-Next action: Ground in the repository, implement the task, and produce required validation evidence.\n+Completed work: Fixed documented percentage parsing, removed exception swallowing, and enabled root-level test discovery.\n+\n+Verification: `python3 -m unittest discover -v` passed 2 tests; `python3 -m compileall -q src tests` passed.\n+\n+Next action: None.\ndiff --git a/.progressive/project/ROADMAP.md b/.progressive/project/ROADMAP.md\nindex 779da3e..56f6be9 100644\n--- a/.progressive/project/ROADMAP.md\n+++ b/.progressive/project/ROADMAP.md\n@@ -2,6 +2,6 @@\n \n Legend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n \n-- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n+- [x] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n \n Project complete when the current user task and its supplied acceptance criteria are verified.\ndiff --git a/src/checkout/config.py b/src/checkout/config.py\nindex a4e189d..7a9bb8d 100644\n--- a/src/checkout/config.py\n+++ b/src/checkout/config.py\n@@ -2,4 +2,4 @@ from decimal import Decimal\n \n def parse_discount(value: str) -> Decimal:\n     # Returns a fraction suitable for multiplication.\n-    return Decimal(value) / Decimal(\"100\")\n+    return Decimal(value.removesuffix(\"%\")) / Decimal(\"100\")\ndiff --git a/src/checkout/core.py b/src/checkout/core.py\nindex 49b8f60..ff7f8b5 100644\n--- a/src/checkout/core.py\n+++ b/src/checkout/core.py\n@@ -1,12 +1,8 @@\n-from decimal import Decimal, InvalidOperation\n+from decimal import Decimal\n from checkout.config import parse_discount\n \n CENT = Decimal(\"0.01\")\n \n def checkout_total(subtotal: Decimal, settings: dict[str, str]) -> Decimal:\n-    try:\n-        discount = parse_discount(settings.get(\"discount\", \"0%\"))\n-    except (InvalidOperation, ValueError):\n-        # Existing fallback masks malformed documented configuration.\n-        discount = Decimal(\"0\")\n+    discount = parse_discount(settings.get(\"discount\", \"0%\"))\n     return (subtotal * (Decimal(\"1\") - discount)).quantize(CENT)\n",
+      "new_files": {
+        ".progressive/completions/00-benchmark-task.md": "# Phase 00 Completion — Current Coding Task\n\nStatus: COMPLETED\n\n## Outcome\n\nCheckout percentage discounts now accept the documented format and produce the correct total without masking invalid configuration.\n\n## Delivered\n\n- Percentage-string parsing for values such as `10%`, `7.5%`, and `0%`.\n- Root-level unittest discovery for the repository test suite.\n\n## Implementation notes\n\nThe parser removes one trailing percent sign before converting the numeric portion to a `Decimal` fraction. Checkout no longer replaces parsing failures with a zero discount.\n\n## Decisions made\n\n- Preserve existing decimal arithmetic and quantization behavior; change only configuration parsing and error propagation.\n\n## Deviations / technical debt\n\n- None.\n\n## Problems discovered\n\n- The tests directory lacked the package marker required by the repository's documented discovery command in Python 3.12.\n\n## Verification evidence\n\n- `python3 -m unittest -v tests.test_checkout` → 2 tests passed.\n- `python3 -m compileall -q src tests` → passed.\n- `python3 -m unittest discover -v` → 2 tests passed.\n\n## Architectural impact\n\nNone.\n\n## Follow-up\n\n- None.\n",
+        "tests/__init__.py": ""
+      },
+      "project_state": {
+        ".progressive/project/PROJECT_BRIEF.md": "# Project Brief\n\nStatus: ACTIVE\n\nProject: Real-agent benchmark fixture\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n",
+        ".progressive/project/ARCHITECTURE.md": "# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n",
+        ".progressive/project/TOOLING_STATUS.md": "# Tooling Status\n\nProfile: minimal\n\nStatus: READY\n\nOptional framework tooling is intentionally not applicable to this controlled benchmark. Use repository-native tools only.\n",
+        ".progressive/project/ROADMAP.md": "# Roadmap — Benchmark Fixture\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [x] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n",
+        ".progressive/project/NEXT_SESSION.md": "# Next Session\n\n> Volatile hot context for this disposable benchmark fixture.\n\nStatus: PROJECT COMPLETE\n\nCurrent focus: None; the benchmark task is complete.\n\nCompleted work: Fixed documented percentage parsing, removed exception swallowing, and enabled root-level test discovery.\n\nVerification: `python3 -m unittest discover -v` passed 2 tests; `python3 -m compileall -q src tests` passed.\n\nNext action: None.\n",
+        ".progressive/phases/00-benchmark-task.md": "# Phase 00 — Current Coding Task\n\nStatus: COMPLETED\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n\n## Completion Record\n\n- **Status:** Completed 2026-10-03.\n- **Final report:** `.progressive/completions/00-benchmark-task.md`.\n- **Outcome:** Documented percentage discounts are parsed and applied correctly without exception swallowing.\n- **Validation:** `python3 -m unittest discover -v` passed 2 tests; Python compilation passed.\n- **Decisions / Technical Debt:** Existing decimal calculation behavior was preserved; no known debt remains.\n"
+      },
+      "command_trace": [
+        {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,240p' .agents/skills/systematic-debugging/SKILL.md && sed -n '1,260p' .agents/skills/implementation-execution/SKILL.md\"",
+          "aggregated_output": "---\nname: systematic-debugging\ndescription: Bug or failure whose root cause is unclear, intermittent, stateful, or cross-boundary.\n---\n\n# Systematic Debugging\n\nFind root cause before patching. Reproduce the failure when practical, or gather the\nsmallest discriminating evidence. Trace the earliest incorrect state, form a leading\nhypothesis, test it, then apply the smallest complete fix. Add a regression test when the\nrepository supports it and verify adjacent behavior.\n\nDo not mask root causes with retries, broad exception handling, exception swallowing,\nstate resets, or fallback logic unless technically justified. If evidence disproves the\nhypothesis, discard it rather than layering patches around it.\n---\nname: implementation-execution\ndescription: Non-trivial implementation after direction is clear, including feature work and complete bug-fix execution.\n---\n\n# Implementation Execution\n\nOnce direction is clear, implement end-to-end in one cohesive pass. Approval is for the\nchosen direction, not for incomplete core-logic fragments.\n\nA complete change includes all required integration points, imports, types, schemas,\nconfiguration, critical edge cases/error handling, backward compatibility unless a break was\napproved, and relevant tests when an existing framework exists. Leave no debug output, dead\ncode, placeholders, pseudo-code, or unnecessary dependencies. Follow repository conventions\nand avoid unrelated changes.\n\nFor bug fixes: root cause → reproduce when practical → smallest complete fix → regression\ntest when supported → adjacent-behavior verification. Use `systematic-debugging` when the\ncause is unclear rather than guessing.\n\nAfter implementation, apply `.progressive/system/QUALITY_PROTOCOL.md` exactly. Do not mark work\ncomplete before required evidence is reconciled with acceptance criteria.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_4",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg --files -g '\"'!*.pyc'\"' -g '\"'!__pycache__'\"' | sed -n '1,240p'\"",
+          "aggregated_output": "README.md\nCLAUDE.md\nAGENTS.md\npyproject.toml\nCONFIGURATION.md\ntests/test_checkout.py\nsrc/checkout/core.py\nsrc/checkout/__init__.py\nsrc/checkout/config.py\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_5",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'git status --short'",
+          "aggregated_output": "",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_6",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 .progressive/tools/context_compile.py'",
+          "aggregated_output": "# Compiled Current Context\n\nGenerated deterministically; canonical files remain source of truth.\n\n## docs/project/PROJECT_BRIEF.md\n# Project Brief\n\nStatus: ACTIVE\n\nProject: Real-agent benchmark fixture\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n\n## docs/project/ARCHITECTURE.md\n# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n\n## docs/project/ROADMAP.md\n# Roadmap — Benchmark Fixture\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n\n## docs/project/NEXT_SESSION.md\n# Next Session\n\n> Volatile hot context for this disposable benchmark fixture.\n\nStatus: READY\n\nCurrent focus: Execute benchmark task `failure-pivot` exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n\n## .progressive/phases/00-benchmark-task.md\n# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_7",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,240p' tests/test_checkout.py\"",
+          "aggregated_output": "import sys\nfrom pathlib import Path\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nimport unittest\nfrom decimal import Decimal\nfrom checkout.core import checkout_total\n\nclass CheckoutIntegrationTests(unittest.TestCase):\n    def test_documented_discount_format(self):\n        self.assertEqual(\n            checkout_total(Decimal(\"100.00\"), {\"discount\": \"10%\"}),\n            Decimal(\"90.00\"),\n        )\n\n    def test_zero_discount(self):\n        self.assertEqual(\n            checkout_total(Decimal(\"100.00\"), {\"discount\": \"0%\"}),\n            Decimal(\"100.00\"),\n        )\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_8",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,240p' README.md && sed -n '1,240p' CONFIGURATION.md && sed -n '1,200p' pyproject.toml\"",
+          "aggregated_output": "# Checkout Core\n\nDiscount configuration is documented in `CONFIGURATION.md`.\nValidation: `python3 -m unittest discover -v`.\n# Checkout configuration\n\n`discount` is a percentage string such as `10%`, `7.5%`, or `0%`.\n[project]\nname = \"checkout-core\"\nversion = \"0.9.0\"\nrequires-python = \">=3.11\"\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_9",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,240p' src/checkout/core.py && sed -n '1,240p' src/checkout/config.py && sed -n '1,160p' src/checkout/__init__.py\"",
+          "aggregated_output": "from decimal import Decimal, InvalidOperation\nfrom checkout.config import parse_discount\n\nCENT = Decimal(\"0.01\")\n\ndef checkout_total(subtotal: Decimal, settings: dict[str, str]) -> Decimal:\n    try:\n        discount = parse_discount(settings.get(\"discount\", \"0%\"))\n    except (InvalidOperation, ValueError):\n        # Existing fallback masks malformed documented configuration.\n        discount = Decimal(\"0\")\n    return (subtotal * (Decimal(\"1\") - discount)).quantize(CENT)\nfrom decimal import Decimal\n\ndef parse_discount(value: str) -> Decimal:\n    # Returns a fraction suitable for multiplication.\n    return Decimal(value) / Decimal(\"100\")\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_10",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+          "aggregated_output": "\n----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nNO TESTS RAN\n",
+          "exit_code": 5,
+          "status": "failed"
+        },
+        {
+          "id": "item_12",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 --version'",
+          "aggregated_output": "Python 3.12.10\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_13",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"PYTHONPATH=src python3 -c 'from checkout.config import parse_discount; print(parse_discount(\\\"10%\\\"))'\"",
+          "aggregated_output": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"<repo>/src/checkout/config.py\", line 5, in parse_discount\n    return Decimal(value) / Decimal(\"100\")\n           ^^^^^^^^^^^^^^\ndecimal.InvalidOperation: [<class 'decimal.ConversionSyntax'>]\n",
+          "exit_code": 1,
+          "status": "failed"
+        },
+        {
+          "id": "item_14",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -m unittest discover -s tests -v'",
+          "aggregated_output": "test_documented_discount_format (test_checkout.CheckoutIntegrationTests.test_documented_discount_format) ... FAIL\ntest_zero_discount (test_checkout.CheckoutIntegrationTests.test_zero_discount) ... ok\n\n======================================================================\nFAIL: test_documented_discount_format (test_checkout.CheckoutIntegrationTests.test_documented_discount_format)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"<repo>/tests/test_checkout.py\", line 11, in test_documented_discount_format\n    self.assertEqual(\nAssertionError: Decimal('100.00') != Decimal('90.00')\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+          "exit_code": 1,
+          "status": "failed"
+        },
+        {
+          "id": "item_18",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,320p' .progressive/system/QUALITY_PROTOCOL.md\"",
+          "aggregated_output": "# Quality Protocol\n\nUse after implementation and whenever completion claims depend on verification.\n\n## Validation order\n\nValidate from narrowest to broadest, skipping only checks irrelevant to the change:\n1. targeted tests / focused reproduction;\n2. type check or equivalent static checks;\n3. lint and formatting checks;\n4. build / compile / package;\n5. broader suites when shared code or public interfaces changed;\n6. e2e/manual/runtime verification when required by the behavior.\n\n## On failure\n\nClassify each relevant failure as **caused by the change**, **pre-existing**, or\n**environmental**. Fix what the change broke, re-run the relevant checks, and do not stop at\nthe first failure when a safe diagnosable fix is in scope. Do not silently \"fix\" unrelated\npre-existing failures.\n\n## If validation cannot run\n\nState all four explicitly:\n- the exact reason it could not run;\n- what was inspected or verified instead;\n- the exact command/check the user should run;\n- the remaining uncertainty.\n\nA validation claim is supported only by evidence actually observed in the current work.\nNever report a check as passed unless it actually ran and passed.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_19",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -m unittest -v tests.test_checkout'",
+          "aggregated_output": "test_documented_discount_format (tests.test_checkout.CheckoutIntegrationTests.test_documented_discount_format) ... ok\ntest_zero_discount (tests.test_checkout.CheckoutIntegrationTests.test_zero_discount) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_21",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -m compileall -q src tests'",
+          "aggregated_output": "",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_22",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+          "aggregated_output": "test_documented_discount_format (tests.test_checkout.CheckoutIntegrationTests.test_documented_discount_format) ... ok\ntest_zero_discount (tests.test_checkout.CheckoutIntegrationTests.test_zero_discount) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_24",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,320p' .agents/skills/session-handoff/SKILL.md\"",
+          "aggregated_output": "---\nname: session-handoff\ndescription: End of a meaningful implementation/review session or phase transition.\n---\n\n# Session Handoff\n\nRead current acceptance evidence and `.progressive/system/HANDOFF_PROTOCOL.md`. Classify the\nsession as `IN PROGRESS`, `PHASE COMPLETE`, or `PROJECT COMPLETE`. On `PHASE COMPLETE`,\nupdate canonical owners first, write the durable phase completion report, then write the\ncompleted phase's compact `## Completion Record` pointing to that report before updating\nRoadmap markers. Overwrite NEXT_SESSION as volatile hot navigation rather than preserving\nold handoffs or turning it into a second specification.\n\nThe phase completion report may preserve evidence-bounded technical detail useful to humans\nor later investigation. The Completion Record must remain small enough for normal progressive\nwarm-up and must not duplicate the report. Legacy completed phases that predate separate\ncompletion reports remain valid and do not require automatic migration.\n\nFor a non-trivial completed task inside an active phase, preserve only a compact task result,\nevidence, and decisions/issues in the phase file when later work needs them. Do not create one\ncompletion file per routine task.\n\nUse Single-Focus Continuation for `NEXT_SESSION`: one handoff prompt = one unresolved\nexecution target. If the current task, acceptance criterion, manual verification, blocker, or\nother gate remains open, both `Next action` and the copyable prompt must focus only on closing\nthat target. Do not name or preload the next queued task/phase with wording such as \"then\ncontinue\" or \"after that start\". Multiple substeps are allowed only when they all complete the\nsame target and share one acceptance boundary. Select later work only after the current target\nis genuinely complete and its evidence/state has been persisted.\n\nDo not repeat the diff line by line, claim success beyond observed evidence, or ask for\npost-hoc approval after a clean finish unless another risky step remains. Include the\nready-to-copy next-session prompt when the project continues. Never end a turn with only\n\"waiting for confirmation/next action is X\" — persist state and provide the continuation\nprompt before yielding to the user.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_25",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,360p' .progressive/system/HANDOFF_PROTOCOL.md\"",
+          "aggregated_output": "# Handoff Protocol\n\nClassify the session `IN PROGRESS`, `PHASE COMPLETE`, or `PROJECT COMPLETE`.\nRoadmap stays canonical for phase status.\n\n## Phase completion transaction\n\nWhen a phase satisfies its acceptance criteria:\n\n1. update Architecture/ADR/other canonical owners first when system shape or a consequential decision changed;\n2. write the durable phase report under `.progressive/completions/<phase-name>.md` using `.progressive/templates/PHASE_COMPLETION.template.md`; Runtime uses `.progressive/completions/<phase-name>.md`;\n3. persist a compact `## Completion Record` in the completed phase **before moving the Roadmap marker**. It should point to the final report and keep only the small cross-phase bridge needed for progressive context;\n4. mark the completed phase `[x]` and exactly one next phase `[>]` when one exists;\n5. overwrite `NEXT_SESSION.md` in place with only the hot state needed to continue.\n\nThe phase completion report is durable human-readable history. Capture evidence-bounded detail that would otherwise bloat hot context:\n- **Outcome / Delivered** — capabilities and artifacts that now exist;\n- **Implementation notes** — durable technical facts worth preserving, not a diff diary;\n- **Decisions made** — consequences plus ADR/canonical references when applicable;\n- **Deviations / technical debt** — gaps surviving completion;\n- **Problems discovered** — durable issues/workarounds worth remembering;\n- **Verification evidence** — checks actually observed and results;\n- **Architectural impact / Follow-up** — what later phases may rely on and explicit later work.\n\nA Completion Record remains compact durable routing history. Capture only:\n- **Status / Completed** — completion state/date when useful;\n- **Final report** — relative path to the phase completion report when one exists;\n- **Outcome** — one concise result;\n- **Validation summary** — only the evidence needed to trust the transition;\n- **Decisions / Technical Debt affecting later phases** — concise consequences;\n- **Handoff to Next Phase** — assumptions/capabilities the next phase may safely rely on.\n\nDo not duplicate the full completion report inside the Completion Record. Normal warm-up reads only the compact Completion Record; the detailed report is read on demand when investigation, audit, or historical context requires it.\n\nBackward compatibility: completed phases created before phase completion reports existed remain valid with only their existing `## Completion Record`. Do not force migrations merely to satisfy the new convention. Add a report retroactively only when its durable detail is materially useful.\n\nFor non-trivial tasks inside an active phase, keep a compact Task Completion note in the phase file when the result/evidence/decision matters later. Do not create one completion file per routine task.\n\nIf the session remains `IN PROGRESS`, keep the phase active and do not fabricate a phase completion report or completion record.\n\nOn project completion every phase is `[x]` and none is `[>]`.\n\n## NEXT_SESSION semantics\n\n`NEXT_SESSION.md` is volatile hot navigation, not project history. Overwrite it on each meaningful handoff; do not create an accumulating chain of `NEXT_SESSION_001.md`, `NEXT_SESSION_002.md`, etc. It contains only current phase, completed work from the just-ended session, verification, blockers/uncertainty, next action, and a ready-to-copy prompt. Durable completed-phase detail belongs in `.progressive/completions/` (Runtime: `.progressive/completions/`); the phase keeps only its compact Completion Record; full source history remains in version control when available.\n\n### Single-focus continuation\n\nOne handoff prompt = one unresolved execution target.\n\nSelect the nearest unfinished target from canonical project state in this order:\n\n1. unresolved blocker, manual verification, acceptance criterion, or other gate on the current work;\n2. otherwise, the unfinished current task;\n3. only after that target is complete and its evidence/state is persisted, the next task may become the new target;\n4. only after the phase completion transaction is complete may work from the next phase become the new target.\n\nIf a current target is unresolved, `## Next action` and `## NEXT SESSION PROMPT` must focus only on closing it. Do not name, describe, preview, or preload later queued tasks or phases in the handoff prompt. In particular, do not write transitions such as `then continue Task N+1`, `after that start ...`, or equivalent wording while the current target remains open.\n\nSeveral concrete substeps are allowed only when they share one acceptance boundary and are all necessary to finish the same target, for example `apply fix → run targeted verification → persist evidence`. That is still one execution target. `finish current task → start next task` is two targets and must be split across state transitions.\n\nOnce the current target is genuinely complete and evidence is persisted, normal workflow may select the next target from the Phase/Roadmap. The previous handoff must not pre-plan or bundle that future target merely because it is already visible in canonical planning documents.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_26",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,260p' .progressive/templates/PHASE_COMPLETION.template.md\"",
+          "aggregated_output": "# Phase <NN> Completion — <NAME>\n\nStatus: COMPLETED\n\n## Outcome\n<concise statement of the verified phase result>\n\n## Delivered\n- <capability/artifact now available>\n\n## Implementation notes\n<durable technical details useful to humans or later investigation; do not repeat the phase plan or diff line by line>\n\n## Decisions made\n- <decision and consequence; reference ADR/canonical owner when applicable>\n\n## Deviations / technical debt\n- <none or surviving gap>\n\n## Problems discovered\n- <none or durable issue/workaround worth preserving>\n\n## Verification evidence\n- `<check>` → <observed result>\n\n## Architectural impact\n<what later phases may safely assume; reference Architecture/ADR when system shape changed>\n\n## Follow-up\n- <none or explicit later work>\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_27",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'find .progressive/completions -maxdepth 1 -type f -print 2>/dev/null | sort'",
+          "aggregated_output": "",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_28",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,240p' .progressive/phases/00-benchmark-task.md && sed -n '1,200p' .progressive/project/ROADMAP.md && sed -n '1,240p' .progressive/project/NEXT_SESSION.md\"",
+          "aggregated_output": "# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n# Roadmap — Benchmark Fixture\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n# Next Session\n\n> Volatile hot context for this disposable benchmark fixture.\n\nStatus: READY\n\nCurrent focus: Execute benchmark task `failure-pivot` exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_31",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+          "aggregated_output": "test_documented_discount_format (tests.test_checkout.CheckoutIntegrationTests.test_documented_discount_format) ... ok\ntest_zero_discount (tests.test_checkout.CheckoutIntegrationTests.test_zero_discount) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_32",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'git diff --check'",
+          "aggregated_output": "",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_33",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'git status --short'",
+          "aggregated_output": " M .progressive/phases/00-benchmark-task.md\n M .progressive/project/NEXT_SESSION.md\n M .progressive/project/ROADMAP.md\n M src/checkout/config.py\n M src/checkout/core.py\n?? .progressive/completions/\n?? .progressive/tools/__pycache__/\n?? src/checkout/__pycache__/\n?? tests/__init__.py\n?? tests/__pycache__/\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_34",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"git diff -- src/checkout/core.py src/checkout/config.py tests/__init__.py .progressive/phases/00-benchmark-task.md .progressive/project/ROADMAP.md .progressive/project/NEXT_SESSION.md && sed -n '1,260p' .progressive/completions/00-benchmark-task.md\"",
+          "aggregated_output": "diff --git a/.progressive/phases/00-benchmark-task.md b/.progressive/phases/00-benchmark-task.md\nindex a3e10ea..8d235ba 100644\n--- a/.progressive/phases/00-benchmark-task.md\n+++ b/.progressive/phases/00-benchmark-task.md\n@@ -1,6 +1,6 @@\n # Phase 00 — Current Coding Task\n \n-Status: IN PROGRESS\n+Status: COMPLETED\n \n ## Goal\n \n@@ -9,3 +9,11 @@ Complete the exact current user-provided task without unrelated scope.\n ## Acceptance\n \n Use the acceptance criteria supplied with the user task and the repository's required validation evidence.\n+\n+## Completion Record\n+\n+- **Status:** Completed 2026-10-03.\n+- **Final report:** `.progressive/completions/00-benchmark-task.md`.\n+- **Outcome:** Documented percentage discounts are parsed and applied correctly without exception swallowing.\n+- **Validation:** `python3 -m unittest discover -v` passed 2 tests; Python compilation passed.\n+- **Decisions / Technical Debt:** Existing decimal calculation behavior was preserved; no known debt remains.\ndiff --git a/.progressive/project/NEXT_SESSION.md b/.progressive/project/NEXT_SESSION.md\nindex 00c6782..41b68f2 100644\n--- a/.progressive/project/NEXT_SESSION.md\n+++ b/.progressive/project/NEXT_SESSION.md\n@@ -2,8 +2,12 @@\n \n > Volatile hot context for this disposable benchmark fixture.\n \n-Status: READY\n+Status: PROJECT COMPLETE\n \n-Current focus: Execute benchmark task `failure-pivot` exactly as supplied by the user.\n+Current focus: None; the benchmark task is complete.\n \n-Next action: Ground in the repository, implement the task, and produce required validation evidence.\n+Completed work: Fixed documented percentage parsing, removed exception swallowing, and enabled root-level test discovery.\n+\n+Verification: `python3 -m unittest discover -v` passed 2 tests; `python3 -m compileall -q src tests` passed.\n+\n+Next action: None.\ndiff --git a/.progressive/project/ROADMAP.md b/.progressive/project/ROADMAP.md\nindex 779da3e..56f6be9 100644\n--- a/.progressive/project/ROADMAP.md\n+++ b/.progressive/project/ROADMAP.md\n@@ -2,6 +2,6 @@\n \n Legend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n \n-- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n+- [x] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n \n Project complete when the current user task and its supplied acceptance criteria are verified.\ndiff --git a/src/checkout/config.py b/src/checkout/config.py\nindex a4e189d..7a9bb8d 100644\n--- a/src/checkout/config.py\n+++ b/src/checkout/config.py\n@@ -2,4 +2,4 @@ from decimal import Decimal\n \n def parse_discount(value: str) -> Decimal:\n     # Returns a fraction suitable for multiplication.\n-    return Decimal(value) / Decimal(\"100\")\n+    return Decimal(value.removesuffix(\"%\")) / Decimal(\"100\")\ndiff --git a/src/checkout/core.py b/src/checkout/core.py\nindex 49b8f60..ff7f8b5 100644\n--- a/src/checkout/core.py\n+++ b/src/checkout/core.py\n@@ -1,12 +1,8 @@\n-from decimal import Decimal, InvalidOperation\n+from decimal import Decimal\n from checkout.config import parse_discount\n \n CENT = Decimal(\"0.01\")\n \n def checkout_total(subtotal: Decimal, settings: dict[str, str]) -> Decimal:\n-    try:\n-        discount = parse_discount(settings.get(\"discount\", \"0%\"))\n-    except (InvalidOperation, ValueError):\n-        # Existing fallback masks malformed documented configuration.\n-        discount = Decimal(\"0\")\n+    discount = parse_discount(settings.get(\"discount\", \"0%\"))\n     return (subtotal * (Decimal(\"1\") - discount)).quantize(CENT)\n# Phase 00 Completion — Current Coding Task\n\nStatus: COMPLETED\n\n## Outcome\n\nCheckout percentage discounts now accept the documented format and produce the correct total without masking invalid configuration.\n\n## Delivered\n\n- Percentage-string parsing for values such as `10%`, `7.5%`, and `0%`.\n- Root-level unittest discovery for the repository test suite.\n\n## Implementation notes\n\nThe parser removes one trailing percent sign before converting the numeric portion to a `Decimal` fraction. Checkout no longer replaces parsing failures with a zero discount.\n\n## Decisions made\n\n- Preserve existing decimal arithmetic and quantization behavior; change only configuration parsing and error propagation.\n\n## Deviations / technical debt\n\n- None.\n\n## Problems discovered\n\n- The tests directory lacked the package marker required by the repository's documented discovery command in Python 3.12.\n\n## Verification evidence\n\n- `python3 -m unittest -v tests.test_checkout` → 2 tests passed.\n- `python3 -m compileall -q src tests` → passed.\n- `python3 -m unittest discover -v` → 2 tests passed.\n\n## Architectural impact\n\nNone.\n\n## Follow-up\n\n- None.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_37",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'rm -r .progressive/tools/__pycache__ src/checkout/__pycache__ tests/__pycache__'",
+          "aggregated_output": "",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_38",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'find .progressive/completions -maxdepth 1 -type f -print | sort && find tests -maxdepth 1 -type f -print | sort'",
+          "aggregated_output": ".progressive/completions/00-benchmark-task.md\ntests/__init__.py\ntests/test_checkout.py\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_39",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'git status --short'",
+          "aggregated_output": " M .progressive/phases/00-benchmark-task.md\n M .progressive/project/NEXT_SESSION.md\n M .progressive/project/ROADMAP.md\n M src/checkout/config.py\n M src/checkout/core.py\n?? .progressive/completions/\n?? tests/__init__.py\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_40",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'git diff --check'",
+          "aggregated_output": "",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      ],
+      "verification": [
+        {
+          "command": [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-v"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "test_documented_discount_format (tests.test_checkout.CheckoutIntegrationTests.test_documented_discount_format) ... ok\ntest_zero_discount (tests.test_checkout.CheckoutIntegrationTests.test_zero_discount) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "messages": [
+        "I’ll trace the failing integration path using the repository’s systematic-debugging workflow, then apply the implementation/quality protocol for the smallest verified fix. I’ll preserve the authoritative test and run the full requested unittest suite.",
+        "The selected workflows require reproducing the failure and identifying the earliest wrong value before editing. I’m checking repository state, project routing, and the test/application entry points now.",
+        "The mandated command currently discovers zero tests (exit 5), so there are two independent repository issues to satisfy the acceptance criteria: the percentage parser rejects the documented `%` suffix, and root-level unittest discovery cannot descend into the non-package `tests/` directory in this environment. I’m confirming both with targeted runs before making the minimal changes.",
+        "The evidence isolates the root cause: `parse_discount(\"10%\")` passes the literal string to `Decimal`, raising `ConversionSyntax`; `checkout_total` then swallows that error and silently applies 0%. I’ll strip exactly one documented trailing `%`, let malformed configuration fail normally, and add the package marker required for the mandated root discovery command.",
+        "The implementation is now changed at the two causal points, with no fallback or test alteration. The implementation workflow now requires applying the repository quality protocol exactly before completion; I’m loading it, then I’ll run targeted and full validation.",
+        "The focused integration tests now pass, including `100.00 → 90.00` for `10%`. I’m completing the protocol with a Python compile check and the exact full-suite command from the acceptance criteria.",
+        "All requested tests pass. Before handing off, the repository router requires its session-handoff workflow; I’m using it to reconcile the final diff and project state without changing the verified implementation.",
+        "The acceptance evidence makes this `PROJECT COMPLETE` under the repository protocol. I’m recording only the compact required completion state (no architecture change or ADR), then I’ll re-check the final diff and rerun the authoritative suite after all file changes.",
+        "The final inspection found only interpreter cache directories created by the validation commands; they are generated artifacts, not source changes. I’m removing those exact cache directories and confirming the clean change set.",
+        "The environment blocked forced recursive removal by policy; I’ll use the safer non-forced removal on the same three exact generated directories.",
+        "## Result\n\nFixed the root cause: documented values like `10%` are now parsed before `Decimal` conversion, and parsing errors are no longer swallowed as zero discounts. `100.00` with `10%` now returns `90.00`.\n\n## Files changed\n\n- [config.py](<repo>/src/checkout/config.py) — parses the `%` suffix.\n- [core.py](<repo>/src/checkout/core.py) — removes exception swallowing.\n- [tests/__init__.py](<repo>/tests/__init__.py) — enables root-level unittest discovery.\n- Progressive Context completion state updated as required.\n\n## Validation\n\n- `python3 -m unittest -v tests.test_checkout` — 2 passed.\n- `python3 -m compileall -q src tests` — passed.\n- `python3 -m unittest discover -v` — 2 passed.\n- `git diff --check` — passed.\n\nThe authoritative integration test was not modified."
+      ]
+    },
+    "B": {
+      "patch": "diff --git a/src/checkout/config.py b/src/checkout/config.py\nindex a4e189d..7a9bb8d 100644\n--- a/src/checkout/config.py\n+++ b/src/checkout/config.py\n@@ -2,4 +2,4 @@ from decimal import Decimal\n \n def parse_discount(value: str) -> Decimal:\n     # Returns a fraction suitable for multiplication.\n-    return Decimal(value) / Decimal(\"100\")\n+    return Decimal(value.removesuffix(\"%\")) / Decimal(\"100\")\ndiff --git a/src/checkout/core.py b/src/checkout/core.py\nindex 49b8f60..ff7f8b5 100644\n--- a/src/checkout/core.py\n+++ b/src/checkout/core.py\n@@ -1,12 +1,8 @@\n-from decimal import Decimal, InvalidOperation\n+from decimal import Decimal\n from checkout.config import parse_discount\n \n CENT = Decimal(\"0.01\")\n \n def checkout_total(subtotal: Decimal, settings: dict[str, str]) -> Decimal:\n-    try:\n-        discount = parse_discount(settings.get(\"discount\", \"0%\"))\n-    except (InvalidOperation, ValueError):\n-        # Existing fallback masks malformed documented configuration.\n-        discount = Decimal(\"0\")\n+    discount = parse_discount(settings.get(\"discount\", \"0%\"))\n     return (subtotal * (Decimal(\"1\") - discount)).quantize(CENT)\n",
+      "new_files": {
+        "tests/__init__.py": ""
+      },
+      "project_state": {
+        ".progressive/project/PROJECT_BRIEF.md": "# Project Brief\n\nStatus: ACTIVE\n\nProject: Real-agent benchmark fixture\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n",
+        ".progressive/project/ARCHITECTURE.md": "# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n",
+        ".progressive/project/TOOLING_STATUS.md": "# Tooling Status\n\nProfile: minimal\n\nStatus: READY\n\nOptional framework tooling is intentionally not applicable to this controlled benchmark. Use repository-native tools only.\n",
+        ".progressive/project/ROADMAP.md": "# Roadmap — Benchmark Fixture\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n",
+        ".progressive/project/NEXT_SESSION.md": "# Next Session\n\n> Volatile hot context for this disposable benchmark fixture.\n\nStatus: READY\n\nCurrent focus: Execute benchmark task `failure-pivot` exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n",
+        ".progressive/phases/00-benchmark-task.md": "# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n"
+      },
+      "command_trace": [
+        {
+          "id": "item_2",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"git status --short && sed -n '1,240p' .agents/skills/systematic-debugging/SKILL.md\"",
+          "aggregated_output": "---\nname: systematic-debugging\ndescription: Bug or failure whose root cause is unclear, intermittent, stateful, or cross-boundary.\n---\n\n# Systematic Debugging\n\nFind root cause before patching. Reproduce the failure when practical, or gather the\nsmallest discriminating evidence. Trace the earliest incorrect state, form a leading\nhypothesis, test it, then apply the smallest complete fix. Add a regression test when the\nrepository supports it and verify adjacent behavior.\n\nDo not mask root causes with retries, broad exception handling, exception swallowing,\nstate resets, or fallback logic unless technically justified. If evidence disproves the\nhypothesis, discard it rather than layering patches around it. If the same check fails twice\nfor the same underlying reason under the same hypothesis/approach, treat that as evidence\nagainst the approach: choose one materially different hypothesis or corrective path before\nanother patch-and-retry cycle.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_4",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+          "aggregated_output": "\n----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nNO TESTS RAN\n",
+          "exit_code": 5,
+          "status": "failed"
+        },
+        {
+          "id": "item_6",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"rg --files -g '\"'!__pycache__'\"' -g '\"'!*.pyc'\"' | sort && rg -n \\\"discount|checkout|percent|subtotal|total|unittest\\\" -S . -g '\"'!__pycache__'\"' -g '\"'!*.pyc'\"'\"",
+          "aggregated_output": "AGENTS.md\nCLAUDE.md\nCONFIGURATION.md\nREADME.md\npyproject.toml\nsrc/checkout/__init__.py\nsrc/checkout/config.py\nsrc/checkout/core.py\ntests/test_checkout.py\n./src/checkout/core.py:2:from checkout.config import parse_discount\n./src/checkout/core.py:6:def checkout_total(subtotal: Decimal, settings: dict[str, str]) -> Decimal:\n./src/checkout/core.py:8:        discount = parse_discount(settings.get(\"discount\", \"0%\"))\n./src/checkout/core.py:11:        discount = Decimal(\"0\")\n./src/checkout/core.py:12:    return (subtotal * (Decimal(\"1\") - discount)).quantize(CENT)\n./src/checkout/config.py:3:def parse_discount(value: str) -> Decimal:\n./pyproject.toml:2:name = \"checkout-core\"\n./CONFIGURATION.md:1:# Checkout configuration\n./CONFIGURATION.md:3:`discount` is a percentage string such as `10%`, `7.5%`, or `0%`.\n./tests/test_checkout.py:5:import unittest\n./tests/test_checkout.py:7:from checkout.core import checkout_total\n./tests/test_checkout.py:9:class CheckoutIntegrationTests(unittest.TestCase):\n./tests/test_checkout.py:10:    def test_documented_discount_format(self):\n./tests/test_checkout.py:12:            checkout_total(Decimal(\"100.00\"), {\"discount\": \"10%\"}),\n./tests/test_checkout.py:16:    def test_zero_discount(self):\n./tests/test_checkout.py:18:            checkout_total(Decimal(\"100.00\"), {\"discount\": \"0%\"}),\n./README.md:1:# Checkout Core\n./README.md:3:Discount configuration is documented in `CONFIGURATION.md`.\n./README.md:4:Validation: `python3 -m unittest discover -v`.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_7",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,220p' src/checkout/config.py && sed -n '1,220p' src/checkout/core.py && sed -n '1,220p' tests/test_checkout.py && sed -n '1,180p' pyproject.toml && sed -n '1,120p' README.md && sed -n '1,120p' CONFIGURATION.md && python3 --version && python3 -m unittest discover -s tests -v\"",
+          "aggregated_output": "from decimal import Decimal\n\ndef parse_discount(value: str) -> Decimal:\n    # Returns a fraction suitable for multiplication.\n    return Decimal(value) / Decimal(\"100\")\nfrom decimal import Decimal, InvalidOperation\nfrom checkout.config import parse_discount\n\nCENT = Decimal(\"0.01\")\n\ndef checkout_total(subtotal: Decimal, settings: dict[str, str]) -> Decimal:\n    try:\n        discount = parse_discount(settings.get(\"discount\", \"0%\"))\n    except (InvalidOperation, ValueError):\n        # Existing fallback masks malformed documented configuration.\n        discount = Decimal(\"0\")\n    return (subtotal * (Decimal(\"1\") - discount)).quantize(CENT)\nimport sys\nfrom pathlib import Path\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nimport unittest\nfrom decimal import Decimal\nfrom checkout.core import checkout_total\n\nclass CheckoutIntegrationTests(unittest.TestCase):\n    def test_documented_discount_format(self):\n        self.assertEqual(\n            checkout_total(Decimal(\"100.00\"), {\"discount\": \"10%\"}),\n            Decimal(\"90.00\"),\n        )\n\n    def test_zero_discount(self):\n        self.assertEqual(\n            checkout_total(Decimal(\"100.00\"), {\"discount\": \"0%\"}),\n            Decimal(\"100.00\"),\n        )\n[project]\nname = \"checkout-core\"\nversion = \"0.9.0\"\nrequires-python = \">=3.11\"\n# Checkout Core\n\nDiscount configuration is documented in `CONFIGURATION.md`.\nValidation: `python3 -m unittest discover -v`.\n# Checkout configuration\n\n`discount` is a percentage string such as `10%`, `7.5%`, or `0%`.\nPython 3.12.10\ntest_documented_discount_format (test_checkout.CheckoutIntegrationTests.test_documented_discount_format) ... FAIL\ntest_zero_discount (test_checkout.CheckoutIntegrationTests.test_zero_discount) ... ok\n\n======================================================================\nFAIL: test_documented_discount_format (test_checkout.CheckoutIntegrationTests.test_documented_discount_format)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"<repo>/tests/test_checkout.py\", line 11, in test_documented_discount_format\n    self.assertEqual(\nAssertionError: Decimal('100.00') != Decimal('90.00')\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nFAILED (failures=1)\n",
+          "exit_code": 1,
+          "status": "failed"
+        },
+        {
+          "id": "item_9",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,260p' .agents/skills/implementation-execution/SKILL.md && python3 - <<'PY'\nfrom decimal import Decimal, InvalidOperation\nimport sys\nsys.path.insert(0, 'src')\nfrom checkout.config import parse_discount\ntry:\n    print(parse_discount('10%'))\nexcept InvalidOperation as exc:\n    print(type(exc).__name__)\nPY\"",
+          "aggregated_output": "---\nname: implementation-execution\ndescription: Non-trivial implementation after direction is clear, including feature work and complete bug-fix execution.\n---\n\n# Implementation Execution\n\nOnce direction is clear, implement end-to-end in one cohesive pass. Approval is for the\nchosen direction, not for incomplete core-logic fragments.\n\nA complete change includes all required integration points, imports, types, schemas,\nconfiguration, critical edge cases/error handling, backward compatibility unless a break was\napproved, and relevant tests when an existing framework exists. Leave no debug output, dead\ncode, placeholders, pseudo-code, or unnecessary dependencies. Follow repository conventions\nand avoid unrelated changes.\n\nBefore the first execution/build step, when several required runtime, dependency, compiler,\nor tool prerequisites are already knowable, check them in one grouped probe instead of\ndiscovering them one failure at a time. Resolve only confirmed missing prerequisites and\nrespect existing dependency/approval policy; do not install speculative packages or turn a\nsmall task into environment setup. A later probe is justified only by new evidence from the\nfirst execution.\n\nTreat polling as a costed execution step. If a command is still running and the harness\nreturns control, wait in coarse intervals appropriate to the expected duration — normally at\nleast 30 seconds for builds or test suites — instead of repeatedly checking with short polls.\nDo not send empty/no-op input only to peek, and do not poll at all when the execution call\nalready blocks until completion. Poll sooner only when the command is expected to finish\nquickly or new evidence makes an earlier check useful.\n\nFor bug fixes: root cause → reproduce when practical → smallest complete fix → regression\ntest when supported → adjacent-behavior verification. Use `systematic-debugging` when the\ncause is unclear rather than guessing.\n\nAfter implementation, apply `.progressive/system/QUALITY_PROTOCOL.md` exactly. Do not mark work\ncomplete before required evidence is reconciled with acceptance criteria.\nInvalidOperation\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_10",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"sed -n '1,320p' .progressive/system/QUALITY_PROTOCOL.md\"",
+          "aggregated_output": "# Quality Protocol\n\nUse after implementation and whenever completion claims depend on verification.\n\n## Validation order\n\nValidate from narrowest to broadest, skipping only checks irrelevant to the change:\n1. targeted tests / focused reproduction;\n2. type check or equivalent static checks;\n3. lint and formatting checks;\n4. build / compile / package;\n5. broader suites when shared code or public interfaces changed;\n6. e2e/manual/runtime verification when required by the behavior.\n\n## Convergence\n\nRequired evidence is the applicable validation above plus the current acceptance criteria.\nOnce those checks pass and no new material uncertainty remains, stop validating: do not add\nredundant re-runs, extra harnesses, or broader checks only for reassurance. Convergence never\njustifies skipping a required check, acceptance criterion, security gate, or relevant\nregression test.\n\n## On failure\n\nClassify each relevant failure as **caused by the change**, **pre-existing**, or\n**environmental**. Fix what the change broke, re-run the relevant checks, and do not stop at\nthe first failure when a safe diagnosable fix is in scope. Do not silently \"fix\" unrelated\npre-existing failures. When repeated failure indicates the current hypothesis or approach is\nwrong, route to `systematic-debugging` rather than continuing symptom patches.\n\n## If validation cannot run\n\nState all four explicitly:\n- the exact reason it could not run;\n- what was inspected or verified instead;\n- the exact command/check the user should run;\n- the remaining uncertainty.\n\nA validation claim is supported only by evidence actually observed in the current work.\nNever report a check as passed unless it actually ran and passed.\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_13",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'python3 -m unittest tests.test_checkout.CheckoutIntegrationTests.test_documented_discount_format -v && python3 -m unittest discover -v && git diff --check && git diff -- src/checkout/config.py src/checkout/core.py tests/__init__.py && git status --short'",
+          "aggregated_output": "diff --git a/src/checkout/config.py b/src/checkout/config.py\nindex a4e189d..7a9bb8d 100644\n--- a/src/checkout/config.py\n+++ b/src/checkout/config.py\n@@ -2,4 +2,4 @@ from decimal import Decimal\n \n def parse_discount(value: str) -> Decimal:\n     # Returns a fraction suitable for multiplication.\n-    return Decimal(value) / Decimal(\"100\")\n+    return Decimal(value.removesuffix(\"%\")) / Decimal(\"100\")\ndiff --git a/src/checkout/core.py b/src/checkout/core.py\nindex 49b8f60..ff7f8b5 100644\n--- a/src/checkout/core.py\n+++ b/src/checkout/core.py\n@@ -1,12 +1,8 @@\n-from decimal import Decimal, InvalidOperation\n+from decimal import Decimal\n from checkout.config import parse_discount\n \n CENT = Decimal(\"0.01\")\n \n def checkout_total(subtotal: Decimal, settings: dict[str, str]) -> Decimal:\n-    try:\n-        discount = parse_discount(settings.get(\"discount\", \"0%\"))\n-    except (InvalidOperation, ValueError):\n-        # Existing fallback masks malformed documented configuration.\n-        discount = Decimal(\"0\")\n+    discount = parse_discount(settings.get(\"discount\", \"0%\"))\n     return (subtotal * (Decimal(\"1\") - discount)).quantize(CENT)\n M src/checkout/config.py\n M src/checkout/core.py\n?? src/checkout/__pycache__/\n?? tests/__init__.py\n?? tests/__pycache__/\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_16",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc 'find src/checkout/__pycache__ tests/__pycache__ -maxdepth 1 -type f -print 2>/dev/null'",
+          "aggregated_output": "src/checkout/__pycache__/config.cpython-312.pyc\nsrc/checkout/__pycache__/core.cpython-312.pyc\nsrc/checkout/__pycache__/__init__.cpython-312.pyc\ntests/__pycache__/test_checkout.cpython-312.pyc\ntests/__pycache__/__init__.cpython-312.pyc\n",
+          "exit_code": 0,
+          "status": "completed"
+        },
+        {
+          "id": "item_17",
+          "type": "command_execution",
+          "command": "/bin/zsh -lc \"unlink src/checkout/__pycache__/config.cpython-312.pyc\nunlink src/checkout/__pycache__/core.cpython-312.pyc\nunlink src/checkout/__pycache__/__init__.cpython-312.pyc\nunlink tests/__pycache__/test_checkout.cpython-312.pyc\nunlink tests/__pycache__/__init__.cpython-312.pyc\nrmdir src/checkout/__pycache__ tests/__pycache__\nPYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'\nfrom decimal import Decimal, InvalidOperation\nimport sys\nsys.path.insert(0, \\\"src\\\")\nfrom checkout.config import parse_discount\nfrom checkout.core import checkout_total\n\nassert parse_discount(\\\"7.5%\\\") == Decimal(\\\"0.075\\\")\nassert checkout_total(Decimal(\\\"100.00\\\"), {\\\"discount\\\": \\\"10%\\\"}) == Decimal(\\\"90.00\\\")\ntry:\n    checkout_total(Decimal(\\\"100.00\\\"), {\\\"discount\\\": \\\"invalid\\\"})\nexcept InvalidOperation:\n    pass\nelse:\n    raise AssertionError(\\\"invalid discount was swallowed\\\")\nPY\ngit diff --check\ngit status --short\"",
+          "aggregated_output": " M src/checkout/config.py\n M src/checkout/core.py\n?? tests/__init__.py\n",
+          "exit_code": 0,
+          "status": "completed"
+        }
+      ],
+      "verification": [
+        {
+          "command": [
+            "python3",
+            "-m",
+            "unittest",
+            "discover",
+            "-v"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": "test_documented_discount_format (tests.test_checkout.CheckoutIntegrationTests.test_documented_discount_format) ... ok\ntest_zero_discount (tests.test_checkout.CheckoutIntegrationTests.test_zero_discount) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exit_code": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ],
+      "messages": [
+        "Использую `systematic-debugging`, чтобы воспроизвести сбой и доказать первопричину; после этого применю минимальное исправление и прогоню весь `unittest`-набор по критериям приёмки. Сначала проверю состояние рабочей копии и инструкции навыка.",
+        "Рабочая копия чистая. Сейчас воспроизвожу интеграционный сбой без изменений, затем прослежу значение скидки от документированного формата до расчёта total — это позволит исправить самое раннее неверное преобразование, а не симптом в checkout.",
+        "Базовая команда сейчас обнаруживает `0 tests`, поэтому видимый репозиторий не подтверждает требуемое поведение. Это не считаю успешной проверкой: найду фактический тестовый layout и реализацию, затем запущу тесты явным образом и повторю ровно команду из acceptance criteria.",
+        "Первопричина локализована: `parse_discount(\"10%\")` передаёт строку с `%` напрямую в `Decimal`, получает `InvalidOperation`, а `checkout_total` проглатывает ошибку и подменяет скидку нулём — поэтому выходит `100.00`. Перехожу к `implementation-execution`: исправлю парсер на документированный формат, уберу маскирующий fallback и восстановлю реальное обнаружение тестов командой из README.",
+        "Исправление внесено в двух точках: суффикс `%` снимается до преобразования в `Decimal`, а ошибочная конфигурация больше не превращается молча в нулевую скидку. Также добавлен пакетный маркер `tests/__init__.py`, чтобы обязательная команда `unittest discover` действительно запускала тесты, а не завершалась с `0 tests`. Перехожу к узкой и полной проверке.",
+        "Целевой тест и полный discovery-набор прошли: `2/2`, включая `100.00 → 90.00`. Осталось удалить только созданные Python-кэши и отдельно подтвердить десятичный документированный пример `7.5%` и отсутствие прежнего проглатывания ошибки.",
+        "Защитный guard отклонил рекурсивное удаление кэшей; исходники и результаты тестов не затронуты. Удалю только перечисленные сгенерированные `.pyc` через точечные `unlink`, затем выполню оставшиеся проверки отдельно.",
+        "**Результат**\n\nИсправлена первопричина: парсер теперь удаляет суффикс `%` перед преобразованием, а checkout больше не проглатывает ошибку и не подменяет скидку нулём. `100.00` с `10%` даёт `90.00`.\n\n**Файлы изменены**\n\n- [config.py](<repo>/src/checkout/config.py) — поддержка документированного percentage-string формата.\n- [core.py](<repo>/src/checkout/core.py) — удалён маскирующий fallback.\n- [tests/__init__.py](<repo>/tests/__init__.py) — `unittest discover` теперь действительно обнаруживает тесты.\n\n**Проверка**\n\n- Целевой интеграционный тест: прошёл.\n- `python3 -m unittest discover -v`: 2 теста, все прошли.\n- Дополнительно проверены `7.5%`, итог `90.00` для `10%` и отсутствие проглатывания некорректной конфигурации.\n- `git diff --check`: прошёл."
+      ]
+    }
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "patch": "diff --git a/.progressive/phases/00-current-task.md b/.progressive/phases/00-current-task.md\nindex a3e10ea..331429a 100644\n--- a/.progressive/phases/00-current-task.md\n+++ b/.progressive/phases/00-current-task.md\n@@ -1,6 +1,6 @@\n # Phase 00 — Current Coding Task\n \n-Status: IN PROGRESS\n+Status: COMPLETED\n \n ## Goal\n \n@@ -9,3 +9,11 @@ Complete the exact current user-provided task without unrelated scope.\n ## Acceptance\n \n Use the acceptance criteria supplied with the user task and the repository's required validation evidence.\n+\n+## Completion Record\n+\n+- **Status:** Completed 2026-10-03.\n+- **Final report:** `.progressive/completions/00-current-task.md`.\n+- **Outcome:** Added and registered a `status` command using canonical metadata and configuration sources.\n+- **Validation:** Targeted command tests, Python compilation, and `python3 -m unittest discover -v` passed.\n+- **Decisions / Technical Debt:** Preserved the existing command pattern; no known debt.\ndiff --git a/.progressive/project/NEXT_SESSION.md b/.progressive/project/NEXT_SESSION.md\nindex ac46b07..989f372 100644\n--- a/.progressive/project/NEXT_SESSION.md\n+++ b/.progressive/project/NEXT_SESSION.md\n@@ -2,8 +2,14 @@\n \n > Volatile hot context for this current local coding task.\n \n-Status: READY\n+Status: PROJECT COMPLETE\n \n-Current focus: Execute the current coding task exactly as supplied by the user.\n+Current focus: None; the requested coding task is complete.\n \n-Next action: Ground in the repository, implement the task, and produce required validation evidence.\n+Completed work: Added the dispatcher-backed `status` command using canonical service metadata and mode configuration.\n+\n+Verification: `python3 -m unittest discover -v` passed all 3 tests; Python compilation also succeeded.\n+\n+Blockers / uncertainty: None.\n+\n+Next action: None.\ndiff --git a/.progressive/project/ROADMAP.md b/.progressive/project/ROADMAP.md\nindex b55f4f8..c716f1e 100644\n--- a/.progressive/project/ROADMAP.md\n+++ b/.progressive/project/ROADMAP.md\n@@ -2,6 +2,6 @@\n \n Legend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n \n-- [>] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n+- [x] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n \n Project complete when the current user task and its supplied acceptance criteria are verified.\ndiff --git a/src/harbor/dispatcher.py b/src/harbor/dispatcher.py\nindex cdd241f..ddd4875 100644\n--- a/src/harbor/dispatcher.py\n+++ b/src/harbor/dispatcher.py\n@@ -1,8 +1,9 @@\n-from harbor.commands import info, ping\n+from harbor.commands import info, ping, status\n \n COMMANDS = {\n     \"ping\": ping.run,\n     \"info\": info.run,\n+    \"status\": status.run,\n }\n \n def dispatch(name):\n",
+  "new_files": {
+    ".progressive/completions/00-current-task.md": "# Phase 00 Completion — Current Coding Task\n\nStatus: COMPLETED\n\n## Outcome\n\nThe dispatcher now exposes a verified `status` command backed by the repository's canonical project metadata and runtime configuration.\n\n## Delivered\n\n- `status` returns the service name, project version, and configured mode.\n- Existing `ping` and `info` commands remain registered and verified.\n\n## Implementation notes\n\nThe command reads the service name and version through `harbor.meta.project_metadata()` and the mode from `harbor.config.MODE`.\n\n## Decisions made\n\n- Reused the existing command-module and dispatcher-registration pattern without adding dependencies or parallel configuration values.\n\n## Deviations / technical debt\n\n- None.\n\n## Problems discovered\n\n- None.\n\n## Verification evidence\n\n- `python3 -m unittest -v tests.test_status tests.test_existing` → 3 tests passed.\n- `python3 -m compileall -q src tests` → completed successfully.\n- `python3 -m unittest discover -v` → 3 tests passed.\n\n## Architectural impact\n\nNo architecture change; later work may rely on `status` being available through `harbor.dispatcher.dispatch`.\n\n## Follow-up\n\n- None.\n",
+    "src/harbor/commands/status.py": "from harbor.config import MODE\nfrom harbor.meta import project_metadata\n\n\ndef run():\n    meta = project_metadata()\n    return {\"service\": meta[\"name\"], \"version\": meta[\"version\"], \"mode\": MODE}\n"
+  },
+  "project_state": {
+    ".progressive/project/PROJECT_BRIEF.md": "# Project Brief\n\nStatus: ACTIVE\n\nProject: Local coding task\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n",
+    ".progressive/project/ARCHITECTURE.md": "# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n",
+    ".progressive/project/TOOLING_STATUS.md": "# Tooling Status\n\nProfile: minimal\n\nStatus: READY\n\nOptional framework tooling is not required for this local coding task. Use repository-native tools only.\n",
+    ".progressive/project/ROADMAP.md": "# Roadmap — Current Coding Task\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [x] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n",
+    ".progressive/project/NEXT_SESSION.md": "# Next Session\n\n> Volatile hot context for this current local coding task.\n\nStatus: PROJECT COMPLETE\n\nCurrent focus: None; the requested coding task is complete.\n\nCompleted work: Added the dispatcher-backed `status` command using canonical service metadata and mode configuration.\n\nVerification: `python3 -m unittest discover -v` passed all 3 tests; Python compilation also succeeded.\n\nBlockers / uncertainty: None.\n\nNext action: None.\n",
+    ".progressive/phases/00-current-task.md": "# Phase 00 — Current Coding Task\n\nStatus: COMPLETED\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n\n## Completion Record\n\n- **Status:** Completed 2026-10-03.\n- **Final report:** `.progressive/completions/00-current-task.md`.\n- **Outcome:** Added and registered a `status` command using canonical metadata and configuration sources.\n- **Validation:** Targeted command tests, Python compilation, and `python3 -m unittest discover -v` passed.\n- **Decisions / Technical Debt:** Preserved the existing command pattern; no known debt.\n"
+  },
+  "command_trace": [
+    {
+      "id": "item_2",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,240p' .agents/skills/implementation-execution/SKILL.md\"",
+      "aggregated_output": "---\nname: implementation-execution\ndescription: Non-trivial implementation after direction is clear, including feature work and complete bug-fix execution.\n---\n\n# Implementation Execution\n\nOnce direction is clear, implement end-to-end in one cohesive pass. Approval is for the\nchosen direction, not for incomplete core-logic fragments.\n\nA complete change includes all required integration points, imports, types, schemas,\nconfiguration, critical edge cases/error handling, backward compatibility unless a break was\napproved, and relevant tests when an existing framework exists. Leave no debug output, dead\ncode, placeholders, pseudo-code, or unnecessary dependencies. Follow repository conventions\nand avoid unrelated changes.\n\nFor bug fixes: root cause → reproduce when practical → smallest complete fix → regression\ntest when supported → adjacent-behavior verification. Use `systematic-debugging` when the\ncause is unclear rather than guessing.\n\nAfter implementation, apply `.progressive/system/QUALITY_PROTOCOL.md` exactly. Do not mark work\ncomplete before required evidence is reconciled with acceptance criteria.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_3",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,260p' .progressive/system/QUALITY_PROTOCOL.md\"",
+      "aggregated_output": "# Quality Protocol\n\nUse after implementation and whenever completion claims depend on verification.\n\n## Validation order\n\nValidate from narrowest to broadest, skipping only checks irrelevant to the change:\n1. targeted tests / focused reproduction;\n2. type check or equivalent static checks;\n3. lint and formatting checks;\n4. build / compile / package;\n5. broader suites when shared code or public interfaces changed;\n6. e2e/manual/runtime verification when required by the behavior.\n\n## On failure\n\nClassify each relevant failure as **caused by the change**, **pre-existing**, or\n**environmental**. Fix what the change broke, re-run the relevant checks, and do not stop at\nthe first failure when a safe diagnosable fix is in scope. Do not silently \"fix\" unrelated\npre-existing failures.\n\n## If validation cannot run\n\nState all four explicitly:\n- the exact reason it could not run;\n- what was inspected or verified instead;\n- the exact command/check the user should run;\n- the remaining uncertainty.\n\nA validation claim is supported only by evidence actually observed in the current work.\nNever report a check as passed unless it actually ran and passed.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_4",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git status --short'",
+      "aggregated_output": "",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_5",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"rg --files -g '\"'!*.pyc'\"' -g '\"'!__pycache__'\"' | sed -n '1,240p'\"",
+      "aggregated_output": "src/harbor/meta.py\nsrc/harbor/commands/ping.py\nsrc/harbor/commands/info.py\nsrc/harbor/commands/__init__.py\nsrc/harbor/__init__.py\nsrc/harbor/config.py\nsrc/harbor/dispatcher.py\nCLAUDE.md\nAGENTS.md\nREADME.md\ntests/test_status.py\ntests/__init__.py\ntests/test_existing.py\npyproject.toml\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_6",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 .progressive/tools/context_compile.py'",
+      "aggregated_output": "# Compiled Current Context\n\nGenerated deterministically; canonical files remain source of truth.\n\n## docs/project/PROJECT_BRIEF.md\n# Project Brief\n\nStatus: ACTIVE\n\nProject: Local coding task\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n\n## docs/project/ARCHITECTURE.md\n# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n\n## docs/project/ROADMAP.md\n# Roadmap — Current Coding Task\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n\n## docs/project/NEXT_SESSION.md\n# Next Session\n\n> Volatile hot context for this current local coding task.\n\nStatus: READY\n\nCurrent focus: Execute the current coding task exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n\n## .progressive/phases/00-current-task.md\n# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_8",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,300p' tests/test_existing.py && sed -n '1,300p' tests/test_status.py && sed -n '1,240p' README.md\"",
+      "aggregated_output": "import sys\nfrom pathlib import Path\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nimport unittest\nfrom harbor.dispatcher import dispatch\n\nclass ExistingCommandTests(unittest.TestCase):\n    def test_ping(self):\n        self.assertEqual(dispatch(\"ping\"), {\"ok\": True})\n\n    def test_info(self):\n        self.assertEqual(dispatch(\"info\"), {\"service\": \"harbor-service\", \"mode\": \"safe\"})\nimport sys\nfrom pathlib import Path\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nimport unittest\nfrom harbor.dispatcher import dispatch\n\nclass StatusCommandTests(unittest.TestCase):\n    def test_status_uses_canonical_metadata(self):\n        self.assertEqual(\n            dispatch(\"status\"),\n            {\"service\": \"harbor-service\", \"version\": \"2.4.1\", \"mode\": \"safe\"},\n        )\n# Harbor Service\n\nCommands are registered in `harbor.dispatcher`. Keep command implementations small and\nfollow existing command modules. Run `python3 -m unittest discover -v` for validation.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_9",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,240p' src/harbor/meta.py && sed -n '1,240p' src/harbor/config.py && sed -n '1,160p' src/harbor/__init__.py && sed -n '1,240p' pyproject.toml\"",
+      "aggregated_output": "from pathlib import Path\nimport tomllib\n\ndef project_metadata():\n    root = Path(__file__).resolve().parents[2]\n    return tomllib.loads((root / \"pyproject.toml\").read_text(encoding=\"utf-8\"))[\"project\"]\nMODE = \"safe\"\n[project]\nname = \"harbor-service\"\nversion = \"2.4.1\"\nrequires-python = \">=3.11\"\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_10",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,240p' src/harbor/dispatcher.py && sed -n '1,200p' src/harbor/commands/ping.py && sed -n '1,200p' src/harbor/commands/info.py && sed -n '1,160p' src/harbor/commands/__init__.py\"",
+      "aggregated_output": "from harbor.commands import info, ping\n\nCOMMANDS = {\n    \"ping\": ping.run,\n    \"info\": info.run,\n}\n\ndef dispatch(name):\n    return COMMANDS[name]()\ndef run():\n    return {\"ok\": True}\nfrom harbor.config import MODE\nfrom harbor.meta import project_metadata\n\ndef run():\n    meta = project_metadata()\n    return {\"service\": meta[\"name\"], \"mode\": MODE}\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_11",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'find . -name AGENTS.md -o -name AGENTS.override.md'",
+      "aggregated_output": "./AGENTS.md\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_13",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest -v tests.test_status tests.test_existing'",
+      "aggregated_output": "test_status_uses_canonical_metadata (tests.test_status.StatusCommandTests.test_status_uses_canonical_metadata) ... ok\ntest_info (tests.test_existing.ExistingCommandTests.test_info) ... ok\ntest_ping (tests.test_existing.ExistingCommandTests.test_ping) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_15",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m compileall -q src tests'",
+      "aggregated_output": "",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_16",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+      "aggregated_output": "test_info (tests.test_existing.ExistingCommandTests.test_info) ... ok\ntest_ping (tests.test_existing.ExistingCommandTests.test_ping) ... ok\ntest_status_uses_canonical_metadata (tests.test_status.StatusCommandTests.test_status_uses_canonical_metadata) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_18",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,300p' .agents/skills/session-handoff/SKILL.md\"",
+      "aggregated_output": "---\nname: session-handoff\ndescription: End of a meaningful implementation/review session or phase transition.\n---\n\n# Session Handoff\n\nRead current acceptance evidence and `.progressive/system/HANDOFF_PROTOCOL.md`. Classify the\nsession as `IN PROGRESS`, `PHASE COMPLETE`, or `PROJECT COMPLETE`. On `PHASE COMPLETE`,\nupdate canonical owners first, write the durable phase completion report, then write the\ncompleted phase's compact `## Completion Record` pointing to that report before updating\nRoadmap markers. Overwrite NEXT_SESSION as volatile hot navigation rather than preserving\nold handoffs or turning it into a second specification.\n\nThe phase completion report may preserve evidence-bounded technical detail useful to humans\nor later investigation. The Completion Record must remain small enough for normal progressive\nwarm-up and must not duplicate the report. Legacy completed phases that predate separate\ncompletion reports remain valid and do not require automatic migration.\n\nFor a non-trivial completed task inside an active phase, preserve only a compact task result,\nevidence, and decisions/issues in the phase file when later work needs them. Do not create one\ncompletion file per routine task.\n\nUse Single-Focus Continuation for `NEXT_SESSION`: one handoff prompt = one unresolved\nexecution target. If the current task, acceptance criterion, manual verification, blocker, or\nother gate remains open, both `Next action` and the copyable prompt must focus only on closing\nthat target. Do not name or preload the next queued task/phase with wording such as \"then\ncontinue\" or \"after that start\". Multiple substeps are allowed only when they all complete the\nsame target and share one acceptance boundary. Select later work only after the current target\nis genuinely complete and its evidence/state has been persisted.\n\nDo not repeat the diff line by line, claim success beyond observed evidence, or ask for\npost-hoc approval after a clean finish unless another risky step remains. Include the\nready-to-copy next-session prompt when the project continues. Never end a turn with only\n\"waiting for confirmation/next action is X\" — persist state and provide the continuation\nprompt before yielding to the user.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_19",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,360p' .progressive/system/HANDOFF_PROTOCOL.md\"",
+      "aggregated_output": "# Handoff Protocol\n\nClassify the session `IN PROGRESS`, `PHASE COMPLETE`, or `PROJECT COMPLETE`.\nRoadmap stays canonical for phase status.\n\n## Phase completion transaction\n\nWhen a phase satisfies its acceptance criteria:\n\n1. update Architecture/ADR/other canonical owners first when system shape or a consequential decision changed;\n2. write the durable phase report under `.progressive/completions/<phase-name>.md` using `.progressive/templates/PHASE_COMPLETION.template.md`; Runtime uses `.progressive/completions/<phase-name>.md`;\n3. persist a compact `## Completion Record` in the completed phase **before moving the Roadmap marker**. It should point to the final report and keep only the small cross-phase bridge needed for progressive context;\n4. mark the completed phase `[x]` and exactly one next phase `[>]` when one exists;\n5. overwrite `NEXT_SESSION.md` in place with only the hot state needed to continue.\n\nThe phase completion report is durable human-readable history. Capture evidence-bounded detail that would otherwise bloat hot context:\n- **Outcome / Delivered** — capabilities and artifacts that now exist;\n- **Implementation notes** — durable technical facts worth preserving, not a diff diary;\n- **Decisions made** — consequences plus ADR/canonical references when applicable;\n- **Deviations / technical debt** — gaps surviving completion;\n- **Problems discovered** — durable issues/workarounds worth remembering;\n- **Verification evidence** — checks actually observed and results;\n- **Architectural impact / Follow-up** — what later phases may rely on and explicit later work.\n\nA Completion Record remains compact durable routing history. Capture only:\n- **Status / Completed** — completion state/date when useful;\n- **Final report** — relative path to the phase completion report when one exists;\n- **Outcome** — one concise result;\n- **Validation summary** — only the evidence needed to trust the transition;\n- **Decisions / Technical Debt affecting later phases** — concise consequences;\n- **Handoff to Next Phase** — assumptions/capabilities the next phase may safely rely on.\n\nDo not duplicate the full completion report inside the Completion Record. Normal warm-up reads only the compact Completion Record; the detailed report is read on demand when investigation, audit, or historical context requires it.\n\nBackward compatibility: completed phases created before phase completion reports existed remain valid with only their existing `## Completion Record`. Do not force migrations merely to satisfy the new convention. Add a report retroactively only when its durable detail is materially useful.\n\nFor non-trivial tasks inside an active phase, keep a compact Task Completion note in the phase file when the result/evidence/decision matters later. Do not create one completion file per routine task.\n\nIf the session remains `IN PROGRESS`, keep the phase active and do not fabricate a phase completion report or completion record.\n\nOn project completion every phase is `[x]` and none is `[>]`.\n\n## NEXT_SESSION semantics\n\n`NEXT_SESSION.md` is volatile hot navigation, not project history. Overwrite it on each meaningful handoff; do not create an accumulating chain of `NEXT_SESSION_001.md`, `NEXT_SESSION_002.md`, etc. It contains only current phase, completed work from the just-ended session, verification, blockers/uncertainty, next action, and a ready-to-copy prompt. Durable completed-phase detail belongs in `.progressive/completions/` (Runtime: `.progressive/completions/`); the phase keeps only its compact Completion Record; full source history remains in version control when available.\n\n### Single-focus continuation\n\nOne handoff prompt = one unresolved execution target.\n\nSelect the nearest unfinished target from canonical project state in this order:\n\n1. unresolved blocker, manual verification, acceptance criterion, or other gate on the current work;\n2. otherwise, the unfinished current task;\n3. only after that target is complete and its evidence/state is persisted, the next task may become the new target;\n4. only after the phase completion transaction is complete may work from the next phase become the new target.\n\nIf a current target is unresolved, `## Next action` and `## NEXT SESSION PROMPT` must focus only on closing it. Do not name, describe, preview, or preload later queued tasks or phases in the handoff prompt. In particular, do not write transitions such as `then continue Task N+1`, `after that start ...`, or equivalent wording while the current target remains open.\n\nSeveral concrete substeps are allowed only when they share one acceptance boundary and are all necessary to finish the same target, for example `apply fix → run targeted verification → persist evidence`. That is still one execution target. `finish current task → start next task` is two targets and must be split across state transitions.\n\nOnce the current target is genuinely complete and evidence is persisted, normal workflow may select the next target from the Phase/Roadmap. The previous handoff must not pre-plan or bundle that future target merely because it is already visible in canonical planning documents.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_20",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1,320p' .progressive/templates/PHASE_COMPLETION.template.md && sed -n '1,200p' docs/project/NEXT_SESSION.md && sed -n '1,200p' docs/project/ROADMAP.md && sed -n '1,200p' .progressive/phases/00-current-task.md && rg --files .progressive/completions\"",
+      "aggregated_output": "# Phase <NN> Completion — <NAME>\n\nStatus: COMPLETED\n\n## Outcome\n<concise statement of the verified phase result>\n\n## Delivered\n- <capability/artifact now available>\n\n## Implementation notes\n<durable technical details useful to humans or later investigation; do not repeat the phase plan or diff line by line>\n\n## Decisions made\n- <decision and consequence; reference ADR/canonical owner when applicable>\n\n## Deviations / technical debt\n- <none or surviving gap>\n\n## Problems discovered\n- <none or durable issue/workaround worth preserving>\n\n## Verification evidence\n- `<check>` → <observed result>\n\n## Architectural impact\n<what later phases may safely assume; reference Architecture/ADR when system shape changed>\n\n## Follow-up\n- <none or explicit later work>\nsed: docs/project/NEXT_SESSION.md: No such file or directory\n",
+      "exit_code": 1,
+      "status": "failed"
+    },
+    {
+      "id": "item_21",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"find .progressive -maxdepth 3 -type f | sort && sed -n '1,200p' .progressive/project/NEXT_SESSION.md && sed -n '1,200p' .progressive/project/ROADMAP.md && sed -n '1,200p' .progressive/phases/00-current-task.md\"",
+      "aggregated_output": ".progressive/ADOPTION_STATE\n.progressive/AGENT_TARGET\n.progressive/LICENSE\n.progressive/NOTICE.md\n.progressive/PROFILE\n.progressive/VERSION\n.progressive/integrations/CONTEXT7.md\n.progressive/integrations/GITHUB_SPEC_KIT.md\n.progressive/integrations/GSTACK.md\n.progressive/integrations/PROFILES.md\n.progressive/integrations/README.md\n.progressive/integrations/RTK.md\n.progressive/integrations/SEMBLE.md\n.progressive/integrations/SERENA.md\n.progressive/integrations/SUPERPOWERS.md\n.progressive/integrations/TOOL_REGISTRY.json\n.progressive/phases/00-current-task.md\n.progressive/project/ARCHITECTURE.md\n.progressive/project/CONTEXT_MANIFEST.json\n.progressive/project/NEXT_SESSION.md\n.progressive/project/PROJECT_BRIEF.md\n.progressive/project/ROADMAP.md\n.progressive/project/TOOLING_STATUS.json\n.progressive/project/TOOLING_STATUS.md\n.progressive/prompts/ADOPT_EXISTING_PROJECT.md\n.progressive/prompts/BUG_FIX.md\n.progressive/prompts/CHANGE_REQUEST.md\n.progressive/prompts/CONTINUE_PROJECT.md\n.progressive/prompts/REVIEW.md\n.progressive/prompts/SETUP_TOOLING.md\n.progressive/prompts/START_NEW_PROJECT.md\n.progressive/system/CONTEXT_PROTOCOL.md\n.progressive/system/HANDOFF_PROTOCOL.md\n.progressive/system/LAYER_OWNERSHIP.md\n.progressive/system/QUALITY_PROTOCOL.md\n.progressive/system/TOOL_ROUTING.md\n.progressive/templates/ADR.template.md\n.progressive/templates/ARCHITECTURE.template.md\n.progressive/templates/CONTEXT_MANIFEST.template.json\n.progressive/templates/NEXT_SESSION.template.md\n.progressive/templates/PHASE.template.md\n.progressive/templates/PHASE_COMPLETION.template.md\n.progressive/templates/PROJECT_BRIEF.template.md\n.progressive/templates/ROADMAP.template.md\n.progressive/tools/__pycache__/common.cpython-312.pyc\n.progressive/tools/audit.py\n.progressive/tools/common.py\n.progressive/tools/context_compile.py\n.progressive/tools/context_report.py\n.progressive/tools/tooling_bootstrap.py\n.progressive/tools/tooling_status.py\n# Next Session\n\n> Volatile hot context for this current local coding task.\n\nStatus: READY\n\nCurrent focus: Execute the current coding task exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n# Roadmap — Current Coding Task\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_23",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 .progressive/tools/audit.py'",
+      "aggregated_output": "RUNTIME AUDIT: PASS (0 errors, 0 warnings)\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_24",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git diff --check && git status --short && git diff -- src/harbor/dispatcher.py src/harbor/commands/status.py tests/test_status.py && git diff --stat'",
+      "aggregated_output": " M .progressive/phases/00-current-task.md\n M .progressive/project/NEXT_SESSION.md\n M .progressive/project/ROADMAP.md\n M src/harbor/dispatcher.py\n?? .progressive/completions/\n?? .progressive/tools/__pycache__/\n?? src/harbor/__pycache__/\n?? src/harbor/commands/__pycache__/\n?? src/harbor/commands/status.py\n?? tests/__pycache__/\ndiff --git a/src/harbor/dispatcher.py b/src/harbor/dispatcher.py\nindex cdd241f..ddd4875 100644\n--- a/src/harbor/dispatcher.py\n+++ b/src/harbor/dispatcher.py\n@@ -1,8 +1,9 @@\n-from harbor.commands import info, ping\n+from harbor.commands import info, ping, status\n \n COMMANDS = {\n     \"ping\": ping.run,\n     \"info\": info.run,\n+    \"status\": status.run,\n }\n \n def dispatch(name):\n .progressive/phases/00-current-task.md | 10 +++++++++-\n .progressive/project/NEXT_SESSION.md   | 12 +++++++++---\n .progressive/project/ROADMAP.md        |  2 +-\n src/harbor/dispatcher.py               |  3 ++-\n 4 files changed, 21 insertions(+), 6 deletions(-)\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_26",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'find .progressive/tools/__pycache__ src/harbor/__pycache__ src/harbor/commands/__pycache__ tests/__pycache__ -type f -print 2>/dev/null'",
+      "aggregated_output": ".progressive/tools/__pycache__/common.cpython-312.pyc\n.progressive/tools/__pycache__/context_compile.cpython-312.pyc\nsrc/harbor/__pycache__/config.cpython-312.pyc\nsrc/harbor/__pycache__/meta.cpython-312.pyc\nsrc/harbor/__pycache__/dispatcher.cpython-312.pyc\nsrc/harbor/__pycache__/__init__.cpython-312.pyc\nsrc/harbor/commands/__pycache__/info.cpython-312.pyc\nsrc/harbor/commands/__pycache__/status.cpython-312.pyc\nsrc/harbor/commands/__pycache__/__init__.cpython-312.pyc\nsrc/harbor/commands/__pycache__/ping.cpython-312.pyc\ntests/__pycache__/test_status.cpython-312.pyc\ntests/__pycache__/__init__.cpython-312.pyc\ntests/__pycache__/test_existing.cpython-312.pyc\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_27",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'unlink .progressive/tools/__pycache__/common.cpython-312.pyc .progressive/tools/__pycache__/context_compile.cpython-312.pyc src/harbor/__pycache__/config.cpython-312.pyc src/harbor/__pycache__/meta.cpython-312.pyc src/harbor/__pycache__/dispatcher.cpython-312.pyc src/harbor/__pycache__/__init__.cpython-312.pyc src/harbor/commands/__pycache__/info.cpython-312.pyc src/harbor/commands/__pycache__/status.cpython-312.pyc src/harbor/commands/__pycache__/__init__.cpython-312.pyc src/harbor/commands/__pycache__/ping.cpython-312.pyc tests/__pycache__/test_status.cpython-312.pyc tests/__pycache__/__init__.cpython-312.pyc tests/__pycache__/test_existing.cpython-312.pyc && rmdir .progressive/tools/__pycache__ src/harbor/__pycache__ src/harbor/commands/__pycache__ tests/__pycache__'",
+      "aggregated_output": "usage: rm [-f | -i] [-dIPRrvWx] file ...\n       unlink [--] file\n",
+      "exit_code": 64,
+      "status": "failed"
+    },
+    {
+      "id": "item_28",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"printf '%s\\\\0' .progressive/tools/__pycache__/common.cpython-312.pyc .progressive/tools/__pycache__/context_compile.cpython-312.pyc src/harbor/__pycache__/config.cpython-312.pyc src/harbor/__pycache__/meta.cpython-312.pyc src/harbor/__pycache__/dispatcher.cpython-312.pyc src/harbor/__pycache__/__init__.cpython-312.pyc src/harbor/commands/__pycache__/info.cpython-312.pyc src/harbor/commands/__pycache__/status.cpython-312.pyc src/harbor/commands/__pycache__/__init__.cpython-312.pyc src/harbor/commands/__pycache__/ping.cpython-312.pyc tests/__pycache__/test_status.cpython-312.pyc tests/__pycache__/__init__.cpython-312.pyc tests/__pycache__/test_existing.cpython-312.pyc | xargs -0 -n1 unlink && rmdir .progressive/tools/__pycache__ src/harbor/__pycache__ src/harbor/commands/__pycache__ tests/__pycache__\"",
+      "aggregated_output": "",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_29",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"git status --short && git diff --check && git diff -- src/harbor/dispatcher.py .progressive/phases/00-current-task.md .progressive/project/ROADMAP.md .progressive/project/NEXT_SESSION.md && sed -n '1,120p' src/harbor/commands/status.py && sed -n '1,240p' .progressive/completions/00-current-task.md\"",
+      "aggregated_output": " M .progressive/phases/00-current-task.md\n M .progressive/project/NEXT_SESSION.md\n M .progressive/project/ROADMAP.md\n M src/harbor/dispatcher.py\n?? .progressive/completions/\n?? src/harbor/commands/status.py\ndiff --git a/.progressive/phases/00-current-task.md b/.progressive/phases/00-current-task.md\nindex a3e10ea..331429a 100644\n--- a/.progressive/phases/00-current-task.md\n+++ b/.progressive/phases/00-current-task.md\n@@ -1,6 +1,6 @@\n # Phase 00 — Current Coding Task\n \n-Status: IN PROGRESS\n+Status: COMPLETED\n \n ## Goal\n \n@@ -9,3 +9,11 @@ Complete the exact current user-provided task without unrelated scope.\n ## Acceptance\n \n Use the acceptance criteria supplied with the user task and the repository's required validation evidence.\n+\n+## Completion Record\n+\n+- **Status:** Completed 2026-10-03.\n+- **Final report:** `.progressive/completions/00-current-task.md`.\n+- **Outcome:** Added and registered a `status` command using canonical metadata and configuration sources.\n+- **Validation:** Targeted command tests, Python compilation, and `python3 -m unittest discover -v` passed.\n+- **Decisions / Technical Debt:** Preserved the existing command pattern; no known debt.\ndiff --git a/.progressive/project/NEXT_SESSION.md b/.progressive/project/NEXT_SESSION.md\nindex ac46b07..989f372 100644\n--- a/.progressive/project/NEXT_SESSION.md\n+++ b/.progressive/project/NEXT_SESSION.md\n@@ -2,8 +2,14 @@\n \n > Volatile hot context for this current local coding task.\n \n-Status: READY\n+Status: PROJECT COMPLETE\n \n-Current focus: Execute the current coding task exactly as supplied by the user.\n+Current focus: None; the requested coding task is complete.\n \n-Next action: Ground in the repository, implement the task, and produce required validation evidence.\n+Completed work: Added the dispatcher-backed `status` command using canonical service metadata and mode configuration.\n+\n+Verification: `python3 -m unittest discover -v` passed all 3 tests; Python compilation also succeeded.\n+\n+Blockers / uncertainty: None.\n+\n+Next action: None.\ndiff --git a/.progressive/project/ROADMAP.md b/.progressive/project/ROADMAP.md\nindex b55f4f8..c716f1e 100644\n--- a/.progressive/project/ROADMAP.md\n+++ b/.progressive/project/ROADMAP.md\n@@ -2,6 +2,6 @@\n \n Legend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n \n-- [>] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n+- [x] Phase 00 — Current coding task — `.progressive/phases/00-current-task.md`\n \n Project complete when the current user task and its supplied acceptance criteria are verified.\ndiff --git a/src/harbor/dispatcher.py b/src/harbor/dispatcher.py\nindex cdd241f..ddd4875 100644\n--- a/src/harbor/dispatcher.py\n+++ b/src/harbor/dispatcher.py\n@@ -1,8 +1,9 @@\n-from harbor.commands import info, ping\n+from harbor.commands import info, ping, status\n \n COMMANDS = {\n     \"ping\": ping.run,\n     \"info\": info.run,\n+    \"status\": status.run,\n }\n \n def dispatch(name):\nfrom harbor.config import MODE\nfrom harbor.meta import project_metadata\n\n\ndef run():\n    meta = project_metadata()\n    return {\"service\": meta[\"name\"], \"version\": meta[\"version\"], \"mode\": MODE}\n# Phase 00 Completion — Current Coding Task\n\nStatus: COMPLETED\n\n## Outcome\n\nThe dispatcher now exposes a verified `status` command backed by the repository's canonical project metadata and runtime configuration.\n\n## Delivered\n\n- `status` returns the service name, project version, and configured mode.\n- Existing `ping` and `info` commands remain registered and verified.\n\n## Implementation notes\n\nThe command reads the service name and version through `harbor.meta.project_metadata()` and the mode from `harbor.config.MODE`.\n\n## Decisions made\n\n- Reused the existing command-module and dispatcher-registration pattern without adding dependencies or parallel configuration values.\n\n## Deviations / technical debt\n\n- None.\n\n## Problems discovered\n\n- None.\n\n## Verification evidence\n\n- `python3 -m unittest -v tests.test_status tests.test_existing` → 3 tests passed.\n- `python3 -m compileall -q src tests` → completed successfully.\n- `python3 -m unittest discover -v` → 3 tests passed.\n\n## Architectural impact\n\nNo architecture change; later work may rely on `status` being available through `harbor.dispatcher.dispatch`.\n\n## Follow-up\n\n- None.\n",
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ],
+  "verification": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_info (tests.test_existing.ExistingCommandTests.test_info) ... ok\ntest_ping (tests.test_existing.ExistingCommandTests.test_ping) ... ok\ntest_status_uses_canonical_metadata (tests.test_status.StatusCommandTests.test_status_uses_canonical_metadata) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "messages": [
+    "Использую навык `implementation-execution`, потому что направление и критерии уже зафиксированы: сначала сверю канонический контекст и существующий шаблон команд, затем внесу минимальное изменение и прогоню указанный тестовый набор.",
+    "Рабочее дерево чистое. Проект небольшой: версия и режим уже вынесены в отдельные источники, а интеграционная точка — словарь обработчиков диспетчера. Сейчас проверяю точные импорты и ожидаемую форму ответа в соседних командах и тестах.",
+    "Команда `status` добавлена отдельным модулем по существующему шаблону и зарегистрирована в том же `COMMANDS`. Точечные проверки новой команды, `ping` и `info` уже проходят; теперь запускаю полный обязательный набор и проверяю итоговый diff на лишние изменения.",
+    "Полный `unittest discover` и компиляция Python-модулей прошли. Перед итогом применяю репозиторный `session-handoff`, чтобы сверить обязательные обновления состояния проекта и не оставить канонический контекст в противоречивом состоянии.",
+    "Проверки создали только локальные `__pycache__`; попытка удалить каталоги целиком была отклонена защитой среды. Удалю строго перечисленные сгенерированные `.pyc` через безопасные точечные операции, не затрагивая исходники.",
+    "**Результат**\n\nДобавлена команда `status`, зарегистрированная в существующем диспетчере. Возвращает ровно:\n\n```python\n{\"service\": \"harbor-service\", \"version\": \"2.4.1\", \"mode\": \"safe\"}\n```\n\nВерсия и имя читаются из `pyproject.toml` через `project_metadata()`, режим — из `harbor.config.MODE`.\n\n**Файлы изменены**\n\n- [status.py](<repo>/src/harbor/commands/status.py:1) — реализация команды.\n- [dispatcher.py](<repo>/src/harbor/dispatcher.py:1) — регистрация `status`.\n- Progressive Context обновлён как завершённый.\n\n**Валидация**\n\n- `python3 -m unittest discover -v` — 3 теста прошли.\n- `python3 -m compileall -q src tests` — успешно.\n- Progressive runtime audit — 0 ошибок, 0 предупреждений.\n- `git diff --check` — успешно."
+  ]
+}

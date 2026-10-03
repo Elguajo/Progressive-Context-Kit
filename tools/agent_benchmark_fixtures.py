@@ -348,11 +348,15 @@ FIXTURE_BUILDERS = {
 }
 
 
-def materialize_fixture(fixture: str, destination: Path) -> None:
+def materialize_fixture(
+    fixture: str, destination: Path, *, discoverable_tests: bool = False
+) -> None:
     if fixture not in FIXTURE_BUILDERS:
         raise ValueError(f"unknown fixture: {fixture}")
     destination.mkdir(parents=True, exist_ok=True)
     FIXTURE_BUILDERS[fixture](destination)
+    if discoverable_tests and (destination / "tests").is_dir():
+        write_file(destination, "tests/__init__.py", "")
 
 
 def fixture_digest(root: Path) -> str:

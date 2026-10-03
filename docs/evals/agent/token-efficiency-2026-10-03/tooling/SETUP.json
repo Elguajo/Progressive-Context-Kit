@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-03",
+  "claude_code": {
+    "version": "2.1.285",
+    "install": "official native stable installer",
+    "authenticated": false,
+    "runs": "deferred by user"
+  },
+  "rtk": {
+    "version": "0.51.0",
+    "install": "official release installer, checksum verified",
+    "telemetry": "not enabled",
+    "hooks": "not configured"
+  },
+  "codex": {
+    "version": "0.147.0",
+    "model": "gpt-5.6-sol",
+    "reasoning": "high",
+    "settings": "--ignore-user-config --ephemeral --sandbox workspace-write",
+    "unsupported_requested_model": "gpt-6.1-sol rejected by this ChatGPT CLI client"
+  },
+  "shell_path": "user profile unchanged; installed binaries invoked by absolute path"
+}

@@ -3,6 +3,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'tools'))
 import context_report
+from context_compile import build, task_context
 
 class ContextTests(unittest.TestCase):
     def test_personal_quality_first_hard_budget(self):
@@ -42,5 +43,21 @@ class ContextTests(unittest.TestCase):
         self.assertGreater(d['skill_metadata_chars_loaded'],0)
         self.assertGreater(d['skill_full_body_chars_not_loaded'],d['skill_metadata_chars_loaded'])
         self.assertNotIn('all_skill_chars_not_normally_loaded',d)
+
+    def test_report_separates_static_inventory_from_execution_usage(self):
+        d=context_report.collect(ROOT,'personal')
+        self.assertEqual(d['measurement_kind'],'static_unicode_character_counts')
+        self.assertIn('approximate',d['token_estimate_method'])
+        self.assertEqual(d['framework_version'],(ROOT/'VERSION').read_text().strip())
+        layers=d['context_layers']
+        self.assertEqual(layers['persistent_instruction_chars'],d['always_loaded_chars'])
+        self.assertEqual(layers['available_skill_frontmatter_chars'],d['skill_metadata_chars_loaded'])
+        self.assertEqual(layers['on_demand']['compiled_current_context_chars'],len(build(ROOT)))
+        self.assertEqual(layers['on_demand']['compiled_task_delta_chars'],len(task_context(ROOT))+1)
+        self.assertIn('reasoning', ' '.join(d['measurement_limits']))
+
+    def test_baseline_document_matches_current_generated_snapshot(self):
+        self.assertEqual((ROOT/'docs/BASELINE_COMPARISON.md').read_text(encoding='utf-8'),
+                         context_report.baseline_markdown(ROOT))
 
 if __name__=='__main__': unittest.main()

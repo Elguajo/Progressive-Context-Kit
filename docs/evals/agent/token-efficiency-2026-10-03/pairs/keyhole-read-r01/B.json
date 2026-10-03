@@ -1,0 +1,116 @@
+{
+  "patch": "diff --git a/src/catalog/data.py b/src/catalog/data.py\nindex 7d17bb0..b740f62 100644\n--- a/src/catalog/data.py\n+++ b/src/catalog/data.py\n@@ -1301,7 +1301,7 @@ ITEM_1299 = \"catalog-item-1299\"\n ITEM_1300 = \"catalog-item-1300\"\n \n def normalize_sku(value: str) -> str:\n-    return value.strip().upper()\n+    return \"-\".join(value.split()).upper()\n \n def catalog_size() -> int:\n     return 1300\n",
+  "new_files": {
+    "tests/__init__.py": ""
+  },
+  "project_state": {
+    ".progressive/project/PROJECT_BRIEF.md": "# Project Brief\n\nStatus: ACTIVE\n\nProject: Real-agent benchmark fixture\n\nGoal: Complete the current user-provided local coding task correctly and with the smallest complete change.\n\nScope: The current repository and current task only. Do not expand product scope.\n",
+    ".progressive/project/ARCHITECTURE.md": "# Architecture\n\nStatus: ACTIVE\n\nRuntime: Python 3.11+ standard library.\n\nLayout: application code under `src/`, unittest-based tests under `tests/`, and local helper commands under `tools/` when present.\n\nConstraint: Preserve repository-local conventions; add no third-party dependency unless the user task explicitly requires one.\n",
+    ".progressive/project/TOOLING_STATUS.md": "# Tooling Status\n\nProfile: minimal\n\nStatus: READY\n\nOptional framework tooling is intentionally not applicable to this controlled benchmark. Use repository-native tools only.\n",
+    ".progressive/project/ROADMAP.md": "# Roadmap — Benchmark Fixture\n\nLegend: `[ ] PLANNED` · `[>] IN PROGRESS` · `[x] COMPLETE`\n\n- [>] Phase 00 — Current coding task — `.progressive/phases/00-benchmark-task.md`\n\nProject complete when the current user task and its supplied acceptance criteria are verified.\n",
+    ".progressive/project/NEXT_SESSION.md": "# Next Session\n\n> Volatile hot context for this disposable benchmark fixture.\n\nStatus: READY\n\nCurrent focus: Execute benchmark task `keyhole-read` exactly as supplied by the user.\n\nNext action: Ground in the repository, implement the task, and produce required validation evidence.\n",
+    ".progressive/phases/00-benchmark-task.md": "# Phase 00 — Current Coding Task\n\nStatus: IN PROGRESS\n\n## Goal\n\nComplete the exact current user-provided task without unrelated scope.\n\n## Acceptance\n\nUse the acceptance criteria supplied with the user task and the repository's required validation evidence.\n"
+  },
+  "command_trace": [
+    {
+      "id": "item_2",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"git status --short && rg -n \\\"normalize_sku|SKU\\\" . --glob '\"'!*.pyc'\"' --glob '\"'!__pycache__/*'\"'\"",
+      "aggregated_output": "./src/catalog/data.py:1303:def normalize_sku(value: str) -> str:\n./tests/test_catalog.py:6:from catalog.data import catalog_size, normalize_sku\n./tests/test_catalog.py:9:    def test_normalize_sku_collapses_whitespace(self):\n./tests/test_catalog.py:10:        self.assertEqual(normalize_sku(\"  ab  12 cd \"), \"AB-12-CD\")\n./tests/test_catalog.py:13:        self.assertEqual(normalize_sku(\"ab-12\"), \"AB-12\")\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_3",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"sed -n '1288,1312p' src/catalog/data.py && sed -n '1,80p' tests/test_catalog.py && find . -maxdepth 2 -type f \\\\( -name 'pyproject.toml' -o -name 'setup.cfg' -o -name 'requirements*.txt' \\\\) -print\"",
+      "aggregated_output": "ITEM_1287 = \"catalog-item-1287\"\nITEM_1288 = \"catalog-item-1288\"\nITEM_1289 = \"catalog-item-1289\"\nITEM_1290 = \"catalog-item-1290\"\nITEM_1291 = \"catalog-item-1291\"\nITEM_1292 = \"catalog-item-1292\"\nITEM_1293 = \"catalog-item-1293\"\nITEM_1294 = \"catalog-item-1294\"\nITEM_1295 = \"catalog-item-1295\"\nITEM_1296 = \"catalog-item-1296\"\nITEM_1297 = \"catalog-item-1297\"\nITEM_1298 = \"catalog-item-1298\"\nITEM_1299 = \"catalog-item-1299\"\nITEM_1300 = \"catalog-item-1300\"\n\ndef normalize_sku(value: str) -> str:\n    return value.strip().upper()\n\ndef catalog_size() -> int:\n    return 1300\nimport sys\nfrom pathlib import Path\nsys.path.insert(0, str(Path(__file__).resolve().parents[1] / \"src\"))\n\nimport unittest\nfrom catalog.data import catalog_size, normalize_sku\n\nclass CatalogTests(unittest.TestCase):\n    def test_normalize_sku_collapses_whitespace(self):\n        self.assertEqual(normalize_sku(\"  ab  12 cd \"), \"AB-12-CD\")\n\n    def test_existing_compact_sku(self):\n        self.assertEqual(normalize_sku(\"ab-12\"), \"AB-12\")\n\n    def test_generated_catalog_is_intact(self):\n        self.assertEqual(catalog_size(), 1300)\n./pyproject.toml\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_6",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest discover -v && git diff --check && git diff -- src/catalog/data.py tests/test_catalog.py'",
+      "aggregated_output": "\n----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nNO TESTS RAN\n",
+      "exit_code": 5,
+      "status": "failed"
+    },
+    {
+      "id": "item_7",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+      "aggregated_output": "\n----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nNO TESTS RAN\n",
+      "exit_code": 5,
+      "status": "failed"
+    },
+    {
+      "id": "item_8",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc \"find . -maxdepth 3 -type f -print | sort && sed -n '1,160p' pyproject.toml\"",
+      "aggregated_output": "./.git/COMMIT_EDITMSG\n./.git/HEAD\n./.git/config\n./.git/description\n./.git/hooks/applypatch-msg.sample\n./.git/hooks/commit-msg.sample\n./.git/hooks/fsmonitor-watchman.sample\n./.git/hooks/post-update.sample\n./.git/hooks/pre-applypatch.sample\n./.git/hooks/pre-commit.sample\n./.git/hooks/pre-merge-commit.sample\n./.git/hooks/pre-push.sample\n./.git/hooks/pre-rebase.sample\n./.git/hooks/pre-receive.sample\n./.git/hooks/prepare-commit-msg.sample\n./.git/hooks/push-to-checkout.sample\n./.git/hooks/sendemail-validate.sample\n./.git/hooks/update.sample\n./.git/index\n./.git/info/exclude\n./.git/logs/HEAD\n./.progressive/ADOPTION_STATE\n./.progressive/AGENT_TARGET\n./.progressive/LICENSE\n./.progressive/NOTICE.md\n./.progressive/PROFILE\n./.progressive/VERSION\n./.progressive/integrations/CONTEXT7.md\n./.progressive/integrations/GITHUB_SPEC_KIT.md\n./.progressive/integrations/GSTACK.md\n./.progressive/integrations/PROFILES.md\n./.progressive/integrations/README.md\n./.progressive/integrations/RTK.md\n./.progressive/integrations/SEMBLE.md\n./.progressive/integrations/SERENA.md\n./.progressive/integrations/SUPERPOWERS.md\n./.progressive/integrations/TOOL_REGISTRY.json\n./.progressive/phases/00-benchmark-task.md\n./.progressive/project/ARCHITECTURE.md\n./.progressive/project/CONTEXT_MANIFEST.json\n./.progressive/project/NEXT_SESSION.md\n./.progressive/project/PROJECT_BRIEF.md\n./.progressive/project/ROADMAP.md\n./.progressive/project/TOOLING_STATUS.json\n./.progressive/project/TOOLING_STATUS.md\n./.progressive/prompts/ADOPT_EXISTING_PROJECT.md\n./.progressive/prompts/BUG_FIX.md\n./.progressive/prompts/CHANGE_REQUEST.md\n./.progressive/prompts/CONTINUE_PROJECT.md\n./.progressive/prompts/REVIEW.md\n./.progressive/prompts/SETUP_TOOLING.md\n./.progressive/prompts/START_NEW_PROJECT.md\n./.progressive/system/CONTEXT_PROTOCOL.md\n./.progressive/system/HANDOFF_PROTOCOL.md\n./.progressive/system/LAYER_OWNERSHIP.md\n./.progressive/system/QUALITY_PROTOCOL.md\n./.progressive/system/TOOL_ROUTING.md\n./.progressive/templates/ADR.template.md\n./.progressive/templates/ARCHITECTURE.template.md\n./.progressive/templates/CONTEXT_MANIFEST.template.json\n./.progressive/templates/NEXT_SESSION.template.md\n./.progressive/templates/PHASE.template.md\n./.progressive/templates/PHASE_COMPLETION.template.md\n./.progressive/templates/PROJECT_BRIEF.template.md\n./.progressive/templates/ROADMAP.template.md\n./.progressive/tools/audit.py\n./.progressive/tools/common.py\n./.progressive/tools/context_compile.py\n./.progressive/tools/context_report.py\n./.progressive/tools/tooling_bootstrap.py\n./.progressive/tools/tooling_status.py\n./AGENTS.md\n./CLAUDE.md\n./README.md\n./pyproject.toml\n./src/catalog/__init__.py\n./src/catalog/data.py\n./tests/test_catalog.py\n[project]\nname = \"catalog-core\"\nversion = \"1.0.0\"\nrequires-python = \">=3.11\"\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_11",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'python3 -m unittest discover -v'",
+      "aggregated_output": "test_existing_compact_sku (tests.test_catalog.CatalogTests.test_existing_compact_sku) ... ok\ntest_generated_catalog_is_intact (tests.test_catalog.CatalogTests.test_generated_catalog_is_intact) ... ok\ntest_normalize_sku_collapses_whitespace (tests.test_catalog.CatalogTests.test_normalize_sku_collapses_whitespace) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "id": "item_12",
+      "type": "command_execution",
+      "command": "/bin/zsh -lc 'git diff --check && git status --short && git diff --stat && git diff -- src/catalog/data.py tests/test_catalog.py tests/__init__.py'",
+      "aggregated_output": " M src/catalog/data.py\n?? tests/__init__.py\n src/catalog/data.py | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\ndiff --git a/src/catalog/data.py b/src/catalog/data.py\nindex 7d17bb0..b740f62 100644\n--- a/src/catalog/data.py\n+++ b/src/catalog/data.py\n@@ -1301,7 +1301,7 @@ ITEM_1299 = \"catalog-item-1299\"\n ITEM_1300 = \"catalog-item-1300\"\n \n def normalize_sku(value: str) -> str:\n-    return value.strip().upper()\n+    return \"-\".join(value.split()).upper()\n \n def catalog_size() -> int:\n     return 1300\n",
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ],
+  "verification": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_existing_compact_sku (tests.test_catalog.CatalogTests.test_existing_compact_sku) ... ok\ntest_generated_catalog_is_intact (tests.test_catalog.CatalogTests.test_generated_catalog_is_intact) ... ok\ntest_normalize_sku_collapses_whitespace (tests.test_catalog.CatalogTests.test_normalize_sku_collapses_whitespace) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "test_existing_compact_sku (test_catalog.CatalogTests.test_existing_compact_sku) ... ok\ntest_generated_catalog_is_intact (test_catalog.CatalogTests.test_generated_catalog_is_intact) ... ok\ntest_normalize_sku_collapses_whitespace (test_catalog.CatalogTests.test_normalize_sku_collapses_whitespace) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "messages": [
+    "Исправлю только `normalize_sku` и связанные тесты, затем запущу полный `unittest discover -v`; сгенерированные константы трогать не буду.",
+    "Изменение локализовано в одной строке: `split()` убирает краевые пробелы и разбивает любые серии пробельных символов, а `join()` соединяет части одним дефисом. Запускаю весь набор тестов и проверю минимальность diff.",
+    "Обнаружил инфраструктурную проблему в текущем репозитории: точная команда из acceptance criteria завершалась кодом 5, потому что `tests/` не был импортируемым пакетом и discovery находил 0 тестов. Добавляю пустой package marker, чтобы именно указанная команда реально выполняла существующие тесты.",
+    "**Результат**\n\n`normalize_sku` теперь обрезает края, переводит SKU в верхний регистр и заменяет каждую последовательность пробельных символов одним дефисом.\n\n**Изменённые файлы**\n\n- [src/catalog/data.py:1303](<repo>/src/catalog/data.py:1303)\n- [tests/__init__.py](<repo>/tests/__init__.py) — включает обнаружение тестов указанной командой.\n\nСгенерированные константы не изменены.\n\n**Проверка**\n\n`python3 -m unittest discover -v` — 3 теста пройдены.  \n`git diff --check` — ошибок нет."
+  ]
+}

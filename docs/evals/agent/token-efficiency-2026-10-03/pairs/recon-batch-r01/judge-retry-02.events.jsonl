@@ -1,0 +1,5 @@
+{"type":"thread.started","thread_id":"01a10050-299c-7c50-8b40-bb7757b03e0b"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"error","message":"Skill descriptions were shortened to fit the skills context budget. Codex can still see every skill, but some descriptions are shorter. Disable unused skills or plugins to leave more room for the rest."}}
+{"type":"error","message":"{\n  \"type\": \"error\",\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"invalid_json_schema\",\n    \"message\": \"Invalid schema for response_format 'codex_output_schema': context=('properties', 'artifacts'), Unexpected constant value: ['A', 'B'].\",\n    \"param\": \"text.format.schema\"\n  },\n  \"status\": 400\n}"}
+{"type":"turn.failed","error":{"message":"{\n  \"type\": \"error\",\n  \"error\": {\n    \"type\": \"invalid_request_error\",\n    \"code\": \"invalid_json_schema\",\n    \"message\": \"Invalid schema for response_format 'codex_output_schema': context=('properties', 'artifacts'), Unexpected constant value: ['A', 'B'].\",\n    \"param\": \"text.format.schema\"\n  },\n  \"status\": 400\n}"}}
