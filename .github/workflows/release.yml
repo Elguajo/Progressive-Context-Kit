@@ -98,7 +98,7 @@ jobs:
           else
             gh release create "$TAG" "$ASSET" "$MANIFEST" "$CHECKSUMS" \
               --target "$RELEASE_SHA" \
-              --title "Progressive Context Kit $TAG" \
+              --title "$TAG - Progressive Context Kit" \
               --generate-notes
           fi
 

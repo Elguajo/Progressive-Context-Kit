@@ -1,7 +1,10 @@
 # Changelog
 
-## 3.1.1 — 2026-10-03
+## 4.0.0 — 2026-10-03
 
+- Consolidated the v3.1.0 and v3.1.1 Runtime releases as v4.0.0. Existing Runtime behavior
+  and compatibility are preserved by the version rename.
+- GitHub release titles begin with the version: `v4.0.0 - Progressive Context Kit`.
 - Added reproducible token measurement infrastructure in Framework Source: separate static
   context layers, optional immutable-SHA experiment configurations with provenance, and
   all-attempt token accounting per successful task. Missing provider measurements remain null.
@@ -15,6 +18,31 @@
   accepted RTK/Serena optimization are claimed; Claude measurements remain deferred.
 - Runtime keeps the existing instruction budgets and project-owned state. Experimental
   evidence and benchmark tooling are excluded from the generated Runtime archive.
+- Added Phase-owned task prompt archives: each task retains its original request, executable
+  prompt, freshness checks, checkpoint and observed evidence. `NEXT_SESSION.md` points to the
+  active task instead of repeatedly replacing its instructions. Changed instructions create
+  linked revisions; used request/prompt bodies and completed history remain preserved.
+- Added active-prompt applicability checks against the current Phase, project instructions and
+  live evidence. Structural validation rejects stale, terminal, missing or foreign prompt
+  targets while retaining legacy inline handoff compatibility.
+- Bounded continuation context to the selected task's execution view. Original requests,
+  accumulated evidence and historical prompt records remain cold. `context_compile.py --task-only`
+  supports already-grounded sessions; manifest routing avoids duplicated core context and
+  accidentally inlining entire prompt archives.
+- Added exact historical Personal/Standalone profile recognition for existing Runtime updates,
+  without requiring Git or network access. Appended local rules and project-owned state remain
+  preserved; updates preflight both root instruction files before any replacement.
+- Added three-way instruction merging to the Framework Source updater. Independent local and
+  framework line edits are combined, including user additions, replacements and deletions.
+  Incompatible overlapping edits stop before writes; `--dry-run` shows the proposed merge.
+  Legacy projects without a saved original can supply their exact pristine Runtime through
+  `--instruction-base`.
+- New installs, successful updates and generated Runtime ZIPs include cold
+  `.progressive/INSTRUCTION_BASE.json` metadata for future merges. Before replacing instructions,
+  the updater saves byte-exact entrypoint copies and any existing base in a unique backup
+  directory; backup failure prevents replacement. These files never enter normal agent context.
+- Updated English and Russian Runtime upgrade guidance. Framework Source owns the updater and
+  historical compatibility catalog; neither is added to the generated Project Runtime.
 - Validation: Progressive Gate **11/11** and **243 unit/regression tests passing**;
   verified Standalone Runtime for both Codex and Claude. These are package/integrity results,
   not two-agent efficiency measurements.

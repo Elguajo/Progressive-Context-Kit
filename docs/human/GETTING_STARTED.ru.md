@@ -21,7 +21,7 @@
 Скачай последний release asset:
 
 ```text
-Progressive-Context-Project-Runtime-v3.1.1.zip
+Progressive-Context-Project-Runtime-v4.0.0.zip
 ```
 
 со страницы GitHub Releases:
@@ -289,8 +289,8 @@ python3 tools/build_release.py
 Результат:
 
 ```text
-dist/Progressive-Context-Project-Runtime-v3.1.1.zip
-dist/Progressive-Context-Project-Runtime-v3.1.1.manifest.json
+dist/Progressive-Context-Project-Runtime-v4.0.0.zip
+dist/Progressive-Context-Project-Runtime-v4.0.0.manifest.json
 dist/SHA256SUMS.txt
 ```
 
