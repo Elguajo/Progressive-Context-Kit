@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "normalization": "Historical runtime-rendered profile, universal newlines, rstrip; exact prefix match only.",
+  "profiles": {
+    "personal": [
+      {
+        "chars": 3663,
+        "sha256": "24be862899b4b1dbecc00517101b74501e41625af6f53c992a92a7567e42d22d",
+        "source_commit": "b05c965b04ea0ca5d3c5a2d4631332bbb81a85a7"
+      },
+      {
+        "chars": 3645,
+        "sha256": "e858e85f4e682dd8ba0f24f31324075186c9b1754c1a0051c9a22c8dacf4fb61",
+        "source_commit": "2536076e9f92c70a26c1fb688a041e214ee55c5d"
+      },
+      {
+        "chars": 3617,
+        "sha256": "22d534d96331d4a06fe3196a8fe0f45209dd16d2a064bd4a5d7977450199e1fa",
+        "source_commit": "7692c7ece62717bb5f861d6b32be4fb8706d55aa"
+      },
+      {
+        "chars": 3620,
+        "sha256": "08cadf6e6f78ed6b35b36f6ce74fa62f92ca4a7348299cab598498bbb2eb8e9e",
+        "source_commit": "76139c6906998156a0761e936acbe3100c094e3a"
+      },
+      {
+        "chars": 3637,
+        "sha256": "16c81412488840b5806a1356e8a6ec35d9abf885a52e9710e979500db062a1c4",
+        "source_commit": "bb3d2c0ed3617afd63bc3dccbbc0f39d3645fb8e"
+      },
+      {
+        "chars": 3642,
+        "sha256": "b9f2e15724dad313c7aeeb238e15f448b196311b6d1b6f2f9aff4996ee879606",
+        "source_commit": "a355d55b05f3f7ca12544595d2101429254d9e58"
+      }
+    ],
+    "standalone": [
+      {
+        "chars": 9293,
+        "sha256": "4c2f9f1069bad2d75455c862ff7438153405f29d4b7931e73eb7aa214888beba",
+        "source_commit": "b05c965b04ea0ca5d3c5a2d4631332bbb81a85a7"
+      },
+      {
+        "chars": 9275,
+        "sha256": "c722afe0694587c71dd4df2e3e086109da28f68e3945a434c69918145b652656",
+        "source_commit": "2536076e9f92c70a26c1fb688a041e214ee55c5d"
+      },
+      {
+        "chars": 9247,
+        "sha256": "86092b2197c76f56951fd5ab059cf66d6cc37c7bcefe744d0eeb23220dbee6bf",
+        "source_commit": "7692c7ece62717bb5f861d6b32be4fb8706d55aa"
+      },
+      {
+        "chars": 8939,
+        "sha256": "98719a99dfee8bf4510ae86972cb43078ff02acfdf0dedf3351dff224a3fd316",
+        "source_commit": "2c54e4e79177d9af5abf7998efe9d27b84b5a07b"
+      },
+      {
+        "chars": 9519,
+        "sha256": "43019546f9965b473eb2c9a8d28fd6d26bdf25be849772ff0bcf4cc1e9b00b6c",
+        "source_commit": "81906ae36ea7b6b09d8ff5a7baa37dadbd36cdff"
+      },
+      {
+        "chars": 8699,
+        "sha256": "fe5f68b934bb3544df4520a5b7c5cadff5b5c79d039c95d6c8cb6cd58d9f5c37",
+        "source_commit": "ce0faa5da97c32f74a4f1a94c0b84f49c7942c36"
+      },
+      {
+        "chars": 9058,
+        "sha256": "8539a326fcf1ef574c737bf0eca91c2b1996989e4cda9e69e5d7c14955908061",
+        "source_commit": "42e273f894f327416d72059258d947f54d0ba21a"
+      },
+      {
+        "chars": 8702,
+        "sha256": "244068902fac8a989ebbd0b14c947a811246fb26dafdda8fdbcd128b2641ee46",
+        "source_commit": "36c86a33c26f6d33dd66ba24a416ff126a8e8a0f"
+      },
+      {
+        "chars": 8705,
+        "sha256": "68da260d1251540ba4d91a94f7ab245b53bc154f52b24224e55205a49b2abbd5",
+        "source_commit": "76139c6906998156a0761e936acbe3100c094e3a"
+      },
+      {
+        "chars": 8722,
+        "sha256": "85088a4b81ea10823609f7969343bd2fb1b6f6aea1695eeb04c1e8c7ec794113",
+        "source_commit": "bb3d2c0ed3617afd63bc3dccbbc0f39d3645fb8e"
+      },
+      {
+        "chars": 8729,
+        "sha256": "5c76c00ba0d00c83ae4f7b219c50ff2dec5d63c8cd167603941b5bab6e1236e9",
+        "source_commit": "a355d55b05f3f7ca12544595d2101429254d9e58"
+      },
+      {
+        "chars": 8626,
+        "sha256": "b1349f7dfe0919ee761f08827ee2ce8b3cae7712ad75ab1bc0be4395fc5d8ee9",
+        "source_commit": "f36310717006bc963c89f202ecc35f250ca7fdfc"
+      }
+    ]
+  }
+}

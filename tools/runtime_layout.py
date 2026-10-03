@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 
 RUNTIME_DIR = '.progressive'
+PROJECT_INSTRUCTIONS_SENTINEL = '\n\n<!-- PROJECT-SPECIFIC-INSTRUCTIONS -->\n\n'
 
 TEXT_REPLACEMENTS = [
     ('docs/project/', '.progressive/project/'),
@@ -135,7 +136,7 @@ def write_runtime(root: Path, target: Path, profile: str = 'standalone', agent: 
         dst = target / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
         if rel.as_posix() == 'AGENTS.md':
-            dst.write_text(render_agent_profile(root, profile), encoding='utf-8')
+            dst.write_text(render_agent_profile(root, profile).rstrip()+'\n'+PROJECT_INSTRUCTIONS_SENTINEL, encoding='utf-8')
         elif transform:
             write_text_transformed(src, dst)
         else:

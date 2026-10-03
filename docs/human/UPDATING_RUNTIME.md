@@ -37,6 +37,23 @@ python3 tools/init_project.py /path/to/project --update-framework
 
 Use `--dry-run` first when the project matters or when moving across a meaningful framework change.
 
+## Older instruction compatibility
+
+The installer recognizes historical standard Personal/Standalone profiles by exact fingerprints
+in `tools/legacy_agent_profiles.json`, shipped with Framework Source. Recognition needs no Git
+or network. User text appended after a verified standard prefix is preserved under the
+`PROJECT-SPECIFIC-INSTRUCTIONS` boundary.
+
+New installations and generated Runtime entrypoints already contain that boundary. Put local
+instructions after it. Inline edits to an unmarked framework prefix require manual reconciliation
+and are never automatically overwritten. Update checks both AGENTS.md and CLAUDE.md before
+writing any files. `--dry-run` performs the same checks and fails for unknown instruction formats.
+
+The catalog is source-only compatibility evidence, not agent warm-up context. When extending
+compatibility, record the exact runtime-rendered standard prefix fingerprint (universal newlines,
+`rstrip()`), character length and source commit. Do not add user-specific variants or recognize
+ownership only by a heading or declared version.
+
 ## What to verify after an update
 
 Run:

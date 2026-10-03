@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import argparse, json, shutil, subprocess, sys
-from runtime_layout import render_agent_profile, runtime_entries, transform_text
+import argparse, hashlib, json, shutil, subprocess, sys
+from runtime_layout import PROJECT_INSTRUCTIONS_SENTINEL, render_agent_profile, runtime_entries, transform_text
 
 PROJECT_OWNED_PREFIXES = ('.progressive/project/', '.progressive/phases/', '.progressive/completions/', '.progressive/decisions/')
-AGENT_SENTINEL='\n\n<!-- PROJECT-SPECIFIC-INSTRUCTIONS -->\n\n'
+AGENT_SENTINEL=PROJECT_INSTRUCTIONS_SENTINEL
 CLAUDE_SENTINEL='\n\n<!-- PROJECT-SPECIFIC-CLAUDE-INSTRUCTIONS -->\n\n'
 
 
@@ -37,32 +37,74 @@ def collect_ops(root, target, profile, update):
     return ops
 
 
-def merge_agents(root,target,profile,backup=False):
-    dst=target/'AGENTS.md'; base=render_agent_profile(root,profile).rstrip()+'\n'
-    if not dst.is_file(): dst.write_text(base,encoding='utf-8'); return
+def known_profile_suffix(root,old,profile):
+    """Match exact historical framework prefixes; never infer ownership from a title."""
+    catalog=root/'tools/legacy_agent_profiles.json'
+    if not catalog.is_file(): return None
+    try:
+        data=json.loads(catalog.read_text(encoding='utf-8'))
+        if data.get('schema')!=1: raise ValueError('unsupported schema')
+        entries=data['profiles'][profile]
+        for entry in entries:
+            length=entry['chars']
+            if length<=0 or length>len(old): continue
+            prefix=old[:length]
+            if hashlib.sha256(prefix.encode('utf-8')).hexdigest()!=entry['sha256']: continue
+            suffix=old[length:]
+            # A known prefix must end at a line boundary, not halfway through a user edit.
+            if suffix and not suffix.startswith('\n'): continue
+            return suffix if suffix.strip() else ''
+    except (KeyError,TypeError,ValueError) as exc:
+        raise RuntimeError('invalid legacy agent profile catalog: '+str(exc)) from exc
+    return None
+
+
+def agents_merge_text(root,target,profile,adopt=False):
+    base=render_agent_profile(root,profile).rstrip()+'\n'
+    dst=target/'AGENTS.md'
+    if not dst.is_file(): return base+AGENT_SENTINEL
     old=dst.read_text(encoding='utf-8')
     if AGENT_SENTINEL in old:
-        _,suffix=old.split(AGENT_SENTINEL,1); dst.write_text(base+AGENT_SENTINEL+suffix,encoding='utf-8'); return
-    if old.rstrip()==base.rstrip(): return
-    if backup:
-        bp=target/'.progressive/adoption-backup/AGENTS.before.md'; bp.parent.mkdir(parents=True,exist_ok=True); bp.write_text(old,encoding='utf-8')
-        dst.write_text(base+AGENT_SENTINEL+old,encoding='utf-8')
-    else:
-        raise RuntimeError('AGENTS.md is not a recognized Progressive profile/preserved adoption form; reconcile it before --update-framework')
+        _,suffix=old.split(AGENT_SENTINEL,1)
+        return base+AGENT_SENTINEL+suffix
+    if old.rstrip()==base.rstrip(): return base+AGENT_SENTINEL
+    marker=target/'.progressive/PROFILE'
+    installed=marker.read_text(encoding='utf-8').strip() if marker.is_file() else profile
+    if installed not in {'personal','standalone'}: installed=profile
+    suffix=known_profile_suffix(root,old,installed)
+    if suffix is not None: return base+AGENT_SENTINEL+suffix
+    if adopt: return base+AGENT_SENTINEL+old
+    raise RuntimeError('AGENTS.md is not a recognized Progressive profile/preserved adoption form; reconcile it before --update-framework')
+
+
+def merge_agents(root,target,profile,backup=False):
+    dst=target/'AGENTS.md'
+    merged=agents_merge_text(root,target,profile,adopt=backup)
+    if backup and dst.is_file():
+        old=dst.read_text(encoding='utf-8')
+        if AGENT_SENTINEL not in old and old.rstrip()!=render_agent_profile(root,profile).rstrip():
+            bp=target/'.progressive/adoption-backup/AGENTS.before.md'; bp.parent.mkdir(parents=True,exist_ok=True); bp.write_text(old,encoding='utf-8')
+    dst.write_text(merged,encoding='utf-8')
+
+
+def claude_merge_text(root,target,adopt=False):
+    src=transform_text((root/'CLAUDE.md').read_text(encoding='utf-8')).rstrip()+'\n'; dst=target/'CLAUDE.md'
+    if not dst.is_file(): return src
+    old=dst.read_text(encoding='utf-8')
+    if CLAUDE_SENTINEL in old:
+        _,suffix=old.split(CLAUDE_SENTINEL,1); return src+CLAUDE_SENTINEL+suffix
+    if old.rstrip()==src.rstrip(): return src
+    if adopt: return src+CLAUDE_SENTINEL+old
+    raise RuntimeError('CLAUDE.md is not a recognized Progressive form/preserved adoption form; reconcile it before --update-framework')
 
 
 def merge_claude(root,target,adopt=False):
-    src=transform_text((root/'CLAUDE.md').read_text(encoding='utf-8')).rstrip()+'\n'; dst=target/'CLAUDE.md'
-    if not dst.is_file(): dst.write_text(src,encoding='utf-8'); return
-    old=dst.read_text(encoding='utf-8')
-    if CLAUDE_SENTINEL in old:
-        _,suffix=old.split(CLAUDE_SENTINEL,1); dst.write_text(src+CLAUDE_SENTINEL+suffix,encoding='utf-8'); return
-    if old.rstrip()==src.rstrip(): return
-    if adopt:
-        bp=target/'.progressive/adoption-backup/CLAUDE.before.md'; bp.parent.mkdir(parents=True,exist_ok=True); bp.write_text(old,encoding='utf-8')
-        dst.write_text(src+CLAUDE_SENTINEL+old,encoding='utf-8')
-    else:
-        raise RuntimeError('CLAUDE.md is not a recognized Progressive form/preserved adoption form; reconcile it before --update-framework')
+    dst=target/'CLAUDE.md'; merged=claude_merge_text(root,target,adopt)
+    if adopt and dst.is_file():
+        old=dst.read_text(encoding='utf-8')
+        if CLAUDE_SENTINEL not in old and old.rstrip()!=transform_text((root/'CLAUDE.md').read_text(encoding='utf-8')).rstrip():
+            bp=target/'.progressive/adoption-backup/CLAUDE.before.md'; bp.parent.mkdir(parents=True,exist_ok=True); bp.write_text(old,encoding='utf-8')
+    dst.write_text(merged,encoding='utf-8')
 
 
 def write_marker(root,target,profile,agent,state='ready'):
@@ -117,6 +159,13 @@ def main():
     if a.update_framework and not marker.is_file(): print('ERROR: --update-framework requires existing .progressive/VERSION marker'); return 2
     if a.adopt_existing and marker.is_file(): print('ERROR: already marked; use --update-framework'); return 2
     ops=collect_ops(root,target,a.profile,a.update_framework)
+    if a.update_framework:
+        # Fail before any write, including a successful-looking dry run on unsafe instructions.
+        try:
+            agents_merge_text(root,target,a.profile)
+            claude_merge_text(root,target)
+        except RuntimeError as exc:
+            print('ERROR:',exc); return 2
 
     if a.dry_run:
         mode='adopt' if a.adopt_existing else 'update' if a.update_framework else 'install'
